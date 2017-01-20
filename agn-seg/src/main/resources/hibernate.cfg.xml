@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="connection.driver_class">org.postgresql.Driver</property>
+		<property name="connection.url">jdbc:postgresql://localhost:5432/a2dm</property>
+		<property name="connection.username">postgres</property>
+		<property name="connection.password">postgres</property>
+		<property name="hibernate.connection.pool_size">25</property>
+		<property name="hibernate.format_sql">true</property>
+		<property name="hibernate.default_schema">seg</property>
+		<property name="connection.pool_size">1</property>
+		<property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+		<property name="show_sql">true</property>		
+
+		<mapping class="br.com.a2dm.cmn.entity.Usuario"/>
+		<mapping class="br.com.a2dm.cmn.entity.log.UsuarioLog"/>
+		<mapping class="br.com.a2dm.cmn.entity.Grupo"/>
+		<mapping class="br.com.a2dm.cmn.entity.log.GrupoLog"/>
+		<mapping class="br.com.a2dm.cmn.entity.TelaAcao"/>
+		<mapping class="br.com.a2dm.cmn.entity.log.TelaAcaoLog"/>
+		<mapping class="br.com.a2dm.cmn.entity.GrupoTelaAcao"/>
+		<mapping class="br.com.a2dm.cmn.entity.log.GrupoTelaAcaoLog"/>
+		<mapping class="br.com.a2dm.cmn.entity.Sistema"/>
+		<mapping class="br.com.a2dm.cmn.entity.Acao"/>
+		<mapping class="br.com.a2dm.cmn.entity.Conselho"/>
+		<mapping class="br.com.a2dm.cmn.entity.Especialidade"/>
+		<mapping class="br.com.a2dm.cmn.entity.Estado"/>
+		<mapping class="br.com.a2dm.cmn.entity.Parametro"/>
+		<mapping class="br.com.a2dm.cmn.entity.RecuperarSenha"/>
+		
+	</session-factory>
+</hibernate-configuration>
