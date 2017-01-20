@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{clinicaBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">		
+		<t:saveState value="#{crudBean.listaEstado}" />
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+    	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
+			<f:subview id="viewBusca"> 
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Descrição</label>
+		          <div class="col-md-6">
+		          	<h:inputText value="#{crudBean.searchObject.desClinica}" styleClass="form-control" maxlength="200" id="des">
+		           		<f:passThroughAttribute name="placeholder" value="Descrição da Clínica"/>
+		           	</h:inputText>
+		          </div>
+		       </div>
+		       
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Situação</label>
+		          <div class="col-md-4">
+		          	<div style="width: 250px;" class="checkbox">
+						<h:selectOneRadio value="#{crudBean.searchObject.flgAtivo}" style="width: 100%;" >
+							<f:selectItem itemValue="T" itemLabel="Todos" />
+							<f:selectItem itemValue="S" itemLabel="Ativos" />
+							<f:selectItem itemValue="N" itemLabel="Inativos"/>
+						</h:selectOneRadio>
+					</div>
+		          </div>
+		       </div>
+	       </f:subview>
+		</h:panelGroup>
+		
+		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;" rendered="#{crudBean.updating}">
+			<f:subview id="viewEdicao">
+				<h:panelGroup id="panelGroupAlterar1" rendered="#{crudBean.editing}" style="height:100%">
+					<div class="form-group">
+			          <label class="col-md-2 control-label">Código</label>
+			          <div class="col-md-6" style="margin-top: 5px;">
+			          	<h:outputText value="#{crudBean.entity.idClinica}" />
+			          </div>
+			       	</div>					
+				</h:panelGroup>
+			
+				<div class="form-group">
+		          <label class="col-md-2 control-label">Descrição *</label>
+		          <div class="col-md-6">
+		          	<h:inputText value="#{crudBean.entity.desClinica}" styleClass="form-control" maxlength="200">
+		           		<f:passThroughAttribute name="placeholder" value="Descrição da Clínica"/>
+		           	</h:inputText>
+		          </div>
+		       	</div>
+		       	
+		       	<div class="form-group">
+		          <label class="col-md-2 control-label">Cnpj</label>
+		          <div class="col-md-2">
+		          	<h:inputText value="#{crudBean.entity.numCnpjClinica}" styleClass="form-control" maxlength="18" onkeypress="javascript: mascara(this, cnpj_mask);" id="cnpj">
+		           		<f:passThroughAttribute name="placeholder" value="Cnpj da Clínica"/>
+		           	</h:inputText>
+		          </div>
+		       	</div>
+		       	
+		       	<div class="form-group">
+		          <label class="col-md-2 control-label">Telefone *</label>
+		          <div class="col-md-2">
+		          	<h:inputText value="#{crudBean.entity.tlfClinica}" styleClass="form-control" maxlength="15" onkeypress="javascript: mascara(this, mtel);" id="telefone">
+		           		<f:passThroughAttribute name="placeholder" value="Telefone da Clínica"/>
+		           	</h:inputText>
+		          </div>
+		       	</div>
+		       	
+		       	<h:panelGroup layout="block" id="endClinica">
+			       	<div class="form-group">
+			          <label class="col-md-2 control-label">Cep *</label>
+			          <div class="col-md-2">
+			          	<h:inputText value="#{crudBean.entity.cepClinica}" styleClass="form-control" maxlength="9" onkeypress="javascript: mascara(this, mcep); return soNumero(event, this);" id="cep">
+			           		<a4j:ajax event="blur" listener="#{crudBean.buscarCep}" render="endClinica"/>
+			           		<f:passThroughAttribute name="placeholder" value="Cep da Clínica"/>
+			           	</h:inputText>
+			          </div>
+			       	</div>
+			       	
+			       	<div class="form-group">
+			          <label class="col-md-2 control-label">Logradouro *</label>
+			          <div class="col-md-6">
+			          	<h:inputText value="#{crudBean.entity.lgdClinica}" styleClass="form-control" maxlength="200" id="logradouro">
+			           		<f:passThroughAttribute name="placeholder" value="Logradouro da Clínica"/>
+			           	</h:inputText>
+			          </div>
+			       	</div>
+			       	
+			       	<div class="form-group">
+			          <label class="col-md-2 control-label">Número *</label>
+			          <div class="col-md-2">
+			          	<h:inputText value="#{crudBean.entity.numEndClinica}" styleClass="form-control" maxlength="6" id="numero">
+			           		<f:passThroughAttribute name="placeholder" value="Número da Clínica"/>
+			           	</h:inputText>
+			          </div>
+			       	</div>
+			       	
+			       	<div class="form-group">
+		               <label class="col-md-2 control-label">Bairro *</label>
+		               <div class="col-md-6">
+		                 <h:inputText value="#{crudBean.entity.broClinica}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="bairro">
+		                 	<f:passThroughAttribute name="placeholder" value="Bairro da Clínica"/>
+		                 </h:inputText>
+		               </div>
+		            </div>
+		            
+		            <div class="form-group">
+		               <label class="col-md-2 control-label">Cidade *</label>
+		               <div class="col-md-6">
+		                 <h:inputText value="#{crudBean.entity.cidClinica}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="cidade">
+		                 	<f:passThroughAttribute name="placeholder" value="Cidade da Clínica"/>
+		                 </h:inputText>
+		               </div>
+		            </div>
+		            
+		            <div class="form-group">
+		               <label class="col-md-2 control-label">Estado *</label>
+		               <div class="col-md-2">
+		               	<h:selectOneMenu value="#{crudBean.entity.idEstado}" styleClass="form-control" converter="simpleIndexConverter">								
+							<t:selectItems var="o" itemValue="#{o.idEstado}" itemLabel="#{o.descricao}" value="#{crudBean.listaEstado}" />
+						</h:selectOneMenu>
+		               </div>
+		            </div>
+	            </h:panelGroup>
+	            <div class="form-group">
+	               <label class="col-md-2 control-label">Complemento</label>
+	               <div class="col-md-6">
+	                 <h:inputText value="#{crudBean.entity.cmpClinica}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="complemento">
+	                 	<f:passThroughAttribute name="placeholder" value="Complemento da Clínica"/>
+	                 </h:inputText>
+	               </div>
+	            </div>
+	            		       
+			</f:subview>
+		</h:panelGroup>		
+    </ui:define>
+    
+    <ui:define name="list">	
+		<h:panelGrid id="tblResult" layout="block" style="width: 100%; height: 100%;z" >
+			<f:subview id="viewListagem">
+				<div class="box-content">
+					<rich:dataTable id="tblData" 
+								 value="#{crudBean.searchResult}" 
+							       var="rst" rows="10"
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="width: 5%; text-align: center;">
+									Código
+								</rich:column>
+								<rich:column style="width:48%; text-align: center;">
+									Descrição
+								</rich:column>
+								<rich:column style="width:8%; text-align: center;">
+									Telefone
+								</rich:column>
+								<rich:column style="width: 8%; text-align: center;">
+									Situação
+								</rich:column>
+								<rich:column style="width: 3%; text-align: center;"/>
+								<rich:column style="width: 3%; text-align: center;"/>
+								<rich:column style="width: 3%; text-align: center;"/>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.idClinica}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.desClinica}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.tlfClinica}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="ATIVO" style="color: blue;" rendered="#{rst.flgAtivo == 'S'}"/>
+							<h:outputText value="INATIVO" style="color:red;" rendered="#{rst.flgAtivo == 'N'}"/>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<a4j:commandButton image="../img/visualizar.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR" render="pnFrm" oncomplete="#{rich:component('panVisualizar')}.show();">
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<a4j:commandButton image="../img/edit.png" style="border:none; width: 20px; height: 20px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" rendered="#{rst.flgAtivo == 'S'}" render="pnFrm, panelTitle, comentTela" >
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<a4j:commandButton image="../img/remove.png" style="border:none; width: 20px; height: 20px;" title="INATIVAR" action="#{crudBean.inativar}" rendered="#{rst.flgAtivo == 'S'}" render="pnFrm" onclick="if (!confirm('Deseja realmente inativar este registro?')) return false">
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+							<a4j:commandButton image="../img/ativar.png" style="border:none; width: 20px; height: 20px;" title="ATIVAR" action="#{crudBean.ativar}" rendered="#{rst.flgAtivo == 'N'}" render="pnFrm" onclick="if (!confirm('Deseja realmente ativar este registro?')) return false">
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+						</rich:column>						
+					</rich:dataTable>
+				</div>
+				<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
+				<div align="center">
+					<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
+				</div>
+			</f:subview>
+		</h:panelGrid>
+	</ui:define>
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panVisualizar" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="480" resizeable="false" onmaskclick="#{rich:component('panVisualizar')}.hide()">
+			<ui:include src="panelVisualizarClinica.xhtml" />
+		</rich:popupPanel>
+	</ui:define>
+			
+</ui:composition>

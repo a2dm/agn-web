@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html 		xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:ui="http://java.sun.com/jsf/facelets"
+			xmlns:h="http://java.sun.com/jsf/html"
+			xmlns:f="http://java.sun.com/jsf/core"
+			xmlns:a4j="http://richfaces.org/a4j"
+			xmlns:rich="http://richfaces.org/rich"
+			xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+			xmlns:t="http://myfaces.apache.org/tomahawk">
+			
+	<f:loadBundle basename="ApplicationResources" var="bundle"/>
+			
+	<h:head>
+	
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		
+		<title>
+			<h:outputText value="#{bundle.tituloAplicacao}"/>
+		</title>
+		
+		
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/> 
+	    <meta name="description" content="Blue Moon - Responsive Admin Dashboard" />
+	    <meta name="keywords" content="Notifications, Admin, Dashboard, Bootstrap3, Sass, transform, CSS3, HTML5, Web design, UI Design, Responsive Dashboard, Responsive Admin, Admin Theme, Best Admin UI, Bootstrap Theme, Wrapbootstrap, Bootstrap, bootstrap.gallery" />
+	    <meta name="author" content="Bootstrap Gallery" />
+	    <link rel="shortcut icon" href="../img/favicon.ico"/>
+	    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href="../css/new.css" rel="stylesheet"/> 
+	    <link href="../css/charts-graphs.css" rel="stylesheet"/>
+	    <link href="../css/barIndicator.css" rel="stylesheet" />
+	    <link href="../fonts/font-awesome.min.css" rel="stylesheet"/>
+	    <link href="../css/main.css" rel="stylesheet"/>
+		
+		<!-- Main Container end -->
+	
+	    <script src="../js/jquery.js"></script>
+	    <script src="../js/bootstrap.min.js"></script>
+	    <script src="../js/jquery.scrollUp.js"></script>
+	    
+	    <!-- Flot Charts -->
+	    <script src="../js/flot/jquery.flot.js"></script>
+	    <script src="../js/flot/jquery.flot.pie.min.js"></script>
+	    <script src="../js/flot/jquery.flot.stack.min.js"></script>
+	    <script src="../js/flot/jquery.flot.tooltip.min.js"></script>
+	    <script src="../js/flot/jquery.flot.orderBar.min.js"></script>
+	    <script src="../js/flot/jquery.flot.resize.min.js"></script>
+	
+	    <script src="../js/flot/custom/index3-pie.js"></script>
+	    <script src="../js/flot/custom/index3-area.js"></script>
+	    <script src="../js/flot/custom/horizontal-index.js"></script>
+	    <script src="../js/flot/custom/realtime-index.js"></script>
+	    <script src="../js/flot/custom/index3-scatter.js"></script>
+	    
+	    <!-- Custom JS -->
+	    <script src="../js/menu.js"></script>
+	
+	    <!-- Sparkline JS -->
+	    <script src="../js/sparkline.js"></script>
+	    
+	    <script src="../js/jquery.easing.1.3.js"></script>
+	    <script src="../js/jquery-barIndicator.js"></script>
+	    <script src="../js/custom-barIndicator.js"></script>
+	    <script src="../js/custom.js"></script>
+		
+	</h:head>
+
+	<h:body>
+	
+		<rich:popupPanel id="panel_loading" autosized="true" modal="true" style="z-index: 100000;">
+			<table>
+				<tr>
+					<td><h:graphicImage url="../img/ajax-loader.gif" style="border:0px; vertical-align: middle; padding: 5px;" /></td>
+					<td><h:outputText value=" Aguarde..." /></td>
+				</tr>
+			</table>
+		</rich:popupPanel>
+		
+		<a4j:status id="loading" onstart="#{rich:component('panel_loading')}.show();" onstop="#{rich:component('panel_loading')}.hide();" />
+	
+		<h:form class="form-horizontal no-margin" id="formulario">
+			<header>
+		      <h:commandLink action="principal" styleClass="logo">
+		        <img src="../img/logo.png" width="220px" height="40px" alt="Logo"/>
+		      </h:commandLink>
+		      <div class="pull-right">
+		        <ul id="mini-nav" class="clearfix">
+		          <li class="list-box hidden-xs">
+		            
+		            <!-- Modal -->
+		            <div class="modal fade" id="modalMd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
+		              <div class="modal-dialog">
+		                <div class="modal-content">
+		                  <div class="modal-header">
+		                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+		                    <h4 class="modal-title text-danger" id="myModalLabel5">Coding Style </h4>
+		                  </div>
+		                  <div class="modal-body">
+		                    <img src="../img/documentation.png" alt="Esquare Admin"/>
+		                  </div>
+		                  <div class="modal-footer">
+		                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+		                  </div>
+		                </div>
+		              </div>
+		            </div>
+		          </li>
+		          
+		          <li class="list-box user-profile">
+		            <a id="drop7" href="#" role="button"  data-toggle="dropdown">
+		              <i class="fa fa-user"></i> &nbsp; &nbsp; <h:outputText value="#{sessionScope.loginUsuario.login}" />
+		            </a>
+		            <ul class="dropdown-menu server-activity">
+		              <li>
+		                <p><i class="fa fa-cog text-info"></i> Account Settings</p>
+		              </li>
+		              <li>
+		                <p><i class="fa fa-fire text-warning"></i> Payment Details</p>
+		              </li>
+		              
+		              <li>
+		                <div class="demo-btn-group clearfix" align="center">
+		                  <h:commandButton action="#{loginBean.logout}" styleClass="btn btn-primary" value="Logout"/>
+		                </div>
+		              </li>
+		            </ul>
+		          </li>
+		        </ul>
+		      </div>
+	    	</header>
+	    	
+	    	<div class="dashboard-container">
+	
+	      		<div class="container">
+	       			<div id='cssmenu'>
+			          <ul>
+			            <li class='#{sessionScope.flgMenuDsh}'>
+			              <a href='#'><i class="fa fa-dashboard"></i>Dashboard</a>	              
+			            </li>
+			            <li class='#{sessionScope.flgMenuAgn}'>
+			              <a href="calendar.html">
+			                <i class="fa fa-pencil-square-o"></i>
+			                Agendamento
+			              </a>
+			            </li>
+			            <li class='#{sessionScope.flgMenuRcp}'>
+			              <a href="forms.html">
+			                <i class="fa fa-bullhorn"></i>
+			                Recepção
+			              </a>
+			            </li>
+			            <li class='#{sessionScope.flgMenuPct}'>
+			              <a href="forms.html">
+			                <i class="fa fa-user"></i>
+			                Paciente
+			              </a>
+			            </li>
+			            <li class='#{sessionScope.flgMenuRlt}'>
+			              <a href="forms.html">
+			                <i class="fa fa-file-text-o"></i>
+			                Relatórios
+			              </a>
+			            </li>
+			            <li class='#{sessionScope.flgMenuCfg}'>
+			              <a href='#'><i class="fa fa-cogs"></i>Configuração</a>
+			              <ul>
+			              	 <li><h:commandLink action="#{recepcionistaBean.preparaPesquisar}">Recepcionista</h:commandLink></li>
+			              	 <li><h:commandLink action="#{clinicaBean.preparaPesquisar}">Clínica</h:commandLink></li>
+			              	 <li><h:commandLink action="#{convenioBean.preparaPesquisar}">Convênio</h:commandLink></li>
+			                 <li><h:commandLink action="#{servicoBean.preparaPesquisar}">Serviço</h:commandLink></li>			                 
+			              </ul>
+			            </li>
+			          </ul>
+	        		</div>
+	        
+	        <!-- Titulo da Tela -->
+	        <h:panelGroup layout="block" id="panelTitle">
+		        <div class="sub-nav hidden-sm hidden-xs">
+		          <ul>
+		            <li><a href="#" class="heading" style="font-weight: bold;">#{pageTitle}</a></li>
+		          </ul>
+		          <div class="custom-search hidden-sm hidden-xs" style="color: white; font-size: small;">
+		          	<h:outputText id="lblExpira" value="Sua sessão expira em: " />
+                	<h:outputText id="contadorSessao"/> 
+		          </div>
+		        </div>
+	        </h:panelGroup>
+	        <!-- Titulo End -->
+	        <div class="dashboard-wrapper">	        	
+		        <div class="row">
+	            	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+				    	<div class="widget sales-overview">
+			                <h:panelGroup layout="block" id="comentTela">
+			                <div class="widget-header">
+			                  <div class="title">
+				              	<span class="mini-title">
+			                    	<ui:insert name="comentTela"/>
+      			        		</span>
+			                  </div>
+			                </div>
+                			</h:panelGroup>
+                			<div class="widget-body no-padding">   
+	            				<div class="widget-body">
+	            					<a4j:outputPanel style="width:100%;height:100%;" ajaxRendered="true">
+									    <rich:messages layout="table" globalOnly="true" errorClass="alert alert-danger" infoClass="alert alert-success" warnClass="alert alert-info" id="messages"/>
+									</a4j:outputPanel>
+	            				
+				            		<h:panelGroup layout="block" style="padding: 15px" id="pnFrm">
+				                  	
+					                  	<ui:insert name="saveStateObjects"/>
+										<ui:insert name="saveStateObjectsDefined"/>
+										<ui:insert name="content"/>
+										<ui:insert name="buttons">
+											<div class="form-group">
+	                        					<div class="col-sm-offset-2 col-sm-10">
+						                          <ui:insert name="buttonItens"/>
+						                    	</div>
+				                          	</div>
+										</ui:insert>
+										<ui:insert name="list"/>
+										<ui:insert name="modal"/>
+									</h:panelGroup>
+								</div>
+							</div>
+						</div>
+	            	</div>
+	           	</div>
+           	</div>
+	        
+	        
+        	<footer>
+          		<p>© Desenvolvido por <a href="http://a2dm.com.br" style="font: bold; color: white;" target="_blank"> A2DM</a> - 2016.</p>
+        	</footer>
+	      	</div>
+	    </div>
+	    </h:form>
+
+	</h:body>
+
+</html>

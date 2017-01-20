@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	
+		<f:subview id="viewEdicao">
+			<h:panelGroup id="panelGroupAlterar1" rendered="#{crudBean.editing}" style="height:100%">
+				<div class="form-group">
+		          <label class="col-md-2 control-label">Código</label>
+		          <div class="col-md-6" style="margin-top: 5px;">
+		          	<h:outputText value="#{crudBean.entity.idConvenio}" />
+		          </div>
+		       	</div>					
+			</h:panelGroup>
+		
+			<div class="form-group">
+	          <label class="col-md-2 control-label">Descrição *</label>
+	          <div class="col-md-6">
+	          	<h:inputText value="#{crudBean.entity.desConvenio}" styleClass="form-control" maxlength="200">
+	           		<f:passThroughAttribute name="placeholder" value="Descrição do Convênio"/>
+	           	</h:inputText>
+	          </div>
+	       	</div>
+	       	
+	       	
+	       	<div class="col-lg-4 col-md-4 col-sm-12 col-sx-12" style="width: 100%">
+               <div class="panel panel-info">
+                 <div class="panel-heading">
+                   <h4 class="panel-title"><i class="icon ion-clock text-info"></i> Serviços</h4>
+                 </div>
+                 <div class="panel-body">
+                 	<rich:dataTable id="tblServico" 
+								 value="#{crudBean.listaServico}" 
+							       var="rst" 
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							  rendered="#{not empty crudBean.listaServico}">						     
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="width: 5%; text-align: center;">
+									Código
+								</rich:column>
+								<rich:column style="width: 49%; text-align: center;">
+									Descrição
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Duração
+								</rich:column>
+								<rich:column style="width: 13%; text-align: center;">
+									R$ Real
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									R$ Convênio
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Status
+								</rich:column>
+								<rich:column style="width: 3%;"/>			
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.idServico}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.desServico}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.drcServico}" />
+							<h:outputText value=" minutos" />
+						</rich:column>
+						<rich:column style="text-align: right;">
+							<h:outputText value="R$ "/>
+							<h:outputText value="#{rst.vlrServico}" converter="converterMoeda"/>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="-" rendered="#{rst.flgAtivo == 'N'}"/>
+							<h:inputText value="#{rst.vlrServicoFormatado}" styleClass="form-control" style="height: 25px;" maxlength="12" onblur="formataMoeda(this);" rendered="#{rst.flgAtivo == 'S'}"/>
+						</rich:column>		
+						<rich:column style="text-align: center;">
+							<h:outputText value="ATIVO" style="color: blue;" rendered="#{rst.flgAtivo == 'S'}"/>
+								<h:outputText value="INATIVO" style="color:red;" rendered="#{rst.flgAtivo == 'N'}"/>
+							</rich:column>	
+						<rich:column style="text-align: center;">
+							<rich:column style="text-align: center;">
+								<a4j:commandButton image="../img/remove.png" style="border:none; width: 20px; height: 20px;" title="INATIVAR" action="#{crudBean.inativarServico}" rendered="#{rst.flgAtivo == 'S'}" render="tblServico" >
+									<f:setPropertyActionListener target="#{crudBean.servico}" value="#{rst}" />
+								</a4j:commandButton>
+								<a4j:commandButton image="../img/ativar.png" style="border:none; width: 20px; height: 20px;" title="ATIVAR" action="#{crudBean.ativarServico}" rendered="#{rst.flgAtivo == 'N'}" render="tblServico" >
+									<f:setPropertyActionListener target="#{crudBean.servico}" value="#{rst}" />
+								</a4j:commandButton>
+							</rich:column>
+						</rich:column>
+					</rich:dataTable>  
+                 </div>
+               </div>
+             </div>
+	       
+		</f:subview>
+		
+</ui:composition>
