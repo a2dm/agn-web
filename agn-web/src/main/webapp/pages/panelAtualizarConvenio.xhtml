@@ -39,7 +39,7 @@
                  <div class="panel-body">
                  	<rich:dataTable id="tblServico" 
 								 value="#{crudBean.listaServico}" 
-							       var="rst" 
+							       var="rst" rows="10"
 							styleClass="table table-bordered table-striped dataTable"
 							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
 							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -101,6 +101,10 @@
 						</rich:column>
 					</rich:dataTable>  
                  </div>
+                 <div align="center">
+					<rich:dataScroller for="tblServico" maxPages="10" rendered="#{not empty crudBean.listaServico}"/>
+				</div>
+				<br/>
                </div>
              </div>
 	       

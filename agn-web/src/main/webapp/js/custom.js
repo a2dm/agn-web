@@ -79,71 +79,33 @@ function validarEmail(campo)
 	}
 }
 
-function validarCPF(campo, cpf)
+function validarCPF(Objcpf)
 {
-	if(campo.value == "")
-	{
-		return;
-	}
+	var cpf = Objcpf.value;
+	exp = /\.|\-/g
+	cpf = cpf.toString().replace( exp, "" ); 
 	
-	var filtro = /^\d{3}.\d{3}.\d{3}-\d{2}$/i;
-	
-	if(!filtro.test(cpf))
-	{
-		alert("CPF inválido! Favor informar um cpf válido.");
-		campo.value = "";
-		return;
-	}
-   
-	cpf = remove(cpf, ".");
-	cpf = remove(cpf, "-");
-	
-	if(cpf.length != 11 || cpf == "00000000000" || cpf == "11111111111" ||
-		cpf == "22222222222" || cpf == "33333333333" || cpf == "44444444444" ||
-		cpf == "55555555555" || cpf == "66666666666" || cpf == "77777777777" ||
-		cpf == "88888888888" || cpf == "99999999999")
-	{
-		alert("CPF inválido! Favor informar um CPF válido.");
-		campo.value = "";
-		return;
-   }
+	var digitoDigitado = eval(cpf.charAt(9)+cpf.charAt(10));
+	var soma1=0, soma2=0;
+	var vlr =11;
 
-	soma = 0;
-	for(i = 0; i < 9; i++)
+	for(i=0;i<9;i++)
 	{
-		soma += parseInt(cpf.charAt(i)) * (10 - i);
-	}
+		soma1+=eval(cpf.charAt(i)*(vlr-1));
+		soma2+=eval(cpf.charAt(i)*vlr);
+		vlr--;
+	}       
 	
-	resto = 11 - (soma % 11);
-	if(resto == 10 || resto == 11)
-	{
-		resto = 0;
+	soma1 = (((soma1*10)%11)==10 ? 0:((soma1*10)%11));
+	soma2=(((soma2+(2*soma1))*10)%11);
+
+	var digitoGerado=(soma1*10)+soma2;
+	if(digitoGerado!=digitoDigitado){
+		alert('CPF Invalido, Favor informar um CPF válido!');
+		Objcpf.value = "";
 	}
-	if(resto != parseInt(cpf.charAt(9))){
-		alert("CPF inválido! Favor informar um cpf válido.");
-		campo.value = "";
-		return;
-	}
-	
-	soma = 0;
-	for(i = 0; i < 10; i ++)
-	{
-		soma += parseInt(cpf.charAt(i)) * (11 - i);
-	}
-	resto = 11 - (soma % 11);
-	if(resto == 10 || resto == 11)
-	{
-		resto = 0;
-	}
-	
-	if(resto != parseInt(cpf.charAt(10))){
-		alert("CPF inválido! Favor informar um CPF válido.");
-		campo.value = "";
-		reurn;
-	}
-	
-	return true;
- }
+}
+
  
 function remove(str, sub)
 {

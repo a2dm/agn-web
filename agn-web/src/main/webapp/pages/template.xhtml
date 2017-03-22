@@ -63,6 +63,7 @@
 	    <script src="../js/jquery-barIndicator.js"></script>
 	    <script src="../js/custom-barIndicator.js"></script>
 	    <script src="../js/custom.js"></script>
+	    <script src="../js/cep.js"></script>
 		
 	</h:head>
 
@@ -151,10 +152,10 @@
 			              </a>
 			            </li>
 			            <li class='#{sessionScope.flgMenuPct}'>
-			              <a href="forms.html">
+			              <h:commandLink action="#{pacienteBean.preparaPesquisar}">
 			                <i class="fa fa-user"></i>
 			                Paciente
-			              </a>
+			              </h:commandLink>
 			            </li>
 			            <li class='#{sessionScope.flgMenuRlt}'>
 			              <a href="forms.html">
