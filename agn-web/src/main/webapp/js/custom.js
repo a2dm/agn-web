@@ -3,7 +3,6 @@
  *  @since 26/11/2013
  */
 
-
 /**
  * Funcao utilizada para deixar caracteres maiusculos
  * 

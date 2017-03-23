@@ -30,6 +30,8 @@
 		<mapping class="br.com.a2dm.cmn.entity.Especialidade"/>
 		<mapping class="br.com.a2dm.cmn.entity.Estado"/>
 		
+		<mapping class="br.com.a2dm.ngc.entity.ClinicaProfissional"/>
+		
 		<mapping class="br.com.a2dm.ngc.entity.Servico"/>
 		<mapping class="br.com.a2dm.ngc.entity.Convenio"/>
 		<mapping class="br.com.a2dm.ngc.entity.ConvenioServico"/>

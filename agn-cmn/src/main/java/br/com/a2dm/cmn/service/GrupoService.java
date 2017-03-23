@@ -1,6 +1,5 @@
 package br.com.a2dm.cmn.service;
 
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,9 @@ public class GrupoService extends A2DMHbNgc<Grupo>
 
 	public static final int JOIN_USUARIO_CAD = 1;
 	
-	public static final BigInteger GRUPO_CLIENTE = new BigInteger("10");
+	public static final int GRUPO_ADMINISTRADOR = 1;
+	public static final int GRUPO_PROFISSIONAL = 2;
+	public static final int GRUPO_RECEPCIONISTA = 3;
 	
 	private JSFUtil util = new JSFUtil();
 	

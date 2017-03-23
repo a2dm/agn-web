@@ -11,9 +11,79 @@
 				xmlns:t="http://myfaces.apache.org/tomahawk"
 				template="template.xhtml">
 				
-				<ui:param name="crudBean" value="#{principalBean}" />
-				
-				<ui:param name="pageTitle" value="Dashboard" />
+	<ui:param name="crudBean" value="#{principalBean}" />
 	
+	<ui:param name="pageTitle" value="Dashboard" />
+							
+	<ui:define name="saveStateObjects">
+		<t:saveState value="#{crudBean.msgConfig}" />
+	</ui:define>							
+							
+	<ui:define name="content">
+	
+	
+	
+	</ui:define>
+		
+		
+	
+		
+	<ui:define name="modal">
+		<rich:popupPanel id="panConfiguracao" styleClass="modal-content" domElementAttachment="form" modal="true" show="#{crudBean.listaClinicaProfissional.size() > 1}" width="800" height="280" moveable="false">
+			<f:facet name="header">
+				<h:panelGroup>
+					<h:outputText value="Configuração Inicial do Sistema" />
+				</h:panelGroup>
+			</f:facet>
+
+			<div class="modal-body">
+				<fieldset >			
+										
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Profissional:</label>
+		               <div class="col-sm-8">
+		               	<h:selectOneMenu value="#{crudBean.profissional}" styleClass="form-control" converter="simpleIndexConverter" disabled="true" >
+							<t:selectItems var="o" itemValue="#{o}" itemLabel="#{o.nome}" value="#{crudBean.listaProfissional}" />
+						</h:selectOneMenu>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="box-body">
+		             <div class="form-group">
+		               <label for="inputEmail3" class="col-sm-3 control-label">Clínica:</label>
+		               <div class="col-sm-8">
+		               	<h:selectOneMenu value="#{crudBean.clinica}" styleClass="form-control" converter="simpleIndexConverter">
+							<t:selectItems var="o" itemValue="#{o}" itemLabel="#{o.desClinica}" value="#{crudBean.listaClinica}" />
+						</h:selectOneMenu>
+		               </div>
+		             </div>
+					</div>
+					
+					<div class="modal-footer">
+						<a4j:commandButton id="iniciar" styleClass="btn btn-primary" value="Iniciar (I)" accesskey="I" actionListener="#{crudBean.iniciar}" oncomplete="validaPanel('#{crudBean.msgConfig}');"/>			
+					</div>
+				
+				</fieldset>
+			</div>
 			
+			<script>
+				function validaPanel(msg)
+				{
+					if(msg == '')
+					{
+						#{rich:component('panConfiguracao')}.hide();
+					}
+					else
+					{
+						alert(msg);
+					}
+				}
+			</script>
+		</rich:popupPanel>
+		
+		
+	</ui:define>
+	
 </ui:composition>
