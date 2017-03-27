@@ -207,7 +207,7 @@ public class ServicoBean extends AbstractBean<Servico, ServicoService>
 			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 			try
 			{
-				rp.sendRedirect("/brcli/pages/acessoNegado.jsf");
+				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
 			}
 			catch (IOException e)
 			{

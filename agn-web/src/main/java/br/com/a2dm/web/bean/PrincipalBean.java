@@ -1,13 +1,12 @@
 package br.com.a2dm.web.bean;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Usuario;
 import br.com.a2dm.cmn.service.GrupoService;
@@ -16,6 +15,8 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.entity.Clinica;
 import br.com.a2dm.ngc.entity.ClinicaProfissional;
+import br.com.a2dm.ngc.entity.ClinicaProfissionalRec;
+import br.com.a2dm.ngc.service.ClinicaProfissionalRecService;
 import br.com.a2dm.ngc.service.ClinicaProfissionalService;
 
 
@@ -23,21 +24,29 @@ import br.com.a2dm.ngc.service.ClinicaProfissionalService;
 @ManagedBean
 public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 {
+	private static final String ACAO_LOGOUT  = "login";
+	
 	private List<Usuario> listaProfissional;
 	private List<Clinica> listaClinica;
 	private List<ClinicaProfissional> listaClinicaProfissional;
 	
 	private Usuario profissional;
 	private Clinica clinica;
-	
 	private String msgConfig;
 	
 	private JSFUtil util = new JSFUtil();
 	
+	private int controle;	
+	
 	public PrincipalBean()
 	{
-		util.getSession().removeAttribute("clinicaProfissional");
-		this.configuracaoInicio();
+		this.setControle(0);
+		
+		if( util.getSession().getAttribute("startConfig") == null )
+		{
+			this.configuracaoInicio();
+			util.getSession().setAttribute("startConfig", Integer.MIN_VALUE);
+		}
 	}
 	
 	public void configuracaoInicio()
@@ -85,8 +94,7 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 					}
 					else
 					{
-						//NAO EXISTE CLINICA VINCULADA, REDIRECIONA PARA LOGIN
-						this.redirectLogout();
+						this.setControle(1);
 					}
 				}
 			}
@@ -95,30 +103,84 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 				//USUARIO RECEPCIONISTA
 				if(util.getUsuarioLogado().getIdGrupo().intValue() == GrupoService.GRUPO_RECEPCIONISTA)
 				{
+					ClinicaProfissionalRec clinicaProfissionalRec = new ClinicaProfissionalRec();
+					clinicaProfissionalRec.setIdUsuarioRec(util.getUsuarioLogado().getIdUsuario());
 					
+					List<ClinicaProfissionalRec> lista = ClinicaProfissionalRecService.getInstancia().pesquisar(clinicaProfissionalRec, ClinicaProfissionalRecService.JOIN_CLINICA_PROFISSIONAL
+																																	  | ClinicaProfissionalRecService.JOIN_CLINICA_PROFISSIONAL_CLINICA
+																																	  | ClinicaProfissionalRecService.JOIN_CLINICA_PROFISSIONAL_PROFISSIONAL);
+					
+					if(lista != null
+							&& lista.size() == 1)
+					{
+						util.getSession().setAttribute("clinicaProfissional", lista.get(0).getClinicaProfissional());
+					}
+					else
+					{
+						if(lista != null
+								&& lista.size() > 1)
+						{
+							List<ClinicaProfissional> listaClinicaProfissional = new ArrayList<ClinicaProfissional>();
+							
+							List<Clinica> listaClinica = new ArrayList<Clinica>();
+							Clinica cIni = new Clinica();
+							cIni.setDesClinica("Selecione uma Clinica");
+							listaClinica.add(cIni);
+							
+							List<Usuario> listaProfissional = new ArrayList<Usuario>();
+							Usuario pIni = new Usuario();
+							pIni.setNome("Selecione um Profissional");
+							listaProfissional.add(pIni);
+							
+							for (ClinicaProfissionalRec cpr : lista)
+							{
+								listaClinicaProfissional.add(cpr.getClinicaProfissional());
+								listaProfissional.add(cpr.getClinicaProfissional().getUsuario());
+								listaClinica.add(cpr.getClinicaProfissional().getClinica());
+							}
+							
+							//ELIMINANDO REPETIDOS DAS LISTAS DE CLINICA E PROFISSIONAL
+							HashMap<BigInteger, Clinica> mapClinica = new HashMap<BigInteger, Clinica>();
+							HashMap<BigInteger, Usuario> mapProfissional = new HashMap<BigInteger, Usuario>();
+							
+							for (Usuario objU : listaProfissional)
+							{
+								mapProfissional.put(objU.getIdUsuario(), objU);
+							}
+							
+							for (Clinica objC : listaClinica)
+							{
+								mapClinica.put(objC.getIdClinica(), objC);
+							}
+							
+							this.setListaClinicaProfissional(listaClinicaProfissional);
+							
+							this.setListaClinica(new ArrayList<Clinica>(mapClinica.values()));
+							this.setListaProfissional(new ArrayList<Usuario>(mapProfissional.values()));							
+						}
+						else
+						{
+							this.setControle(1);
+						}
+					}
 				}
 				else
 				{
 					//USUARIO ADMINISTRADOR
 					if(util.getUsuarioLogado().getIdGrupo().intValue() == GrupoService.GRUPO_ADMINISTRADOR)
 					{
-						this.redirectLogout();
+						this.setControle(1);
 					}
 					else
 					{
-						//USUARIO NAO PERTENCE A NENHUM GRUPO, REDIRECIONA PARA LOGIN
-						this.redirectLogout();
+						this.setControle(1);
 					}
 				}
 			}
-			
-			
-		}	
+		}
 		catch(Exception e)
 		{
-			
-			///mensagem
-			
+			this.setControle(1);
 		}
 	}
 
@@ -136,8 +198,7 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 			clinicaProfissional = ClinicaProfissionalService.getInstancia().get(clinicaProfissional, ClinicaProfissionalService.JOIN_CLINICA
 																								   | ClinicaProfissionalService.JOIN_PROFISSIONAL);
 			
-			util.getSession().setAttribute("clinicaProfissional", clinicaProfissional);
-			
+			util.getSession().setAttribute("clinicaProfissional", clinicaProfissional);			
 		}
 		catch (Exception e)
 	    {
@@ -147,7 +208,8 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	
 	private void validarIniciar() throws Exception
 	{
-		if(this.getProfissional() == null)
+		if(this.getProfissional() == null
+				|| this.getProfissional().getIdUsuario() == null)
 		{
 			throw new Exception("O campo Profissional é obrigatório.");
 		}
@@ -159,14 +221,11 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 		}
 	}
 	
-	private void redirectLogout() throws Exception
-	{
-		//util.getSession().invalidate();
+	public String redirectLogout() throws Exception
+	{		
+		util.getSession().invalidate();
 		
-		HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-		HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-		
-		((HttpServletResponse) response).sendRedirect(request.getContextPath() + "/pages/login.jsf");
+		return ACAO_LOGOUT;
 	}
 	
 	public List<ClinicaProfissional> getListaClinicaProfissional() {
@@ -215,5 +274,13 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 
 	public void setMsgConfig(String msgConfig) {
 		this.msgConfig = msgConfig;
+	}
+
+	public int getControle() {
+		return controle;
+	}
+
+	public void setControle(int controle) {
+		this.controle = controle;
 	}
 }

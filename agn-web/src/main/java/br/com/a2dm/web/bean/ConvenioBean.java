@@ -291,7 +291,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
 			try
 			{
-				rp.sendRedirect("/brcli/pages/acessoNegado.jsf");
+				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
 			}
 			catch (IOException e)
 			{

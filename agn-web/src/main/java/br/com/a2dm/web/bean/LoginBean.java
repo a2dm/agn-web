@@ -70,6 +70,14 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			
 			if(usuario != null)
 			{
+				if(usuario.getIdGrupo() == null)
+				{
+					FacesMessage message = new FacesMessage("Você não está vinculado a um Perfil de Usuário. Favor entrar em contato com a administração do sistema.");
+					message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			        FacesContext.getCurrentInstance().addMessage(null, message);
+					return null;
+				}				
+				
 				util.getSession().setAttribute("loginUsuario", usuario);
 				util.getSession().setAttribute("dataLogin", new Date());
 				MenuControl.ativarMenu("flgMenuDsh");
@@ -77,7 +85,7 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			}
 			else
 			{
-				FacesMessage message = new FacesMessage("Login ou Senha incorretos!");
+				FacesMessage message = new FacesMessage("Os dados inseridos não corresponde a um usuário do sistema. Verifique seu Login e Senha e tente novamente.");
 		        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 		        FacesContext.getCurrentInstance().addMessage(null, message);
 				return null;
@@ -95,7 +103,6 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 	
 	public String logout()
 	{
-		
 		JSFUtil util = new JSFUtil();
 		util.getSession().invalidate();
 		
