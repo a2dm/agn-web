@@ -34,18 +34,21 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	private Clinica clinica;
 	private String msgConfig;
 	
-	private JSFUtil util = new JSFUtil();
-	
-	private int controle;	
+	private JSFUtil util = new JSFUtil();	
 	
 	public PrincipalBean()
 	{
-		this.setControle(0);
-		
 		if( util.getSession().getAttribute("startConfig") == null )
 		{
+			util.getSession().setAttribute("controleSemPermissao", new Integer(0));
+			util.getSession().setAttribute("controleTrocarClinicaProfissional", new Integer(0));
+			
 			this.configuracaoInicio();
+			
 			util.getSession().setAttribute("startConfig", Integer.MIN_VALUE);
+			util.getSession().setAttribute("listaProfissional", this.getListaProfissional());
+			util.getSession().setAttribute("listaClinica", this.getListaClinica());
+			util.getSession().setAttribute("listaClinicaProfissional", this.getListaClinicaProfissional());
 		}
 	}
 	
@@ -74,6 +77,8 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 				}
 				else
 				{
+					util.getSession().removeAttribute("clinicaProfissional");
+					
 					if(lista != null
 							&& lista.size() > 1)
 					{
@@ -90,11 +95,14 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 							JSFUtil.copiarPropriedades(obj.getClinica(), clinica);
 							
 							this.getListaClinica().add(clinica);
-						}				        
+						}
+						
+						//SETANDO CONTROLE DE RENDERIZAR O MENU DE TROCAR CLINICA / PROFISSIONAL
+						util.getSession().setAttribute("controleTrocarClinicaProfissional", new Integer(1));
 					}
 					else
-					{
-						this.setControle(1);
+					{						
+						util.getSession().setAttribute("controleSemPermissao", new Integer(1));
 					}
 				}
 			}
@@ -117,6 +125,8 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 					}
 					else
 					{
+						util.getSession().removeAttribute("clinicaProfissional");
+						
 						if(lista != null
 								&& lista.size() > 1)
 						{
@@ -156,34 +166,47 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 							this.setListaClinicaProfissional(listaClinicaProfissional);
 							
 							this.setListaClinica(new ArrayList<Clinica>(mapClinica.values()));
-							this.setListaProfissional(new ArrayList<Usuario>(mapProfissional.values()));							
+							this.setListaProfissional(new ArrayList<Usuario>(mapProfissional.values()));
+							
+							//SETANDO CONTROLE DE RENDERIZAR O MENU DE TROCAR CLINICA / PROFISSIONAL
+							util.getSession().setAttribute("controleTrocarClinicaProfissional", new Integer(1));
 						}
 						else
 						{
-							this.setControle(1);
+							util.getSession().setAttribute("controleSemPermissao", new Integer(1));
 						}
 					}
 				}
 				else
 				{
+					util.getSession().removeAttribute("clinicaProfissional");
+					
 					//USUARIO ADMINISTRADOR
 					if(util.getUsuarioLogado().getIdGrupo().intValue() == GrupoService.GRUPO_ADMINISTRADOR)
 					{
-						this.setControle(1);
+						util.getSession().setAttribute("controleSemPermissao", new Integer(1));
 					}
 					else
 					{
-						this.setControle(1);
+						util.getSession().setAttribute("controleSemPermissao", new Integer(1));
 					}
 				}
 			}
 		}
 		catch(Exception e)
 		{
-			this.setControle(1);
+			util.getSession().setAttribute("controleSemPermissao", new Integer(1));
 		}
 	}
 
+	public void alterarClinicaProfissional() 
+	{
+		util.getSession().removeAttribute("startConfig");
+		
+		
+		
+	}
+	
 	public void iniciar()
 	{
 		try
@@ -224,7 +247,6 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	public String redirectLogout() throws Exception
 	{		
 		util.getSession().invalidate();
-		
 		return ACAO_LOGOUT;
 	}
 	
@@ -274,13 +296,5 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 
 	public void setMsgConfig(String msgConfig) {
 		this.msgConfig = msgConfig;
-	}
-
-	public int getControle() {
-		return controle;
-	}
-
-	public void setControle(int controle) {
-		this.controle = controle;
 	}
 }

@@ -114,41 +114,34 @@
 		            </div>
 		          </li>
 		          
+		          <h:panelGroup id="menuUsuarioLogado">
 		          <li class="list-box user-profile">
 		          
-			            <a id="drop7" href="#" role="button" style="text-align: right;"  data-toggle="dropdown">
+			            <a id="drop7" href="#" role="button" style="text-align: right; font-size: 13px;"  data-toggle="dropdown">
 		            		<h:panelGroup layout="block" id="session1">
 			              		<i class="fa fa-user"></i> &nbsp; &nbsp; <b> <h:outputText value="#{sessionScope.loginUsuario.login}" /> </b>
 		            		</h:panelGroup>		            
-			            </a>
-			            
-			           
-			           <a id="drop7" href="#" role="button" style="text-align: right;"  data-toggle="dropdown">
-			              <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo != 2}" id="session2">
-			              	<i class="fa fa-user-md"></i>  &nbsp; <h:outputText value="#{sessionScope.clinicaProfissional.usuario.nome}"/> &nbsp;&nbsp;
-			              </h:panelGroup>
-			                
-			              <h:panelGroup layout="block" id="session3">
-			              	<i class="fa fa-home"></i>  &nbsp; <h:outputText style="text-transform: upper;" value="#{sessionScope.clinicaProfissional.clinica.desClinica}" />
-			              </h:panelGroup>
-			            </a>
-		            
-		            
-		            <ul class="dropdown-menu server-activity">
-		              <li>
-		                <p><i class="fa fa-cog text-info"></i> Alterar Clínica / Profissional </p>
-		              </li>
-		              <li>
-		                <p><i class="fa fa-fire text-warning"></i> Payment Details</p>
-		              </li>
-		              
-		              <li>
-		                <div class="demo-btn-group clearfix" align="center">
-		                  <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Logout"/>
-		                </div>
-		              </li>
-		            </ul>
+			            </a>			            
+	            
+	            		
+				            <ul class="dropdown-menu server-activity">
+				            <h:panelGroup rendered="#{sessionScope.controleTrocarClinicaProfissional.intValue() == 1}">
+					            <li>
+					              <p><i class="fa fa-cog text-info"></i><span onclick="#{rich:component('panConfiguracao')}.show();">Trocar Clínica / Profissional</span></p>
+					            </li>
+				            </h:panelGroup>
+				              <li>
+				                <p><i class="fa fa-fire text-warning"></i> Alterar Senha</p>
+				              </li>
+				              
+				              <li>
+				                <div class="demo-btn-group clearfix" align="center">
+				                  <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Logout"/>
+				                </div>
+				              </li>
+				            </ul>
 		          </li>
+			            </h:panelGroup>
 		        </ul>
 		      </div>
 	    	</header>
@@ -195,13 +188,20 @@
 			              </ul>
 			            </li>
 			          </ul>
-	        		</div>
+	        		</div>	
 	        
-	        <!-- Titulo da Tela -->
-	        <h:panelGroup layout="block" id="panelTitle">
+	    
+	        <h:panelGroup layout="block" id="panelSession">
 		        <div class="sub-nav hidden-sm hidden-xs">
 		          <ul>
-		            <li><a href="#" class="heading" style="font-weight: bold;">Home / Dashboard</a></li>
+		            <li><div class="heading" style="font-weight: bold; padding-left: 10px; font-size: 12px;"> 
+		            	 
+			              	<i class="fa fa-user-md" style="font-size: 13px;" title="Profissional Responsável"></i>  &nbsp; <h:outputText value="#{sessionScope.clinicaProfissional.usuario.nome}" title="Profissional Responsável"/> &nbsp;&nbsp; 
+			              
+			              	<i class="fa fa-home" style="font-size: 13px;" title="Clínica"></i>  &nbsp; <h:outputText style="text-transform: upperCase;" value="#{sessionScope.clinicaProfissional.clinica.desClinica}" title="Clínica"/>
+			             
+						</div>
+					</li>
 		          </ul>
 		          <div class="custom-search hidden-sm hidden-xs" style="color: white; font-size: small;">
 		          	<h:outputText id="lblExpira" value="Sua sessão expira em: " />
@@ -210,7 +210,7 @@
 		          
 		        </div>
 	        </h:panelGroup>
-	        <!-- Titulo End -->
+	     
 	        <div class="dashboard-wrapper">	        	
 		        <div class="row">
 	            	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -219,7 +219,7 @@
 			                <div class="widget-header">
 			                  <div class="title">
 				              	<span class="mini-title">
-			                    	coment tela
+			                    	${pageTitle}
       			        		</span>
 			                  </div>
 			                </div>
@@ -233,86 +233,86 @@
 				            		<h:panelGroup layout="block" style="padding: 15px" id="pnFrm">
 				                  	
 				                  	
-										<a4j:commandButton render="session2, session3" id="conf" value="teste"/>
+									<a4j:commandButton render="panelSession, menuUsuarioLogado" id="conf" value="teste" style="display: none;"/>
 										
-										<rich:popupPanel id="panConfiguracao" styleClass="modal-content" domElementAttachment="form" modal="true" show="#{crudBean.listaClinicaProfissional.size() > 1}" width="800" height="280" moveable="false">
-			<f:facet name="header">
-				<h:panelGroup>
-					<h:outputText value="Configuração Inicial do Sistema" />
-				</h:panelGroup>
-			</f:facet>
-
-			<div class="modal-body">
-				<fieldset >			
-										
-					<div class="box-body">
-		             <div class="form-group">
-		               <label for="inputEmail3" class="col-sm-3 control-label">Profissional:</label>
-		               <div class="col-sm-8">
-		               	<h:selectOneMenu value="#{crudBean.profissional}" styleClass="form-control" converter="simpleIndexConverter" disabled="#{crudBean.listaProfissional.size() == 1}" >
-							<t:selectItems var="o" itemValue="#{o}" itemLabel="#{o.nome}" value="#{crudBean.listaProfissional}" />
-						</h:selectOneMenu>
-		               </div>
-		             </div>
-					</div>
-					
-					<div class="box-body">
-		             <div class="form-group">
-		               <label for="inputEmail3" class="col-sm-3 control-label">Clínica:</label>
-		               <div class="col-sm-8">
-		               	<h:selectOneMenu value="#{crudBean.clinica}" styleClass="form-control" converter="simpleIndexConverter">
-							<t:selectItems var="o" itemValue="#{o}" itemLabel="#{o.desClinica}" value="#{crudBean.listaClinica}" />
-						</h:selectOneMenu>
-		               </div>
-		             </div>
-					</div>
-					
-					<div class="modal-footer">
-						<a4j:commandButton id="iniciar" styleClass="btn btn-primary" value="Iniciar (I)" accesskey="I" actionListener="#{crudBean.iniciar}" render="session1, session2, session3" oncomplete="validaPanel('#{crudBean.msgConfig}');"/>
-						<h:commandButton id="fechar" styleClass="btn btn-default" value="Sair (S)" accesskey="S" action="#{crudBean.redirectLogout}"/>			
-					</div>
-				
-				</fieldset>
-			</div>
-			
-			<script>
-				$( document ).ready(function() {
-				    document.getElementById('formulario:conf').click();
-				});
-			
-				function validaPanel(msg)
-				{
-					if(msg == '')
-					{
-						#{rich:component('panConfiguracao')}.hide();
-					}
-					else
-					{
-						alert(msg);
-					}
-				}
-			</script>
-		</rich:popupPanel>
+										<rich:popupPanel id="panConfiguracao" styleClass="modal-content" domElementAttachment="form" modal="true" show="#{sessionScope.clinicaProfissional== null}" width="800" height="280" moveable="false">
+											<f:facet name="header">
+												<h:panelGroup>
+													<h:outputText value="Configuração Inicial do Sistema" />
+												</h:panelGroup>
+											</f:facet>
+								
+											<div class="modal-body">
+												<fieldset >			
+																		
+													<div class="box-body">
+										             <div class="form-group">
+										               <label for="inputEmail3" class="col-sm-3 control-label">Profissional:</label>
+										               <div class="col-sm-8">
+										               	<h:selectOneMenu value="#{crudBean.profissional}" styleClass="form-control" converter="simpleIndexConverter" disabled="#{sessionScope.listaProfissional.size() == 1}" >
+															<t:selectItems var="o" itemValue="#{o}" itemLabel="#{o.nome}" value="#{sessionScope.listaProfissional}" />
+														</h:selectOneMenu>
+										               </div>
+										             </div>
+													</div>
+													
+													<div class="box-body">
+										             <div class="form-group">
+										               <label for="inputEmail3" class="col-sm-3 control-label">Clínica:</label>
+										               <div class="col-sm-8">
+										               	<h:selectOneMenu value="#{crudBean.clinica}" styleClass="form-control" converter="simpleIndexConverter">
+															<t:selectItems var="o" itemValue="#{o}" itemLabel="#{o.desClinica}" value="#{sessionScope.listaClinica}" />
+														</h:selectOneMenu>
+										               </div>
+										             </div>
+													</div>
+													
+													<div class="modal-footer">
+														<a4j:commandButton id="iniciar" styleClass="btn btn-primary" value="Iniciar (I)" accesskey="I" actionListener="#{crudBean.iniciar}" render="panelSession" oncomplete="validaPanel('#{crudBean.msgConfig}');"/>
+														<h:commandButton id="fechar" styleClass="btn btn-default" value="Sair (S)" accesskey="S" action="#{crudBean.redirectLogout}"/>			
+													</div>
+												
+												</fieldset>
+											</div>
+											
+											<script>
+												$( document ).ready(function() {
+												    document.getElementById('formulario:conf').click();
+												});
+											
+												function validaPanel(msg)
+												{
+													if(msg == '')
+													{
+														#{rich:component('panConfiguracao')}.hide();
+													}
+													else
+													{
+														alert(msg);
+													}
+												}
+											</script>
+										</rich:popupPanel>
 		
 		
-		<rich:popupPanel id="panExit" styleClass="modal-content" domElementAttachment="form" modal="true" show="#{crudBean.controle == 1}" width="730" height="230" moveable="false">
-			<f:facet name="header">
-				<h:panelGroup>
-					<h:outputText value="Configuração Inicial do Sistema" />
-				</h:panelGroup>
-			</f:facet>
-
-			<div class="modal-body">
-				<b>Olá, Boas Vindas!!! <br/>
-				Você encontra-se registrado no sistema, mas a configuração do seu perfil não está completa. <br/>
-				Aguarde alguns instantes ou entre em contato com a administração para finalizar a configuração do seu perfil.</b>
-			</div>
-			
-			<div class="modal-footer">				
-				<h:commandButton id="exit" styleClass="btn btn-default" value="Sair (S)" accesskey="S" action="#{crudBean.redirectLogout}"/>			
-			</div>
-			
-		</rich:popupPanel>
+										<rich:popupPanel id="panExit" styleClass="modal-content" domElementAttachment="form" modal="true" show="#{sessionScope.controleSemPermissao.intValue() == 1}" width="730" height="230" moveable="false">
+											<f:facet name="header">
+												<h:panelGroup>
+													<h:outputText value="Configuração Inicial do Sistema" />
+												</h:panelGroup>
+											</f:facet>
+								
+											<div class="modal-body">
+												<b>Olá, Boas Vindas!!! <br/>
+												Você encontra-se registrado no sistema, mas a configuração do seu perfil não está completa. <br/>
+												Aguarde alguns instantes ou entre em contato com a administração para finalizar a configuração do seu perfil.</b>
+											</div>
+											
+											<div class="modal-footer">				
+												<h:commandButton id="exit" styleClass="btn btn-default" value="Sair (S)" accesskey="S" action="#{crudBean.redirectLogout}"/>			
+											</div>
+											
+										</rich:popupPanel>
 		
 										
 										
