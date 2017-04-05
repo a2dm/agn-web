@@ -1,4 +1,4 @@
-package br.com.a2dm.web.configuracao;
+package br.com.a2dm.ngc.configuracao;
 
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 

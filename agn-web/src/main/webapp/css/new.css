@@ -1209,8 +1209,8 @@ ul.appointments {
       .widget .widget-header .title .attribution, .widget .widget-header .title .mini-title {
         font-size: 14px;
         padding-left: 4px;
-        color: #b3b3b3;
-        font-weight: normal; }
+        color: #657dc1;
+        font-weight: bold; }
         .widget .widget-header .title .attribution a, .widget .widget-header .title .mini-title a {
           color: #b3b3b3; }
     .widget .widget-header span.tools {

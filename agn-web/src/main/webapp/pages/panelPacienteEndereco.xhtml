@@ -15,7 +15,7 @@
            	<div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Cep *</label>
                <div class="col-sm-2">
-                 <h:inputText value="#{crudBean.entity.cepPaciente}" styleClass="form-control" onblur="buscarCep();" maxlength="9" onkeypress="javascript: mascara(this, mcep); return soNumero(event, this);" id="cep">
+                 <h:inputText value="#{crudBean.entity.cepPaciente}" styleClass="form-control" onblur="buscarCep(); javascript: mascara(this, mcep);" maxlength="9" onkeypress="javascript: mascara(this, mcep); return soNumero(event, this);" id="cep">
                  	<f:passThroughAttribute name="placeholder" value="Cep do Paciente"/>
                  </h:inputText>
                </div>
@@ -60,8 +60,8 @@
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Estado *</label>
                <div class="col-sm-2">
-               	<h:selectOneMenu value="#{crudBean.entity.idEstado}" styleClass="form-control" converter="simpleIndexConverter" id="uf">								
-					<t:selectItems var="o" itemValue="#{o.idEstado}" itemLabel="#{o.descricao}" value="#{crudBean.listaEstado}" />
+               	<h:selectOneMenu value="#{crudBean.siglaEstado}" styleClass="form-control" id="uf">								
+					<t:selectItems var="o" itemValue="#{o.sigla}" itemLabel="#{o.descricao}" value="#{crudBean.listaEstado}" />
 				</h:selectOneMenu>
                </div>
             </div>

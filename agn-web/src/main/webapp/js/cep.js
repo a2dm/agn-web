@@ -34,7 +34,20 @@ function buscarCep()
 	    	            document.getElementById("formulario:viewEdicao:bairro").value = dados.bairro;
 	    	            document.getElementById("formulario:viewEdicao:cidade").value = dados.localidade;
 	    	            document.getElementById("formulario:viewEdicao:uf").value = dados.uf;
+	    	            //alert(dados.uf);
 	    	            
+//	    	            var combo = document.getElementById("formulario:viewEdicao:uf");
+//	    	        	
+//	    	        	for (var i = 0; i < combo.options.length; i++)
+//	    	        	{
+//	    	        	
+//	    	        		if (combo.options[i].value == dados.uf)
+//	    	        		{
+//	    	        			combo.options[i].selected = "true";
+//	    	        			break;
+//	    	        		}
+//	    	        	}
+//	    	            
 	                } //end if.
 	                else {
 	                    //CEP pesquisado não foi encontrado.

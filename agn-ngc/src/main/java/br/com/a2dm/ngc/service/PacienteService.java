@@ -8,21 +8,22 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.RestritorHb;
-import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Paciente;
 
 public class PacienteService extends A2DMHbNgc<Paciente>
-{
-	private JSFUtil util = new JSFUtil();
-	
+{	
 	private static PacienteService instancia = null;
 	
 	public static final int JOIN_USUARIO_CAD = 1;
 	
 	public static final int JOIN_USUARIO_ALT = 2;
+	
+	public static final int JOIN_ESTADO = 4;
 
 	@SuppressWarnings("rawtypes")
 	private static Map filtroPropriedade = new HashMap();
@@ -41,7 +42,9 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 	
 	public PacienteService()
 	{
-		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");		
+		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");
+		adicionarFiltro("nomPaciente", RestritorHb.RESTRITOR_LIKE,"nomPaciente");
+		adicionarFiltro("cpfPaciente", RestritorHb.RESTRITOR_EQ,"cpfPaciente");
 	}
 		
 	@Override
@@ -53,7 +56,7 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 		or.add(Restrictions.eq("emlPaciente",vo.getEmlPaciente()).ignoreCase());		
 		or.add(Restrictions.eq("cpfPaciente",vo.getCpfPaciente()).ignoreCase());
 		criteria.add(or)
-				.add(Restrictions.eq("idProfissional", util.getUsuarioLogado().getIdUsuario()));
+				.add(Restrictions.eq("idProfissional", UtilFuncions.getClinicaProfissionalSession().getIdUsuario()));
 		
 		
 		Paciente paciente = (Paciente) criteria.uniqueResult();
@@ -61,7 +64,7 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 		if(paciente != null)
 		{
 			if(paciente.getNomPaciente() != null
-					&& paciente.getNomPaciente().trim().equals(vo.getNomPaciente().trim()))
+					&& paciente.getNomPaciente().toLowerCase().trim().equals(vo.getNomPaciente().toLowerCase().trim()))
 			{
 				throw new Exception("Já existe um paciente cadastrado com este Nome.");
 			}
@@ -73,7 +76,7 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 			}
 			
 			if(paciente.getEmlPaciente() != null
-					&& paciente.getEmlPaciente().trim().equals(vo.getEmlPaciente().trim()))
+					&& paciente.getEmlPaciente().toLowerCase().trim().equals(vo.getEmlPaciente().toLowerCase().trim()))
 			{
 				throw new Exception("Já existe um Paciente cadastrado com este E-mail.");
 			}
@@ -92,7 +95,12 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 		
 		if ((join & JOIN_USUARIO_ALT) != 0)
 	    {
-			criteria.createAlias("usuarioAlt", "usuarioAlt");
+			criteria.createAlias("usuarioAlt", "usuarioAlt", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
+		if ((join & JOIN_ESTADO) != 0)
+	    {
+			criteria.createAlias("estado", "estado");
 	    }
 		
 		return criteria;

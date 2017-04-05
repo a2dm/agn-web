@@ -17,13 +17,13 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
+import br.com.a2dm.ngc.configuracao.MenuControl;
 import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.entity.ConvenioServico;
 import br.com.a2dm.ngc.entity.Servico;
 import br.com.a2dm.ngc.service.ConvenioService;
 import br.com.a2dm.ngc.service.ConvenioServicoService;
 import br.com.a2dm.ngc.service.ServicoService;
-import br.com.a2dm.web.configuracao.MenuControl;
 
 
 @RequestScoped

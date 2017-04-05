@@ -12,7 +12,7 @@ import br.com.a2dm.cmn.service.UsuarioService;
 import br.com.a2dm.cmn.util.criptografia.CriptoMD5;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
-import br.com.a2dm.web.configuracao.MenuControl;
+import br.com.a2dm.ngc.configuracao.MenuControl;
 
 
 @RequestScoped

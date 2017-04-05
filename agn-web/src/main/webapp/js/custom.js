@@ -98,10 +98,12 @@ function validarCPF(Objcpf)
 	soma1 = (((soma1*10)%11)==10 ? 0:((soma1*10)%11));
 	soma2=(((soma2+(2*soma1))*10)%11);
 
-	var digitoGerado=(soma1*10)+soma2;
-	if(digitoGerado!=digitoDigitado){
-		alert('CPF Invalido, Favor informar um CPF válido!');
-		Objcpf.value = "";
+	if(cpf != ''){
+		var digitoGerado=(soma1*10)+soma2;
+		if(digitoGerado!=digitoDigitado){
+			alert('CPF Invalido, Favor informar um CPF válido!');
+			Objcpf.value = "";
+		}
 	}
 }
 

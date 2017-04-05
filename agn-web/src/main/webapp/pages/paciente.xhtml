@@ -23,8 +23,18 @@
 	</ui:define>
     
     <ui:define name="content">
+    
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca"> 
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Código *</label>
+		          <div class="col-md-2" style="width: 200px;">
+		          	<h:inputText value="#{crudBean.searchObject.idPaciente}" styleClass="form-control" onkeypress="return soNumero(event, this);" maxlength="6" id="id">
+		          		<f:passThroughAttribute name="placeholder" value="Código do Paciente"/>
+		          	</h:inputText>		           		
+		          </div>
+		       </div>
+		       
 		       <div class="form-group">
 		          <label class="col-md-2 control-label">Nome *</label>
 		          <div class="col-md-6">
@@ -37,7 +47,7 @@
 		       <div class="form-group">
 		          <label class="col-md-2 control-label">Cpf *</label>
 		          <div class="col-md-2" style="width: 200px;">
-		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
+		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" maxlength="14" id="cpf">
 		           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>
 		           	</h:inputText>
 		          </div>
@@ -50,7 +60,7 @@
 		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;" rendered="#{crudBean.updating}">
 			<f:subview id="viewEdicao">
 				
-				<rich:tabPanel switchType="client">
+				<rich:tabPanel switchType="client" activeItem="#{crudBean.activeTab}">
 					 <rich:tab header="Daods Pessoais">
 				
 						<h:panelGroup id="panelGroupAlterar1" rendered="#{crudBean.editing}" style="height:100%">
@@ -83,7 +93,7 @@
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Cpf *</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
+				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
 				           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>
 				           	</h:inputText>
 				          </div>
@@ -115,7 +125,7 @@
 				       </div>
 				       
 				       <div class="form-group">
-				          <label class="col-md-2 control-label">Celular</label>
+				          <label class="col-md-2 control-label">Celular *</label>
 				          <div class="col-md-2" style="width: 200px;">
 				          	<h:inputText value="#{crudBean.entity.celPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="15" id="cel">
 				          		<f:passThroughAttribute name="placeholder" value="Pessoal"/>
@@ -149,16 +159,75 @@
 		<h:panelGrid id="tblResult" layout="block" style="width: 100%; height: 100%;z" >
 			<f:subview id="viewListagem">
 				<div class="box-content">
-					
+					<rich:dataTable id="tblData" 
+								 value="#{crudBean.searchResult}" 
+							       var="rst" rows="10"
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="width: 5%; text-align: center;">
+									Código
+								</rich:column>
+								<rich:column style="width:56%; text-align: center;">
+									Nome
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Cpf
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Sexo
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Nascimento
+								</rich:column>
+								<rich:column style="width: 3%; text-align: center;"/>
+								<rich:column style="width: 3%; text-align: center;"/>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.idPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.nomPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.cpfPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="Masculino" rendered="#{rst.sexPaciente == 'M'}"/>
+							<h:outputText value="Feminino" rendered="#{rst.sexPaciente == 'F'}"/>
+						</rich:column>	
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.datNascimento}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<a4j:commandButton image="../img/visualizar.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR" render="pnFrm" oncomplete="#{rich:component('panVisualizar')}.show();">
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<a4j:commandButton image="../img/edit.png" style="border:none; width: 20px; height: 20px;" title="ALTERAR" action="#{crudBean.preparaAlterar}" render="pnFrm, panelTitle, comentTela" >
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+						</rich:column>
+					</rich:dataTable>
 				</div>
 				<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
+				<h:panelGroup style="color: #333333" rendered="#{empty crudBean.searchResult and crudBean.searching}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
 				<div align="center">
-					
+					<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
 				</div>
 			</f:subview>
 		</h:panelGrid>
 	</ui:define>
 	
-	
+	<ui:define name="modal">
+		<rich:popupPanel id="panVisualizar" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="480" resizeable="false" onmaskclick="#{rich:component('panVisualizar')}.hide()">
+			<ui:include src="panelVisualizarPaciente.xhtml" />
+		</rich:popupPanel>
+	</ui:define>
 			
 </ui:composition>

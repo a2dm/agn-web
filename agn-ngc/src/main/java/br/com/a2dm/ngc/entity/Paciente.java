@@ -21,6 +21,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Proxy;
 
+import br.com.a2dm.cmn.entity.Estado;
 import br.com.a2dm.cmn.entity.Usuario;
 
 /** 
@@ -82,6 +83,10 @@ public class Paciente implements Serializable
 	
 	@Column(name = "id_estado")
 	private BigInteger idEstado;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_estado", insertable = false, updatable = false)
+	private Estado estado;
 	
 	@Column(name = "cmp_paciente")
 	private String cmpPaciente;
@@ -339,5 +344,13 @@ public class Paciente implements Serializable
 
 	public void setFlgCompleto(String flgCompleto) {
 		this.flgCompleto = flgCompleto;
+	}
+
+	public Estado getEstado() {
+		return estado;
+	}
+
+	public void setEstado(Estado estado) {
+		this.estado = estado;
 	}
 }

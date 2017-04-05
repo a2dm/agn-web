@@ -13,6 +13,7 @@ import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.service.UsuarioService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.ngc.configuracao.MenuControl;
 import br.com.a2dm.ngc.entity.Clinica;
 import br.com.a2dm.ngc.entity.ClinicaProfissional;
 import br.com.a2dm.ngc.entity.ClinicaProfissionalRec;
@@ -38,6 +39,8 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	
 	public PrincipalBean()
 	{
+		MenuControl.ativarMenu("flgMenuDsh");
+		
 		if( util.getSession().getAttribute("startConfig") == null )
 		{
 			util.getSession().setAttribute("controleSemPermissao", new Integer(0));

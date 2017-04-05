@@ -193,16 +193,17 @@ public class JSFUtil
     }
     
     public Usuario getUsuarioLogado() throws Exception
-   {
+    {	
 
-      Object usuarioLogadoObj = getSession().getAttribute(AbstractBean.USUARIO_LOGADO);
-      if (usuarioLogadoObj == null)
-      {
-         throw new Exception("N�o existe usu�rio logado no sistema!");
-      }
+    	Object usuarioLogadoObj = getSession().getAttribute(AbstractBean.USUARIO_LOGADO);
+    	
+    	if (usuarioLogadoObj == null)
+    	{
+    		throw new Exception("Não existe usuário logado no sistema.");
+    	}
 
-      return (Usuario) usuarioLogadoObj;
-   }
+    	return (Usuario) usuarioLogadoObj;
+    }
     
     @SuppressWarnings({ "rawtypes", "unchecked" })
 	public static void copiarPropriedades(Object origem, Object destino)

@@ -15,9 +15,10 @@ import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
+import br.com.a2dm.ngc.configuracao.MenuControl;
+import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.service.PacienteService;
-import br.com.a2dm.web.configuracao.MenuControl;
 
 
 @RequestScoped
@@ -25,6 +26,9 @@ import br.com.a2dm.web.configuracao.MenuControl;
 public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 {
 	private List<Estado> listaEstado;
+	private String siglaEstado;
+	private String activeTab;
+	
 	
 	private JSFUtil util = new JSFUtil();
 	
@@ -41,6 +45,7 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	protected void setDefaultInserir() throws Exception 
 	{
 		this.getEntity().setSexPaciente("M");
+		this.setActiveTab("Dados Pessoais");
 	}
 	
 	@Override
@@ -62,9 +67,23 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	@Override
 	protected void completarInserir() throws Exception
 	{
+		Estado estado = new Estado();
+		estado.setSigla(this.getSiglaEstado());
+		estado = EstadoService.getInstancia().get(estado, 0);
+		
+		this.getEntity().setIdEstado(estado.getIdEstado());
+		this.getEntity().setIdProfissional(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
 		this.getEntity().setFlgCompleto("S");
+	}
+	
+	@Override
+	protected int getJoinPesquisar()
+	{
+		return PacienteService.JOIN_USUARIO_CAD
+			 | PacienteService.JOIN_USUARIO_ALT
+			 | PacienteService.JOIN_ESTADO;
 	}
 	
 	@Override
@@ -112,6 +131,11 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 			throw new Exception("O campo Data de Nascimento é obrigatório.");
 		}
 		
+		if(this.getEntity().getCelPaciente() == null || this.getEntity().getCelPaciente().trim().equals(""))
+		{
+			throw new Exception("O campo Celular é obrigatório.");
+		}
+		
 		if(this.getEntity().getCepPaciente() == null || this.getEntity().getCepPaciente().trim().equals(""))
 		{
 			throw new Exception("O campo Cep é obrigatório.");
@@ -137,7 +161,7 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 			throw new Exception("O campo Cidade é obrigatório.");
 		}
 		
-		if(this.getEntity().getIdEstado() == null || this.getEntity().getIdEstado().longValue() <= 0)
+		if(this.getSiglaEstado() == null || this.getSiglaEstado().trim().equals(""))
 		{
 			throw new Exception("O campo Estado é obrigatório.");
 		}
@@ -155,5 +179,21 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 
 	public void setListaEstado(List<Estado> listaEstado) {
 		this.listaEstado = listaEstado;
+	}
+
+	public String getSiglaEstado() {
+		return siglaEstado;
+	}
+
+	public void setSiglaEstado(String siglaEstado) {
+		this.siglaEstado = siglaEstado;
+	}
+
+	public String getActiveTab() {
+		return activeTab;
+	}
+
+	public void setActiveTab(String activeTab) {
+		this.activeTab = activeTab;
 	}
 }

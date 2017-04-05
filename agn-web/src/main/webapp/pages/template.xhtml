@@ -53,6 +53,7 @@
 	    <script src="../js/flot/custom/realtime-index.js"></script>
 	    <script src="../js/flot/custom/index3-scatter.js"></script>
 	    
+		<script src="../js/jquery.maskedinput.min.js" type="text/javascript"></script>
 	    <!-- Custom JS -->
 	    <script src="../js/menu.js"></script>
 	
@@ -108,32 +109,33 @@
 		            </div>
 		          </li>
 		          
-		          <li class="list-box user-profile">
-		            <a id="drop7" href="#" role="button" style="text-align: right;"  data-toggle="dropdown">
-		              <i class="fa fa-user"></i> &nbsp; &nbsp; <b> <h:outputText value="#{sessionScope.loginUsuario.login}" /> </b>
-		            </a>		            
-		            <a id="drop8" style="font-size: 13px; text-align: right" href="#" role="button" >
-		              <h:panelGroup layout="block" rendered="#{sessionScope.loginUsuario.idGrupo != 2}">
-		              	<i class="fa fa-home"></i>  &nbsp; <h:outputText value="#{sessionScope.clinicaProfissional.usuario.nome}" /> &nbsp;&nbsp;
-		              </h:panelGroup>  
-		              <i class="fa fa-home"></i>  &nbsp; <h:outputText style="text-transform: upper;" value="#{sessionScope.clinicaProfissional.clinica.desClinica}" />
-		            </a>
-		            
-		            <ul class="dropdown-menu server-activity">
-		              <li>
-		                <p><i class="fa fa-cog text-info"></i> Account Settings</p>
-		              </li>
-		              <li>
-		                <p><i class="fa fa-fire text-warning"></i> Payment Details</p>
-		              </li>
-		              
-		              <li>
-		                <div class="demo-btn-group clearfix" align="center">
-		                  <h:commandButton action="#{loginBean.logout}" styleClass="btn btn-primary" value="Logout"/>
-		                </div>
-		              </li>
-		            </ul>
-		          </li>
+		          <h:panelGroup id="menuUsuarioLogado">
+			          <li class="list-box user-profile">			          
+			            <a id="drop7" href="#" role="button" style="text-align: right; font-size: 13px;"  data-toggle="dropdown">
+		            		<h:panelGroup layout="block" id="session1">
+			              		<i class="fa fa-user"></i> &nbsp; &nbsp; <b> <h:outputText value="#{sessionScope.loginUsuario.login}" /> </b>
+		            		</h:panelGroup>		            
+			            </a>
+	            		
+			            <ul class="dropdown-menu server-activity">
+				            <h:panelGroup rendered="#{sessionScope.controleTrocarClinicaProfissional.intValue() == 1}">
+					            <li>
+					              <p><i class="fa fa-cog text-info"></i><span onclick="#{rich:component('panConfiguracao')}.show();">Trocar Clínica / Profissional</span></p>
+					            </li>
+				            </h:panelGroup>
+				            
+				            <li>
+				            	<p><i class="fa fa-fire text-warning"></i> Alterar Senha</p>
+				            </li>
+			              
+			              	<li>
+				                <div class="demo-btn-group clearfix" align="center">
+				                  <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Logout"/>
+				                </div>
+			              	</li>
+			            </ul>
+			          </li>
+			      </h:panelGroup>
 		        </ul>
 		      </div>
 	    	</header>
@@ -144,7 +146,7 @@
 	       			<div id='cssmenu'>
 			          <ul>
 			            <li class='#{sessionScope.flgMenuDsh}'>
-			              <a href='#'><i class="fa fa-dashboard"></i>Dashboard</a>	              
+			              <h:commandLink action="principal"> <i class="fa fa-dashboard"></i>Dashboard </h:commandLink>	              
 			            </li>
 			            <li class='#{sessionScope.flgMenuAgn}'>
 			              <a href="calendar.html">
@@ -182,66 +184,74 @@
 			          </ul>
 	        		</div>
 	        
-	        <!-- Titulo da Tela -->
-	        <h:panelGroup layout="block" id="panelTitle">
-		        <div class="sub-nav hidden-sm hidden-xs">
-		          <ul>
-		            <li><a href="#" class="heading" style="font-weight: bold;">#{pageTitle}</a></li>
-		          </ul>
-		          <div class="custom-search hidden-sm hidden-xs" style="color: white; font-size: small;">
-		          	<h:outputText id="lblExpira" value="Sua sessão expira em: " />
-                	<h:outputText id="contadorSessao"/> 
-		          </div>
-		        </div>
-	        </h:panelGroup>
-	        <!-- Titulo End -->
-	        <div class="dashboard-wrapper">	        	
-		        <div class="row">
-	            	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-				    	<div class="widget sales-overview">
-			                <h:panelGroup layout="block" id="comentTela">
-			                <div class="widget-header">
-			                  <div class="title">
-				              	<span class="mini-title">
-			                    	<ui:insert name="comentTela"/>
-      			        		</span>
-			                  </div>
-			                </div>
-                			</h:panelGroup>
-                			<div class="widget-body no-padding">   
-	            				<div class="widget-body">
-	            					<a4j:outputPanel style="width:100%;height:100%;" ajaxRendered="true">
-									    <rich:messages layout="table" globalOnly="true" errorClass="alert alert-danger" infoClass="alert alert-success" warnClass="alert alert-info" id="messages"/>
-									</a4j:outputPanel>
-	            				
-				            		<h:panelGroup layout="block" style="padding: 15px" id="pnFrm">
-				                  	
-					                  	<ui:insert name="saveStateObjects"/>
-										<ui:insert name="saveStateObjectsDefined"/>
-										<ui:insert name="content"/>
-										<ui:insert name="buttons">
-											<div class="form-group">
-	                        					<div class="col-sm-offset-2 col-sm-10">
-						                          <ui:insert name="buttonItens"/>
-						                    	</div>
-				                          	</div>
-										</ui:insert>
-										<ui:insert name="list"/>
-										<ui:insert name="modal"/>
-									</h:panelGroup>
+			        <h:panelGroup layout="block" id="panelSession">
+				        <div class="sub-nav hidden-sm hidden-xs">
+				          <ul>
+				            <li><div class="heading" style="font-weight: bold; padding-left: 10px; font-size: 12px;"> 
+				            	 
+					              	<i class="fa fa-user-md" style="font-size: 13px;" title="Profissional Responsável"></i>  &nbsp; <h:outputText value="#{sessionScope.clinicaProfissional.usuario.nome}" title="Profissional Responsável"/> &nbsp;&nbsp; 
+					              
+					              	<i class="fa fa-home" style="font-size: 13px;" title="Clínica"></i>  &nbsp; <h:outputText style="text-transform: upperCase;" value="#{sessionScope.clinicaProfissional.clinica.desClinica}" title="Clínica"/>
+					             
 								</div>
-							</div>
-						</div>
-	            	</div>
-	           	</div>
-           	</div>
+							</li>
+				          </ul>
+				          <div class="custom-search hidden-sm hidden-xs" style="color: white; font-size: small;">
+				          	<h:outputText id="lblExpira" value="Sua sessão expira em: " />
+		                	<h:outputText id="contadorSessao"/> 
+				          </div>
+				          
+				        </div>
+			        </h:panelGroup>
+	        	        
+	       
+			        <div class="dashboard-wrapper">	        	
+				        <div class="row">
+			            	<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+						    	<div class="widget sales-overview">
+					                <h:panelGroup layout="block" id="comentTela">
+					                <div class="widget-header">
+					                  <div class="title">
+						              	<span class="mini-title">
+					                    	${pageTitle}
+		      			        		</span>
+					                  </div>
+					                </div>
+		                			</h:panelGroup>
+		                			<div class="widget-body no-padding">   
+			            				<div class="widget-body">
+			            					<a4j:outputPanel style="width:100%;height:100%;" ajaxRendered="true">
+											    <rich:messages layout="table" globalOnly="true" errorClass="alert alert-danger" infoClass="alert alert-success" warnClass="alert alert-info" id="messages"/>
+											</a4j:outputPanel>
+			            				
+						            		<h:panelGroup layout="block" style="padding: 15px" id="pnFrm">
+						                  	
+							                  	<ui:insert name="saveStateObjects"/>
+												<ui:insert name="saveStateObjectsDefined"/>
+												<ui:insert name="content"/>
+												<ui:insert name="buttons">
+													<div class="form-group">
+			                        					<div class="col-sm-offset-2 col-sm-10">
+								                          <ui:insert name="buttonItens"/>
+								                    	</div>
+						                          	</div>
+												</ui:insert>
+												<ui:insert name="list"/>
+												<ui:insert name="modal"/>
+											</h:panelGroup>
+										</div>
+									</div>
+								</div>
+			            	</div>
+			           	</div>
+		           	</div>
 	        
 	        
-        	<footer>
-          		<p>© Desenvolvido por <a href="http://a2dm.com.br" style="font: bold; color: white;" target="_blank"> A2DM</a> - 2016.</p>
-        	</footer>
-	      	</div>
-	    </div>
+		        	<footer>
+		          		<p>© Desenvolvido por <a href="http://a2dm.com.br" style="font: bold; color: white;" target="_blank"> A2DM</a> - 2016.</p>
+		        	</footer>
+	      		</div>
+	    	</div>
 	    </h:form>
 
 	</h:body>
