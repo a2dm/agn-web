@@ -12,6 +12,10 @@
 	
 	<ui:param name="pageTitle" value="#{crudBean.fullTitle}" />
 	
+	<ui:define name="pageIcon">
+		<h:commandLink actionListener="#{crudBean.clean}" title="Limpar Tela" rendered="#{crudBean.searching}" render="pnFrm, panelTitle, comentTela"> <i class="fa fa-eraser" /></h:commandLink>
+	</ui:define>
+	
 	<ui:define name="saveStateObjects">
 		<t:saveState value="#{crudBean.searchObject}" />
 		<t:saveState value="#{crudBean.currentState}" />

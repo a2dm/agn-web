@@ -300,6 +300,7 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
     	  {
     		  setValoresDefault();
     		  setCurrentState(STATE_SEARCH);
+    		  setSearchObject(getNewEntityInstance());
     		  setListaPesquisa();
     		  this.setSearchResult(null);
     	  }
@@ -475,7 +476,6 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
     */
    public void inserir(ActionEvent event) 
    {
-      // inclus�o
       try
       {
     	  if(validarAcesso(Variaveis.ACAO_INSERIR))
@@ -488,7 +488,7 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
     				  new FacesMessage(FacesMessage.SEVERITY_INFO,
     						  "Registro inserido com sucesso.", null));
     		  
-    		  this.cancelar(event);
+    		  this.clean(event);
     	  }
       }
       catch (Exception e)
@@ -528,7 +528,7 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
     		  // search(event);
     		  // realiza a pesquisa para preenchimento dos combos
     		  // setSearchLists();
-    		  this.cancelar(event);
+    		  this.clean(event);
     	  }
       }
       catch (Exception e)
@@ -829,12 +829,38 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
     		 // limpa dos dados dos componentes de edi��o
     		 cleanSubmittedValues(pnlEditing);
     		 // remove a entidade selecionada colocando uma nova, vazia no lugar
-    		 setSearchObject(getNewEntityInstance());
+    		 //setSearchObject(getNewEntityInstance());
     		 // realiza a pesquisa para preenchimento dos combos
-    		 setListaPesquisa();
+    		 //setListaPesquisa();
     		 // seto a lista que foi pesquisada para null
-    		 setSearchResult(null);
+    		 //setSearchResult(null);
     	 //}
+      }
+      catch (Exception e)
+      {
+         FacesMessage message = new FacesMessage(e.getMessage());
+         message.setSeverity(FacesMessage.SEVERITY_ERROR);
+         if(e.getMessage() == null)
+        	 FacesContext.getCurrentInstance().addMessage("", message);
+         else
+        	 FacesContext.getCurrentInstance().addMessage(null, message);
+      }
+   }
+   
+   /**
+    * Cancela a inclus�o / altera��o.
+    * 
+    * @param event - evento que foi disparado na tela
+    */
+   public void clean(ActionEvent event)
+   {
+      try
+      {
+		 setCurrentState(STATE_SEARCH);		 
+		 cleanSubmittedValues(pnlEditing);		
+		 setSearchObject(getNewEntityInstance());		 
+		 setListaPesquisa();
+		 setSearchResult(null);
       }
       catch (Exception e)
       {

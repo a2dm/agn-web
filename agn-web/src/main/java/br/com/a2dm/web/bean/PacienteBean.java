@@ -5,15 +5,18 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Estado;
 import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.configuracao.MenuControl;
 import br.com.a2dm.ngc.configuracao.UtilFuncions;
@@ -65,6 +68,30 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	}
 	
 	@Override
+	public void preparaAlterar()
+	{
+		try
+		{
+			if(validarAcesso(Variaveis.ACAO_PREPARA_ALTERAR))
+			{
+				super.preparaAlterar();
+				
+				Estado estado = new Estado();
+				estado.setIdEstado(this.getEntity().getIdEstado());
+				estado = EstadoService.getInstancia().get(estado, 0);
+				
+				this.setSiglaEstado(estado.getSigla());
+			}
+		}
+		catch (Exception e) 
+		{	
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	        FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}	
+
+	@Override
 	protected void completarInserir() throws Exception
 	{
 		Estado estado = new Estado();
@@ -75,6 +102,21 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 		this.getEntity().setIdProfissional(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
+		this.getEntity().setFlgCompleto("S");
+	}
+	
+	@Override
+	protected void completarAlterar() throws Exception
+	{
+		this.validarInserir();
+		
+		Estado estado = new Estado();
+		estado.setSigla(this.getSiglaEstado());
+		estado = EstadoService.getInstancia().get(estado, 0);
+		
+		this.getEntity().setIdEstado(estado.getIdEstado());		
+		this.getEntity().setDatAlteracao(new Date());
+		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 		this.getEntity().setFlgCompleto("S");
 	}
 	
