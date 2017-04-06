@@ -89,6 +89,27 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	        FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+	
+	@Override
+	public void preparaVisualizar()
+	{
+		try
+		{			
+			super.preparaVisualizar();
+			
+			Estado estado = new Estado();
+			estado.setIdEstado(this.getEntity().getIdEstado());
+			estado = EstadoService.getInstancia().get(estado, 0);
+			
+			this.setSiglaEstado(estado.getSigla());
+		}
+		catch (Exception e) 
+		{	
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	        FacesContext.getCurrentInstance().addMessage(null, message);
+		}
 	}	
 
 	@Override

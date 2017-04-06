@@ -15,52 +15,42 @@
            	<div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Cep *</label>
                <div class="col-sm-2">
-                 <h:inputText value="#{crudBean.entity.cepPaciente}" styleClass="form-control" onblur="buscarCep(); javascript: mascara(this, mcep);" maxlength="9" onkeypress="javascript: mascara(this, mcep); return soNumero(event, this);" id="cep">
-                 	<f:passThroughAttribute name="placeholder" value="Cep do Paciente"/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.cepPaciente}" styleClass="form-control" onblur="buscarCep(); javascript: mascara(this, mcep);" maxlength="9" onkeypress="javascript: mascara(this, mcep); return soNumero(event, this);" id="cep" readonly="#{crudBean.viewing}"/>
                </div>
             </div>
             
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Logradouro *</label>
                <div class="col-sm-4">
-                 <h:inputText value="#{crudBean.entity.lgdPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="logradouro">
-                 	<f:passThroughAttribute name="placeholder" value="Logradouro do Paciente"/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.lgdPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="logradouro" readonly="#{crudBean.viewing}"/>
                </div>
             </div>
             
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Número *</label>
                <div class="col-sm-1">
-                 <h:inputText value="#{crudBean.entity.numEndereco}" styleClass="form-control" maxlength="6" onkeypress="return soNumero(event, this);" id="numero">
-                 	<f:passThroughAttribute name="placeholder" value="Nº Resid."/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.numEndereco}" styleClass="form-control" maxlength="6" onkeypress="return soNumero(event, this);" id="numero" readonly="#{crudBean.viewing}"/>
                </div>
             </div>
             
              <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Bairro *</label>
                <div class="col-sm-2">
-                 <h:inputText value="#{crudBean.entity.brrPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="bairro">
-                 	<f:passThroughAttribute name="placeholder" value="Bairro do Paciente"/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.brrPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="bairro" readonly="#{crudBean.viewing}"/>                 	
                </div>
             </div>
             
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Cidade *</label>
                <div class="col-sm-2">
-                 <h:inputText value="#{crudBean.entity.cidPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="cidade">
-                 	<f:passThroughAttribute name="placeholder" value="Cidade do Paciente"/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.cidPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="cidade" readonly="#{crudBean.viewing}"/>                 
                </div>
             </div>
             
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Estado *</label>
                <div class="col-sm-2">
-               	<h:selectOneMenu value="#{crudBean.siglaEstado}" styleClass="form-control" id="uf">								
+               	<h:selectOneMenu value="#{crudBean.siglaEstado}" styleClass="form-control" id="uf" disabled="#{crudBean.viewing}">								
 					<t:selectItems var="o" itemValue="#{o.sigla}" itemLabel="#{o.descricao}" value="#{crudBean.listaEstado}" />
 				</h:selectOneMenu>
                </div>
@@ -69,18 +59,14 @@
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Complemento</label>
                <div class="col-sm-4">
-                 <h:inputText value="#{crudBean.entity.cmpPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="complemento">
-                 	<f:passThroughAttribute name="placeholder" value="Complemento do Paciente"/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.cmpPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="complemento" readonly="#{crudBean.viewing}"/>                 
                </div>
             </div>
             
             <div class="form-group">
                <label for="inputEmail3" class="col-sm-2 control-label">Referência</label>
                <div class="col-sm-4">
-                 <h:inputText value="#{crudBean.entity.refPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="referencia">
-                 	<f:passThroughAttribute name="placeholder" value="Ponto de Referência"/>
-                 </h:inputText>
+                 <h:inputText value="#{crudBean.entity.refPaciente}" styleClass="form-control" maxlength="200" onblur="upper(this);" id="referencia" readonly="#{crudBean.viewing}"/>                 	
                </div>
             </div>
 		</div>

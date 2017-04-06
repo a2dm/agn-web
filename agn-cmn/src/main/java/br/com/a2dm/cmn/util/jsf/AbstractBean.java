@@ -721,25 +721,21 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
 	  }
    }
    
-   public void preparaVisualizar(ActionEvent event) throws Exception
+   public void preparaVisualizar()
    {
-	  if(validarAcesso(Variaveis.ACAO_PREPARA_VISUALIZAR))
-	  {
-		  if (this.getSelectedRowEntity() != null)
-		  {
-			  setEntity(getSelectedRowEntity());
-			  
-			  // Alterna os panels necess�rios para mostrar o conte�do da exclus�o
-			  setCurrentState(STATE_VIEW);
-		  }
-		  else
-		  {
-			  FacesContext.getCurrentInstance().addMessage(
-					  null,
-					  new FacesMessage(FacesMessage.SEVERITY_WARN,
-							  noItemSelectedMessage, null));
-		  }
-	  }
+	   try
+	   {
+		   setCurrentState(STATE_VIEW);
+		   setListaAlterar();
+	   }
+	   catch (Exception e)
+	   {
+		   FacesMessage message = new FacesMessage(e.getMessage());
+		   message.setSeverity(FacesMessage.SEVERITY_ERROR);
+		   if(e.getMessage() == null)
+        	 FacesContext.getCurrentInstance().addMessage("", message);
+        	 FacesContext.getCurrentInstance().addMessage(null, message);
+      }
    }
 
    /**

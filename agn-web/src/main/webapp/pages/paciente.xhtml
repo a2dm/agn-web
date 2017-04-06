@@ -57,7 +57,7 @@
 	       </f:subview>
 		</h:panelGroup>
 		
-		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;" rendered="#{crudBean.updating}">
+		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;" rendered="#{crudBean.updating || crudBean.viewing}">
 			<f:subview id="viewEdicao">
 				
 				<rich:tabPanel switchType="client" activeItem="#{crudBean.activeTab}">
@@ -75,61 +75,49 @@
 						 <div class="form-group">
 				          <label class="col-md-2 control-label">Nome *</label>
 				          <div class="col-md-6">
-				          	<h:inputText value="#{crudBean.entity.nomPaciente}" styleClass="form-control" maxlength="200" id="nom">
-				           		<f:passThroughAttribute name="placeholder" value="Nome do Paciente"/>
-				           	</h:inputText>
+				          	<h:inputText value="#{crudBean.entity.nomPaciente}" styleClass="form-control" maxlength="200" id="nom" readonly="#{crudBean.viewing}"/>
 				          </div>
 				       </div>
 				       
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">E-mail *</label>
 				          <div class="col-md-6">
-				          	<h:inputText value="#{crudBean.entity.emlPaciente}" styleClass="form-control" onblur="validarEmail(this);" maxlength="200" id="eml">
-				           		<f:passThroughAttribute name="placeholder" value="E-mail do Paciente"/>
-				           	</h:inputText>
+				          	<h:inputText value="#{crudBean.entity.emlPaciente}" styleClass="form-control" onblur="validarEmail(this);" maxlength="200" id="eml" readonly="#{crudBean.viewing}"/>				           		
 				          </div>
 				       </div>
 				       
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Cpf *</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
-				           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>
-				           	</h:inputText>
+				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf" readonly="#{crudBean.viewing}"/>				           		
 				          </div>
 				       </div>
 				       
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Rg</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<h:inputText value="#{crudBean.entity.rgPaciente}" onkeypress="return soNumero(event, this);" styleClass="form-control" maxlength="20" id="rg">
-				          		<f:passThroughAttribute name="placeholder" value="Rg do Paciente"/>
-				          	</h:inputText>
+				          	<h:inputText value="#{crudBean.entity.rgPaciente}" onkeypress="return soNumero(event, this);" styleClass="form-control" maxlength="20" id="rg" readonly="#{crudBean.viewing}"/>				          	
 				          </div>
 				       </div>
 				       
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Data de Nascimento *</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<rich:calendar value="#{crudBean.entity.datNascimento}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10"/>
+				          	<rich:calendar value="#{crudBean.entity.datNascimento}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" readonly="#{crudBean.viewing}"/>
 				          </div>
 				       </div>
 				       
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Telefone</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<h:inputText value="#{crudBean.entity.telPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="14" id="tel">
-				          		<f:passThroughAttribute name="placeholder" value="Residencial"/>
-				          	</h:inputText>
+				          	<h:inputText value="#{crudBean.entity.telPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="14" id="tel" readonly="#{crudBean.viewing}"/>				          	
 				          </div>
 				       </div>
 				       
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Celular *</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<h:inputText value="#{crudBean.entity.celPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="15" id="cel">
-				          		<f:passThroughAttribute name="placeholder" value="Pessoal"/>
-				          	</h:inputText>
+				          	<h:inputText value="#{crudBean.entity.celPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="15" id="cel" readonly="#{crudBean.viewing}"/>				          	
 				          </div>
 				       </div>
 				       
@@ -137,7 +125,7 @@
 				          <label class="col-md-2 control-label">Sexo</label>
 				          <div class="col-md-6" style="width: 400px;">
 				          	<div style="width: 230px; padding-left: 20px;" class="radio">
-								<h:selectOneRadio value="#{crudBean.entity.sexPaciente}" style="width: 100%;" >
+								<h:selectOneRadio value="#{crudBean.entity.sexPaciente}" style="width: 100%;" disabled="#{crudBean.viewing}">
 									<f:selectItem itemValue="M" itemLabel="Masculino" />
 									<f:selectItem itemValue="F" itemLabel="Feminino"/>
 								</h:selectOneRadio>
@@ -204,7 +192,7 @@
 							<h:outputText value="#{rst.datNascimento}" />
 						</rich:column>
 						<rich:column style="text-align: center;">
-							<a4j:commandButton image="../img/visualizar.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR" render="pnFrm" oncomplete="#{rich:component('panVisualizar')}.show();">
+							<a4j:commandButton image="../img/visualizar.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR" action="#{crudBean.preparaVisualizar}" render="pnFrm, panelTitle, comentTela">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 							</a4j:commandButton>
 						</rich:column>
@@ -222,12 +210,6 @@
 				</div>
 			</f:subview>
 		</h:panelGrid>
-	</ui:define>
-	
-	<ui:define name="modal">
-		<rich:popupPanel id="panVisualizar" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="480" resizeable="false" onmaskclick="#{rich:component('panVisualizar')}.hide()">
-			<ui:include src="panelVisualizarPaciente.xhtml" />
-		</rich:popupPanel>
 	</ui:define>
 			
 </ui:composition>

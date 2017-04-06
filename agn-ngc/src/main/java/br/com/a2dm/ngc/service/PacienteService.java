@@ -84,6 +84,43 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 	}
 	
 	@Override
+	protected void validarAlterar(Session sessao, Paciente vo) throws Exception
+	{
+		Criteria criteria = sessao.createCriteria(Paciente.class);
+		Disjunction or = Restrictions.disjunction();
+		or.add(Restrictions.eq("nomPaciente", vo.getNomPaciente()).ignoreCase());
+		or.add(Restrictions.eq("emlPaciente",vo.getEmlPaciente()).ignoreCase());		
+		or.add(Restrictions.eq("cpfPaciente",vo.getCpfPaciente()).ignoreCase());
+		criteria.add(or)
+				.add(Restrictions.ne("idPaciente", vo.getIdPaciente()))
+				.add(Restrictions.eq("idProfissional", UtilFuncions.getClinicaProfissionalSession().getIdUsuario()));
+		
+		
+		Paciente paciente = (Paciente) criteria.uniqueResult();
+		
+		if(paciente != null)
+		{
+			if(paciente.getNomPaciente() != null
+					&& paciente.getNomPaciente().toLowerCase().trim().equals(vo.getNomPaciente().toLowerCase().trim()))
+			{
+				throw new Exception("Já existe um paciente cadastrado com este Nome.");
+			}
+			
+			if(paciente.getCpfPaciente() != null
+					&& paciente.getCpfPaciente().trim().equals(vo.getCpfPaciente().trim()))
+			{
+				throw new Exception("Já existe um Paciente cadastrado com este Cpf.");
+			}
+			
+			if(paciente.getEmlPaciente() != null
+					&& paciente.getEmlPaciente().toLowerCase().trim().equals(vo.getEmlPaciente().toLowerCase().trim()))
+			{
+				throw new Exception("Já existe um Paciente cadastrado com este E-mail.");
+			}
+		}
+	}
+	
+	@Override
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
 		Criteria criteria = sessao.createCriteria(Paciente.class);
