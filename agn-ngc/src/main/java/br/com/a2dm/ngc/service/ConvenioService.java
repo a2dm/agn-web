@@ -16,6 +16,7 @@ import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.entity.ConvenioServico;
 import br.com.a2dm.ngc.entity.Servico;
@@ -60,7 +61,7 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 	{
 		Convenio convenio = new Convenio();
 		convenio.setFlgAtivo("S");
-		convenio.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		convenio.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		convenio.setFiltroMap(new HashMap<String, Object>());
 		convenio.getFiltroMap().put("desConvenio", vo.getDesConvenio().trim());
 		
@@ -111,7 +112,7 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 		convenio.getFiltroMap().put("idConvenioNotEq", vo.getIdConvenio());		
 		convenio.getFiltroMap().put("desConvenio", vo.getDesConvenio().trim());
 		convenio.setFlgAtivo(vo.getFlgAtivo());
-		convenio.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		convenio.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		
 		convenio = this.get(sessao, convenio, 0);
 		

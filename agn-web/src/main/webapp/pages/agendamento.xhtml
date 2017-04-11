@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{agendamentoBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">		
+		
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+    
+    	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
+			<f:subview id="viewBusca"> 
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Teste *</label>
+		          
+		       </div>
+		       
+		       
+		       
+	       </f:subview>
+		</h:panelGroup>	
+    </ui:define>
+    
+    <ui:define name="list">	
+		
+	</ui:define>
+			
+</ui:composition>

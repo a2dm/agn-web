@@ -19,6 +19,7 @@ import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.configuracao.MenuControl;
+import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Servico;
 import br.com.a2dm.ngc.service.ServicoService;
 
@@ -75,8 +76,8 @@ public class ServicoBean extends AbstractBean<Servico, ServicoService>
 			this.getSearchObject().setFlgAtivo(null);
 		}
 		
-		//RECUPERAR SOMENTE OS REGISTROS DO PROFISSIONAL LOGADO
-		this.getSearchObject().setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		//RECUPERAR SOMENTE OS REGISTROS DO PROFISSIONAL RESPONSAVEL
+		this.getSearchObject().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 	}
 	
 	@Override
@@ -111,7 +112,7 @@ public class ServicoBean extends AbstractBean<Servico, ServicoService>
 		this.getEntity().setFlgAtivo("S");
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
-		this.getEntity().setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		this.getEntity().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 	}
 	
 	@Override

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	<h:panelGroup id="panelAuditoria">
+		<div class="box-body">
+             <div class="form-group">
+	          <label class="col-md-2 control-label">Usuário de Cadastro</label>
+	          <div class="col-md-6" style="margin-top: 5px;">
+	          	<h:outputText value="#{crudBean.entity.usuarioCad.nome}" />
+	          </div>
+	       	</div>	
+            
+            <div class="form-group">
+	          <label class="col-md-2 control-label">Data de Cadastro</label>
+	          <div class="col-md-6" style="margin-top: 5px;">
+	          	<h:outputText value="#{crudBean.entity.datCadastro}" />
+	          </div>
+	       	</div>
+	       	
+	       	<div class="form-group">
+	          <label class="col-md-2 control-label">Usuário de Alteração</label>
+	          <div class="col-md-6" style="margin-top: 5px;">
+	          	<h:outputText value="#{crudBean.entity.usuarioAlt.nome}" />
+	          </div>
+	       	</div>
+	       	
+	       	<div class="form-group">
+	          <label class="col-md-2 control-label">Data de Alteração</label>
+	          <div class="col-md-6" style="margin-top: 5px;">
+	          	<h:outputText value="#{crudBean.entity.datAlteracao}" />
+	          </div>
+	       	</div>
+		</div>
+	</h:panelGroup>
+
+</ui:composition>

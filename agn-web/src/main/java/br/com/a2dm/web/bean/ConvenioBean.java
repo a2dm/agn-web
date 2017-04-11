@@ -18,6 +18,7 @@ import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.configuracao.MenuControl;
+import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.entity.ConvenioServico;
 import br.com.a2dm.ngc.entity.Servico;
@@ -55,7 +56,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 		}
 		
 		//RECUPERAR SOMENTE OS REGISTROS DO PROFISSIONAL LOGADO
-		this.getSearchObject().setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		this.getSearchObject().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 	}
 	
 	@Override
@@ -68,7 +69,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 	protected void setListaInserir() throws Exception
 	{
 		Servico servico = new Servico();
-		servico.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		servico.setFlgAtivo("S");
 		
 		List<Servico> listaServico = ServicoService.getInstancia().pesquisar(servico, 0);
@@ -116,7 +117,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 		this.getEntity().setFlgAtivo("S");
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
-		this.getEntity().setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		this.getEntity().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		this.getEntity().setListaServico(this.getListaServico());
 	}
 	
@@ -150,7 +151,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 		this.setListaServico(null);
 		
 		Servico servico = new Servico();
-		servico.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		servico.setFlgAtivo("S");
 		
 		List<Servico> listaServico = ServicoService.getInstancia().pesquisar(servico, 0);

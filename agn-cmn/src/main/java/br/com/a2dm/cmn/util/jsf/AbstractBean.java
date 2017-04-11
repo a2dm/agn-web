@@ -298,9 +298,9 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
       {
     	  if(validarAcesso(Variaveis.ACAO_PREPARA_PESQUISAR))
     	  {
+    		  setSearchObject(getNewEntityInstance());
     		  setValoresDefault();
     		  setCurrentState(STATE_SEARCH);
-    		  setSearchObject(getNewEntityInstance());
     		  setListaPesquisa();
     		  this.setSearchResult(null);
     	  }
@@ -854,7 +854,8 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
       {
 		 setCurrentState(STATE_SEARCH);		 
 		 cleanSubmittedValues(pnlEditing);		
-		 setSearchObject(getNewEntityInstance());		 
+		 setSearchObject(getNewEntityInstance());
+		 setValoresDefault();
 		 setListaPesquisa();
 		 setSearchResult(null);
       }

@@ -14,6 +14,7 @@ import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Servico;
 
 public class ServicoService extends A2DMHbNgc<Servico>
@@ -56,7 +57,7 @@ public class ServicoService extends A2DMHbNgc<Servico>
 	{
 		Servico servico = new Servico();
 		servico.setFlgAtivo("S");
-		servico.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		servico.setFiltroMap(new HashMap<String, Object>());
 		servico.getFiltroMap().put("desServico", vo.getDesServico().trim());		
 		
@@ -76,7 +77,7 @@ public class ServicoService extends A2DMHbNgc<Servico>
 		servico.getFiltroMap().put("idServicoNotEq", vo.getIdServico());
 		servico.getFiltroMap().put("desServico", vo.getDesServico().trim());
 		servico.setFlgAtivo(vo.getFlgAtivo());
-		servico.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 		
 		servico = this.get(sessao, servico, 0);
 		

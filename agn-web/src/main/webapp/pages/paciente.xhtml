@@ -63,7 +63,7 @@
 				<rich:tabPanel switchType="client" activeItem="#{crudBean.activeTab}">
 					 <rich:tab header="Daods Pessoais">
 				
-						<h:panelGroup id="panelGroupAlterar1" rendered="#{crudBean.editing}" style="height:100%">
+						<h:panelGroup id="panelGroupAlterar1" rendered="#{crudBean.editing || crudBean.viewing}" style="height:100%">
 							<div class="form-group">
 					          <label class="col-md-2 control-label">Código</label>
 					          <div class="col-md-6" style="margin-top: 5px;">
@@ -137,8 +137,12 @@
 				      <rich:tab header="Endereço">
 				      	<ui:include src="panelPacienteEndereco.xhtml" />
 				      </rich:tab>
-			      </rich:tabPanel>
-		       	
+				      
+					  <rich:tab header="Auditoria">
+				      	<ui:include src="panelAuditoria.xhtml" />
+				      </rich:tab>      
+				      
+				</rich:tabPanel>
 			</f:subview>
 		</h:panelGroup>		
     </ui:define>
