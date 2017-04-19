@@ -155,10 +155,10 @@
 				              <a href='#'><i class="fa fa-dashboard"></i>Dashboard</a>	              
 				            </li>
 				            <li class='#{sessionScope.flgMenuAgn}'>
-				              <a href="calendar.html">
+				              <h:commandLink action="#{agendamentoBean.preparaPesquisar}">
 				                <i class="fa fa-pencil-square-o"></i>
 				                Agendamento
-				              </a>
+				              </h:commandLink>
 				            </li>
 				            <li class='#{sessionScope.flgMenuRcp}'>
 				              <a href="forms.html">
