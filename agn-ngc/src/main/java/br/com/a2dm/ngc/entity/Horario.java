@@ -66,6 +66,9 @@ public class Horario implements Serializable
 	@JoinColumn(name = "id_usuario_alt", insertable = false, updatable = false)
 	private Usuario usuarioAlt;
 	
+	@Column(name = "flg_ativo")
+	private boolean flgAtivo;
+	
 	@Transient
 	private HashMap<String, Object> filtroMap;
 
@@ -148,4 +151,13 @@ public class Horario implements Serializable
 	public void setFiltroMap(HashMap<String, Object> filtroMap) {
 		this.filtroMap = filtroMap;
 	}
+
+	public boolean isFlgAtivo() {
+		return flgAtivo;
+	}
+
+	public void setFlgAtivo(boolean flgAtivo) {
+		this.flgAtivo = flgAtivo;
+	}
+
 }

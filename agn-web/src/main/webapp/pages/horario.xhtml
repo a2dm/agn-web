@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{horarioBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">		
+		<t:saveState value="#{crudBean.listaHorarioDefault}" />
+	</ui:define>
+	
+	<ui:define name="pageIcon"/>	
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+		
+		<h:panelGrid id="tblPanel" layout="block" style="width: 100%; height: 100%;z" >
+			<f:subview id="viewListagem">
+				<div class="box-content" style="width: 70%; float:left;">
+					<rich:dataTable id="tblData" style="width:100%; text-align: center;"
+								 value="#{crudBean.listaHorarioDefault}" var="rst"
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'">						     
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="width: 3%; text-align: center;"/>
+								<rich:column style="width: 17%; text-align: center;"/>
+								
+								<rich:column style="width:30%; text-align: center;">
+									Hora de Início
+								</rich:column>
+								<rich:column style="width: 30%; text-align: center;">
+									Hora de Término
+								</rich:column>
+								
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column style="text-align: center;">
+							<h:selectBooleanCheckbox value="#{rst.flgAtivo}">
+								<a4j:ajax event="change" listener="#{crudBean.selecionarDia}" render="pnFrm" execute="@form"/>
+							</h:selectBooleanCheckbox>
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.desHorario}"/>
+						</rich:column>
+						<rich:column style="text-align: center;" >
+							<h:inputText value="#{rst.horInicio}" maxlength="5" styleClass="form-control" id="hi" style="width: 200px; display: inline !important; text-align: center;" readonly="#{!rst.flgAtivo}"/>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:inputText value="#{rst.horFim}" maxlength="5" styleClass="form-control" id="hf" style="width: 200px; display: inline !important; text-align: center;" readonly="#{!rst.flgAtivo}"/>
+						</rich:column>
+					
+					</rich:dataTable>
+				</div>
+				
+				<div style="width: 28%; float:right;">
+					<div class="alert alert-block alert-warning fade in">
+                      
+                      <h4 style="margin-bottom: 6px; text-align: center;"><u>Informações</u></h4>
+                      <p>
+                        <b>1) Hora de Início:</b> Hora em que inicia os agendamentos no dia.
+                      </p>
+                      
+                      <p>
+                        <b>2) Hora de Fim:</b> Hora limite para o último agendamento do dia.
+                      </p>
+                      
+                      <p>
+                        <b>3)</b> Os horários só podem ser informados no intervalo de 30 minutos (Exemplo: 8:00, 8:30, 13:00, 13:30, etc).
+                      </p>
+                      
+                      <p>
+                        <b>4)</b> Só estarão disponíveis para agendamento os dias selecionados com seus respectivos horários (Início e Fim).
+                      </p>
+                      
+                    </div>
+				</div>
+			</f:subview>
+		</h:panelGrid>	
+		
+		<script type="text/javascript">
+		    $(function() {        
+		        $("#formulario\\:viewListagem\\:tblData\\:0\\:hi").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:1\\:hi").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:2\\:hi").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:3\\:hi").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:4\\:hi").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:5\\:hi").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:6\\:hi").mask("99:99");
+		        
+		        $("#formulario\\:viewListagem\\:tblData\\:0\\:hf").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:1\\:hf").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:2\\:hf").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:3\\:hf").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:4\\:hf").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:5\\:hf").mask("99:99");
+		        $("#formulario\\:viewListagem\\:tblData\\:6\\:hf").mask("99:99");
+		    });	
+		</script>
+			
+    </ui:define>
+    
+    <ui:define name="buttons" style="height:100%; width:100%; text-align: center;">
+    	<a4j:commandButton id="salvar" styleClass="btn btn-primary" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.salvar}" render="pnFrm, panelTitle, comentTela"/>
+    	<h:outputText value=" "/>
+    	<a4j:commandButton id="limpar" styleClass="btn btn-primary" value="Limpar (L)" accesskey="L" actionListener="#{crudBean.limpar}" render="pnFrm, panelTitle, comentTela"/>
+    </ui:define>
+
+</ui:composition>

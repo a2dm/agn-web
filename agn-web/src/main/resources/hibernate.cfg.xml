@@ -39,5 +39,6 @@
 		<mapping class="br.com.a2dm.ngc.entity.Clinica"/>
 		<mapping class="br.com.a2dm.ngc.entity.ValidaLimite"/>
 		<mapping class="br.com.a2dm.ngc.entity.Paciente"/>
+		<mapping class="br.com.a2dm.ngc.entity.Horario"/>
 	</session-factory>
 </hibernate-configuration>
