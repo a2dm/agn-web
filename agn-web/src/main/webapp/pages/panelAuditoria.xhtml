@@ -22,7 +22,7 @@
             <div class="form-group">
 	          <label class="col-md-2 control-label">Data de Cadastro</label>
 	          <div class="col-md-6" style="margin-top: 5px;">
-	          	<h:outputText value="#{crudBean.entity.datCadastro}" />
+	          	<h:outputText value="#{crudBean.entity.datCadastro}" converter="converterDataHora"/>
 	          </div>
 	       	</div>
 	       	

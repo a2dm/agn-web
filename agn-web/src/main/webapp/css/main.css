@@ -243,82 +243,78 @@
   border-right-color: #C4C0B9;
 }
 
+.rf-ds {
+	display: inline-block !important;
+    border-radius: 4px;
+    position: relative;    
+    padding: 6px 12px !important;    
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
 
-.rf-tab-hdr-tabline-vis.rf-tab-hdr-tabline-top {
-    border-style: none !important;
-    border-width: 0px 0px 0 !important;
-    height: 38px !important;
-    overflow: hidden;
-    padding-top: 5px !important;
-    position: relative !important;
-    white-space: nowrap;
-	backgoung: #FFFFFF !important;
-	padding: 7px 0 !important;
-    font-size: 0 !important;
-    margin:0;
-    list-style-type: none;
-    text-align: left; /*set to left, center, or right to align the tabs as desired*/	
-}
-.rf-tab-hdr-inact.rf-tab-hdr-top {
-	-moz-border-bottom-colors: none !important;
-    -moz-border-left-colors: none !important;
-    -moz-border-right-colors: none !important;
-    -moz-border-top-colors: none !important;
-    background: url("../images/tabbg.gif") repeat-x scroll 0 0 #f0f0f0 !important;
-    border-color: #ccc #ccc #b7b7b7 !important;
-    border-image: none !important;
-    border-radius: 3px 3px 0 0 !important;
-    border-style: solid !important;
-    border-width: 1px !important;
-    color: #000 !important;
-    outline: medium none !important;
-    padding: 7px 16px !important;
-    text-decoration: none !important;
+   
 }
 
-.rf-tab-lbl {
+.rf-ds-btn{
 	position: relative;
-    top: 0px;
-    font-weight:bold;
-    border-bottom-color: white;
-    font-size: 12px;
+    float: center !important; 
+    padding: 6px 12px !important;
+    margin-left: -1px !important;
+    margin-right: -1px !important;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer !important;
 }
 
-/**
-* TAB ATIVA
-*/
-.rf-tab-hdr-act.rf-tab-hdr-top {
-	padding: 7px 16px !important;
-    font-size: 0;
-    margin:0;
-    list-style-type: none;
-    text-align: left; /*set to left, center, or right to align the tabs as desired*/
-	border: 1px solid #B7B7B7 !important;
-	background: none repeat scroll 0 0 white !important;
-    border-color: #b7b7b7 #b7b7b7 white !important;
-    border-radius: 3px 3px 0 0 !important;
-    color: #000 !important;
-    text-decoration: none !important;
+*.rf-ds-btn-first{
+    margin-left: 0;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
 }
 
-
-.rf-tab-hdr-brd {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-color: -moz-use-text-color;
-    border-image: none;
-    border-style: none !important;
-    border-width: none !important;
-    height: 0px !important;
+*.rf-ds-btn-last{
+        border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
 }
 
-.rf-tab-cnt {
-	background-color: #fff;
-    border-top: 1px solid #b7b7b7 !important;
-    border-bottom: none !important;
-    border-left: none !important;
-    border-right: none !important;
-    padding: 30px !important;
+.rf-ds-btn:hover{
+	
+    background-color: #eee !important;
+   	color: #337ab7 !important;
+   	    outline: 0 !important;
+   	        transition: All 0.5s ease !important;
+}
+
+*.rf-ds-nmb-btn{
+	position: relative;
+    float: center !important; 
+    padding: 6px 12px !important;
+    margin-left: 0px !important;
+    margin-right: -1px !important;
+    line-height: 1.42857143;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    cursor: pointer !important;
+    border: 1px solid #ddd !important;
+}
+
+*.rf-ds-nmb-btn:hover{
+	background-color: #eee !important;
+   	color: #337ab7 !important;
+   	    outline: 0 !important;
+   	        transition: All 0.5s ease !important;
+}
+
+*.rf-ds-act, *.rf-ds-act:hover {
+    background-color: #eee !important;
+   	color: #337ab7 !important;
+   	    outline: 0 !important;
+   	        transition: All 0.5s ease !important;	
+   	        font-weight: normal !important;
 }
