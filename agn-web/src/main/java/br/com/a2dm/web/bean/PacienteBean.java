@@ -12,7 +12,6 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Estado;
-import br.com.a2dm.cmn.entity.Usuario;
 import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;

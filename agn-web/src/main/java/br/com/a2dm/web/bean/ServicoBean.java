@@ -77,7 +77,7 @@ public class ServicoBean extends AbstractBean<Servico, ServicoService>
 		}
 		
 		//RECUPERAR SOMENTE OS REGISTROS DO PROFISSIONAL RESPONSAVEL
-		this.getSearchObject().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		this.getSearchObject().setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 	}
 	
 	@Override
@@ -112,7 +112,7 @@ public class ServicoBean extends AbstractBean<Servico, ServicoService>
 		this.getEntity().setFlgAtivo("S");
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
-		this.getEntity().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		this.getEntity().setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 	}
 	
 	@Override

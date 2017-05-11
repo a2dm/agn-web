@@ -45,7 +45,7 @@ public class ServicoService extends A2DMHbNgc<Servico>
 	public ServicoService()
 	{
 		adicionarFiltro("idServico", RestritorHb.RESTRITOR_EQ,"idServico");
-		adicionarFiltro("idUsuario", RestritorHb.RESTRITOR_EQ,"idUsuario");
+		adicionarFiltro("idClinicaProfissional", RestritorHb.RESTRITOR_EQ, "idClinicaProfissional");		
 		adicionarFiltro("idServico", RestritorHb.RESTRITOR_NE, "filtroMap.idServicoNotEq");
 		adicionarFiltro("desServico", RestritorHb.RESTRITOR_LIKE, "desServico");
 		adicionarFiltro("desServico", RestritorHb.RESTRITOR_EQ, "filtroMap.desServico");
@@ -57,7 +57,7 @@ public class ServicoService extends A2DMHbNgc<Servico>
 	{
 		Servico servico = new Servico();
 		servico.setFlgAtivo("S");
-		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		servico.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		servico.setFiltroMap(new HashMap<String, Object>());
 		servico.getFiltroMap().put("desServico", vo.getDesServico().trim());		
 		
@@ -77,7 +77,7 @@ public class ServicoService extends A2DMHbNgc<Servico>
 		servico.getFiltroMap().put("idServicoNotEq", vo.getIdServico());
 		servico.getFiltroMap().put("desServico", vo.getDesServico().trim());
 		servico.setFlgAtivo(vo.getFlgAtivo());
-		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		servico.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		
 		servico = this.get(sessao, servico, 0);
 		

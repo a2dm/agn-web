@@ -44,8 +44,8 @@ public class Servico implements Serializable
 	@Column(name = "id_servico")
 	private BigInteger idServico;
 	
-	@Column(name = "id_usuario")
-	private BigInteger idUsuario;
+	@Column(name = "id_clinica_profissional")
+	private BigInteger idClinicaProfissional;
 	
 	@Column(name = "des_servico")
 	private String desServico;
@@ -99,13 +99,13 @@ public class Servico implements Serializable
 	public void setIdServico(BigInteger idServico) {
 		this.idServico = idServico;
 	}
-	
-	public BigInteger getIdUsuario() {
-		return idUsuario;
+
+	public BigInteger getIdClinicaProfissional() {
+		return idClinicaProfissional;
 	}
 
-	public void setIdUsuario(BigInteger idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setIdClinicaProfissional(BigInteger idClinicaProfissional) {
+		this.idClinicaProfissional = idClinicaProfissional;
 	}
 
 	public String getDesServico() {

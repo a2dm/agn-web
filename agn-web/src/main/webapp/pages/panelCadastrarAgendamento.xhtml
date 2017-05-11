@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Agendamento - Cadastrar" />
+			</h:panelGroup>
+		</f:facet>
+		
+		<f:facet name="controls">
+			<h:outputLink value="#" onclick="#{rich:component('panVisualizar')}.hide(); return false;">
+		    	<h:graphicImage value="../img/closeModal.png" id="fechaPanelVisualizar" style="width: 16px; height: 16px; vertical-align:middle;"/>
+	       	</h:outputLink>
+		</f:facet>
+
+		<div class="modal-body">
+			
+			<div class="widget-body">
+            	<div class="row">
+                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="hue-demo">Data do Agendamento <span style="color: red">*</span></label>       
+                          <h:inputText value="#{crudBean.entity.datAgendamento}" readonly="true" styleClass="form-control" size="12"/>                   
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="saturation-demo">Hora Inicial <span style="color: red">*</span></label>
+                          <h:inputText value="#{crudBean.entity.horInicio}" readonly="true" styleClass="form-control" size="12"/>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="saturation-demo">Hora Final <span style="color: red">*</span></label>
+                          <h:inputText value="#{crudBean.entity.horFim}" readonly="true" styleClass="form-control" size="12"/>
+                        </div>
+                    </div>
+	            </div>
+            </div>
+            
+            <div class="widget-body">
+            	<div class="row">
+                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="hue-demo">Cpf do Paciente <span style="color: red">*</span></label>       
+                          <h:inputText value="#{crudBean.entity.paciente.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf"/>                   
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="saturation-demo">Nome do Paciente <span style="color: red">*</span></label>
+                          <rich:autocomplete value="#{crudBean.entity.nomPaciente}" styleClass="form-control" inputClass="form-control" minChars="3"/>                          
+                        </div>
+                    </div>                   
+	            </div>
+            </div>
+            
+			<div class="widget-body">
+            	<div class="row">
+                	<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="hue-demo">Serviço <span style="color: red">*</span></label>
+		                  <h:selectOneMenu value="#{crudBean.entity.idServico}" styleClass="form-control" converter="simpleIndexConverter">								
+							<t:selectItems var="i" itemValue="#{i.idServico}" itemLabel="#{i.desServico}" value="#{crudBean.listaServico}" />
+						  </h:selectOneMenu>
+                        </div>
+                    </div>      
+	            </div>
+            </div>
+
+  			<h:panelGroup layout="block" id="panTipoAgendamento">
+	  			<div class="widget-body">
+	            	<div class="row">  
+	 					<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="saturation-demo">Tipo do Agendamento <span style="color: red">*</span></label>
+	                          <div style="width: 200px;" class="checkbox">
+								<h:selectOneRadio value="#{crudBean.entity.tpAgendamento}" style="width: 100%;" >								
+									<f:selectItem itemValue="P" itemLabel="Particular" />
+									<f:selectItem itemValue="C" itemLabel="Convênio"/>
+									<a4j:ajax event="change" render="panTipoAgendamento" />
+								</h:selectOneRadio>
+							   </div>
+	                        </div>
+	                    </div>
+	                    
+	                    <h:panelGroup layout="block" rendered="#{crudBean.entity.tpAgendamento == 'C'}" >
+		                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+		                    	<div class="form-group">
+		                          <label for="saturation-demo">Convênio <span style="color: red">*</span></label>
+								  <h:selectOneMenu value="#{crudBean.entity.idConvenio}" styleClass="form-control" converter="simpleIndexConverter">								
+									<t:selectItems var="i" itemValue="#{i.idConvenio}" itemLabel="#{i.desConvenio}" value="#{crudBean.listaConvenio}" />
+								  </h:selectOneMenu>
+		                        </div>
+		                    </div>
+	                    </h:panelGroup>
+	                 </div>
+	             </div>  
+             </h:panelGroup>    
+  
+  			<div class="widget-body">
+            	<div class="row">  
+ 					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
+                    	<div class="form-group">
+                          <label for="saturation-demo">Observações</label>                          
+	               	  		<h:inputTextarea cols="93" rows="5" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" />
+							<label id="lblObsAgendamento" style="font-size: 12px;">(300 caracteres restantes)</label>	                  		
+                        </div>
+                    </div>
+                 </div>
+             </div> 
+  
+  			<div class="widget-body">
+            	<div class="row">  
+ 					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
+  						<span style="font-size: 12px;">Todos os campos com <span style="color: red">*</span> são obrigatórios.</span>
+  					</div>
+  				</div>
+  			</div>
+  
+		</div>
+	
+		<div class="modal-footer">			
+			<input type="button" onclick="#{rich:component('panVisualizar')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+		</div>
+		
+</ui:composition>

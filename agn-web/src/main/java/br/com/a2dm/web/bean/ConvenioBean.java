@@ -56,7 +56,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 		}
 		
 		//RECUPERAR SOMENTE OS REGISTROS DO PROFISSIONAL LOGADO
-		this.getSearchObject().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		this.getSearchObject().setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 	}
 	
 	@Override
@@ -69,7 +69,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 	protected void setListaInserir() throws Exception
 	{
 		Servico servico = new Servico();
-		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		servico.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		servico.setFlgAtivo("S");
 		
 		List<Servico> listaServico = ServicoService.getInstancia().pesquisar(servico, 0);
@@ -117,7 +117,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 		this.getEntity().setFlgAtivo("S");
 		this.getEntity().setDatCadastro(new Date());
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
-		this.getEntity().setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		this.getEntity().setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		this.getEntity().setListaServico(this.getListaServico());
 	}
 	
@@ -151,7 +151,7 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 		this.setListaServico(null);
 		
 		Servico servico = new Servico();
-		servico.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		servico.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		servico.setFlgAtivo("S");
 		
 		List<Servico> listaServico = ServicoService.getInstancia().pesquisar(servico, 0);

@@ -61,7 +61,7 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 	{
 		Convenio convenio = new Convenio();
 		convenio.setFlgAtivo("S");
-		convenio.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		convenio.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		convenio.setFiltroMap(new HashMap<String, Object>());
 		convenio.getFiltroMap().put("desConvenio", vo.getDesConvenio().trim());
 		
@@ -89,7 +89,7 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 					&& obj.getFlgAtivo().equals("S"))
 			{
 				ConvenioServico convenioServico = new ConvenioServico();
-				convenioServico.setIdUsuario(vo.getIdUsuario());
+				convenioServico.setIdClinicaProfissional(vo.getIdClinicaProfissional());
 				convenioServico.setIdConvenio(vo.getIdConvenio());
 				convenioServico.setIdServico(obj.getIdServico());
 				convenioServico.setVlrReceber(new Double(obj.getVlrServicoFormatado().toString().replace(".", "").replace(",", ".")));
@@ -112,7 +112,7 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 		convenio.getFiltroMap().put("idConvenioNotEq", vo.getIdConvenio());		
 		convenio.getFiltroMap().put("desConvenio", vo.getDesConvenio().trim());
 		convenio.setFlgAtivo(vo.getFlgAtivo());
-		convenio.setIdUsuario(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+		convenio.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		
 		convenio = this.get(sessao, convenio, 0);
 		
@@ -161,7 +161,7 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 				{
 					//inserir
 					ConvenioServico objInserir = new ConvenioServico();
-					objInserir.setIdUsuario(vo.getIdUsuario());
+					objInserir.setIdClinicaProfissional(vo.getIdClinicaProfissional());
 					objInserir.setIdConvenio(vo.getIdConvenio());
 					objInserir.setIdServico(obj.getIdServico());
 					objInserir.setVlrReceber(new Double(obj.getVlrServicoFormatado().toString().replace(".", "").replace(",", ".")));

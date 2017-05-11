@@ -222,9 +222,9 @@ function verificaTamanho(campo, tamMax, resposta)
 	}
 	if(resposta != null)
 	{	
-		if(document.forms['contexto'].elements[resposta] != null)
+		if(document.forms['formulario'].elements[resposta] != null)
 		{
-			document.forms['contexto'].elements[resposta].value = (tamMax - strLen);
+			document.forms['formulario'].elements[resposta].value = (tamMax - strLen);
 		}
 		else
 		{

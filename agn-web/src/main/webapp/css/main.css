@@ -17,6 +17,7 @@
 
 .rf-pp-shade {
 	z-index: 100000 !important;
+	background-color: rgb(70, 70, 70) !important;
 }
 
 

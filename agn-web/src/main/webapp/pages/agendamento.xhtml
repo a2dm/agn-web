@@ -14,7 +14,8 @@
 	<ui:param name="crudBean" value="#{agendamentoBean}" />
 	
 	<ui:define name="saveStateObjectsDefined">		
-		
+		<t:saveState value="#{crudBean.listaServico}" />
+		<t:saveState value="#{crudBean.listaConvenio}" />
 	</ui:define>
 	
 	<ui:define name="comentTela">
@@ -23,6 +24,21 @@
 	</ui:define>
     
     <ui:define name="content">
+    
+    	<script>
+			function abrirModalAgendamento(start, end, allDay){
+			
+				document.getElementById('formulario:ini').value = start;
+				document.getElementById('formulario:fim').value = end;
+				
+				$('#formulario\\:preparaAgendamento').click();
+			}
+		</script>
+    
+    	<h:inputHidden value="#{crudBean.inicio}" id="ini"/>
+    	<h:inputHidden value="#{crudBean.fim}" id="fim"/>
+    	
+    	<a4j:commandButton id="preparaAgendamento" style="display:none;" actionListener="#{crudBean.preparaInserir}" render="panVisualizar" oncomplete="#{rich:component('panVisualizar')}.show();"/>
     
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca"> 
@@ -115,5 +131,13 @@
 			
 	<ui:define name="buttonItens" style="height:100%; width:100%;"/>
 	
-			
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panVisualizar" styleClass="modal-content" domElementAttachment="form" modal="true" width="800" height="730" resizeable="false" onmaskclick="#{rich:component('panVisualizar')}.hide()">
+			<ui:include src="panelCadastrarAgendamento.xhtml" />
+		</rich:popupPanel>
+	</ui:define>
+	
+	
+	
 </ui:composition>

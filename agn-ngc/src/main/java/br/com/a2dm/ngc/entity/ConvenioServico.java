@@ -40,8 +40,8 @@ public class ConvenioServico implements Serializable
 	@Column(name = "id_convenio_servico")
 	private BigInteger idConvenioServico;
 	
-	@Column(name = "id_usuario")
-	private BigInteger idUsuario;
+	@Column(name = "id_clinica_profissional")
+	private BigInteger idClinicaProfissional;
 	
 	@Column(name = "id_convenio")
 	private BigInteger idConvenio;
@@ -92,12 +92,12 @@ public class ConvenioServico implements Serializable
 		this.idConvenioServico = idConvenioServico;
 	}
 
-	public BigInteger getIdUsuario() {
-		return idUsuario;
+	public BigInteger getIdClinicaProfissional() {
+		return idClinicaProfissional;
 	}
 
-	public void setIdUsuario(BigInteger idUsuario) {
-		this.idUsuario = idUsuario;
+	public void setIdClinicaProfissional(BigInteger idClinicaProfissional) {
+		this.idClinicaProfissional = idClinicaProfissional;
 	}
 
 	public BigInteger getIdConvenio() {
