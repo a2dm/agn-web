@@ -31,6 +31,8 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	private String siglaEstado;
 	private String activeTab;
 	
+	private List<Paciente> pacientes;
+	
 	
 	private JSFUtil util = new JSFUtil();
 	
@@ -258,4 +260,21 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	public void setActiveTab(String activeTab) {
 		this.activeTab = activeTab;
 	}
+
+	public List<Paciente> getPacientes() {
+		
+		Paciente paciente = new Paciente();
+		paciente.setNomPaciente("andresa de lima");
+		
+		pacientes = new ArrayList<Paciente>();
+		pacientes.add(paciente);
+		
+		return pacientes;
+	}
+
+	public void setPacientes(List<Paciente> pacientes) {
+		this.pacientes = pacientes;
+	}
+	
+	
 }

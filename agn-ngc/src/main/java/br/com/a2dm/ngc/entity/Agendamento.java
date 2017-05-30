@@ -55,6 +55,9 @@ public class Agendamento implements Serializable
 	@Column(name = "nom_paciente")
 	private String nomPaciente;
 	
+	@Column(name = "cpf_paciente")
+	private String cpfPaciente;
+	
 	@Column(name = "id_convenio")
 	private BigInteger idConvenio;
 	
@@ -75,7 +78,7 @@ public class Agendamento implements Serializable
 	private String flgConfirmado;
 	
 	@Column(name = "id_situacao")
-	private String idSituacao;
+	private BigInteger idSituacao;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "dat_cadastro")
@@ -188,11 +191,11 @@ public class Agendamento implements Serializable
 		this.flgConfirmado = flgConfirmado;
 	}
 
-	public String getIdSituacao() {
+	public BigInteger getIdSituacao() {
 		return idSituacao;
 	}
 
-	public void setIdSituacao(String idSituacao) {
+	public void setIdSituacao(BigInteger idSituacao) {
 		this.idSituacao = idSituacao;
 	}
 
@@ -282,5 +285,13 @@ public class Agendamento implements Serializable
 
 	public void setNomPaciente(String nomPaciente) {
 		this.nomPaciente = nomPaciente;
+	}
+
+	public String getCpfPaciente() {
+		return cpfPaciente;
+	}
+
+	public void setCpfPaciente(String cpfPaciente) {
+		this.cpfPaciente = cpfPaciente;
 	}
 }

@@ -18,55 +18,62 @@
 		</f:facet>
 		
 		<f:facet name="controls">
-			<h:outputLink value="#" onclick="#{rich:component('panVisualizar')}.hide(); return false;">
-		    	<h:graphicImage value="../img/closeModal.png" id="fechaPanelVisualizar" style="width: 16px; height: 16px; vertical-align:middle;"/>
+			<h:outputLink value="#" onclick="#{rich:component('panAgendamento')}.hide(); return false;">
+		    	<h:graphicImage value="../img/closeModal.png" id="fechaPanelAgendamento" style="width: 16px; height: 16px; vertical-align:middle;"/>
 	       	</h:outputLink>
 		</f:facet>
 
 		<div class="modal-body">
 			
-			<div class="widget-body">
-            	<div class="row">
-                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="hue-demo">Data do Agendamento <span style="color: red">*</span></label>       
-                          <h:inputText value="#{crudBean.entity.datAgendamento}" readonly="true" styleClass="form-control" size="12"/>                   
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="saturation-demo">Hora Inicial <span style="color: red">*</span></label>
-                          <h:inputText value="#{crudBean.entity.horInicio}" readonly="true" styleClass="form-control" size="12"/>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="saturation-demo">Hora Final <span style="color: red">*</span></label>
-                          <h:inputText value="#{crudBean.entity.horFim}" readonly="true" styleClass="form-control" size="12"/>
-                        </div>
-                    </div>
+           	<h:panelGroup id="pnlTime" layout="block" width="100%">
+				<div class="widget-body">
+	            	<div class="row">
+	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="hue-demo">Data do Agendamento <span style="color: red">*</span></label>       
+	                          <h:inputText value="#{crudBean.entity.datAgendamento}" readonly="true" styleClass="form-control" size="12"/>                   
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="saturation-demo">Hora Inicial <span style="color: red">*</span></label>
+	                          <h:inputText value="#{crudBean.entity.horInicio}" readonly="true" styleClass="form-control" size="12"/>
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="saturation-demo">Hora Final <span style="color: red">*</span></label>
+	                          <h:inputText value="#{crudBean.entity.horFim}" readonly="true" styleClass="form-control" size="12"/>
+	                        </div>
+	                    </div>
+		            </div>
 	            </div>
-            </div>
+            </h:panelGroup>
             
-            <div class="widget-body">
-            	<div class="row">
-                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="hue-demo">Cpf do Paciente <span style="color: red">*</span></label>       
-                          <h:inputText value="#{crudBean.entity.paciente.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf"/>                   
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="saturation-demo">Nome do Paciente <span style="color: red">*</span></label>
-                          <rich:autocomplete value="#{crudBean.entity.nomPaciente}" styleClass="form-control" inputClass="form-control" minChars="3"/>                          
-                        </div>
-                    </div>                   
-	            </div>
-            </div>
+            <h:panelGroup id="pnlPaciente" layout="block" width="100%">				
+	            <div class="widget-body">
+	            	<div class="row">
+	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="hue-demo">Cpf do Paciente </label>       
+	                          <h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
+	                          	<a4j:ajax event="blur" listener="#{crudBean.verificarPacienteExistente}" render="pnlPaciente"/>
+	                          </h:inputText>                   
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="saturation-demo">Nome do Paciente <span style="color: red">*</span></label>
+							  <h:inputText value="#{crudBean.entity.nomPaciente}" styleClass="form-control" maxlength="200" id="nome" readonly="#{crudBean.entity.idPaciente != null}"/>
+	                        </div>
+	                    </div>   
+	                      
+		            </div>
+	            </div>	            
+            </h:panelGroup>            
             
 			<div class="widget-body">
             	<div class="row">
@@ -75,6 +82,7 @@
                           <label for="hue-demo">Serviço <span style="color: red">*</span></label>
 		                  <h:selectOneMenu value="#{crudBean.entity.idServico}" styleClass="form-control" converter="simpleIndexConverter">								
 							<t:selectItems var="i" itemValue="#{i.idServico}" itemLabel="#{i.desServico}" value="#{crudBean.listaServico}" />
+							<a4j:ajax event="change" listener="#{crudBean.atualizarHoraFim}" render="pnlTime"/>
 						  </h:selectOneMenu>
                         </div>
                     </div>      
@@ -133,8 +141,22 @@
   
 		</div>
 	
-		<div class="modal-footer">			
-			<input type="button" onclick="#{rich:component('panVisualizar')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+		<div class="modal-footer">
+			<a4j:commandButton id="gravar" styleClass="btn btn-primary pull-left" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');"/>
+			<input type="button" onclick="#{rich:component('panAgendamento')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
 		</div>
 		
+		<script>
+			function validarForm(msg)
+			{
+				if(msg != '')
+				{
+					#{rich:component('panMensagem')}.show();
+				}
+				else
+				{
+					#{rich:component('panAgendamento')}.hide();
+				}
+			}
+		</script>
 </ui:composition>

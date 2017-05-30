@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Mensagem" />
+			</h:panelGroup>
+		</f:facet>
+
+		<div class="modal-body">
+			<div class="widget-body">
+            	<div class="row">
+                	<span style="color: red;">
+                		<b><h:outputText value="#{crudBean.mensagem}"/></b> 
+                	</span>
+	            </div>
+            </div>
+       </div>
+       
+       <div class="modal-footer">			
+			<input type="button" onclick="#{rich:component('panMensagem')}.hide();" class="btn btn-default" value="Ok" accesskey="X"/>
+		</div>
+</ui:composition>

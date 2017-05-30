@@ -18,6 +18,14 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	public static final int JOIN_USUARIO_CAD = 1;
 	
 	public static final int JOIN_USUARIO_ALT = 2;
+	
+	//SITUACOES DO AGENDAMENTO
+	public static final int SITUACAO_AGENDADA       = 1;
+	public static final int SITUACAO_PRESENTE       = 2;
+	public static final int SITUACAO_EM_ATENDIMENTO = 3;
+	public static final int SITUACAO_CONCLUIDA      = 4;
+	public static final int SITUACAO_CANCELADA      = 5;
+	
 
 	@SuppressWarnings("rawtypes")
 	private static Map filtroPropriedade = new HashMap();
