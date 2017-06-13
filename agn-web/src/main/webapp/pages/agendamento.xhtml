@@ -17,6 +17,7 @@
 		<t:saveState value="#{crudBean.listaServico}" />
 		<t:saveState value="#{crudBean.listaConvenio}" />
 		<t:saveState value="#{crudBean.mensagem}" />
+		<t:saveState value="#{crudBean.jsonAgendamento}" />
 	</ui:define>
 	
 	<ui:define name="comentTela">
@@ -27,19 +28,29 @@
     <ui:define name="content">
     
     	<script>
-			function abrirModalAgendamento(start, end, allDay){
-			
+			function abrirModalAgendamento(start, end, allDay)
+			{			
 				document.getElementById('formulario:ini').value = start;
 				document.getElementById('formulario:fim').value = end;
 				
 				$('#formulario\\:preparaAgendamento').click();
 			}
+			
+			function abrirModalAlterarAgendamento(id)
+			{
+				document.getElementById("formulario:idAgendamento").value = id;
+				$('#formulario\\:preparaAlterarAgendamento').click();
+			}
 		</script>
     
     	<h:inputHidden value="#{crudBean.inicio}" id="ini"/>
     	<h:inputHidden value="#{crudBean.fim}" id="fim"/>
-    	
+    	<h:inputHidden value="#{crudBean.jsonAgendamento}" id="jsonAgendamento"/>
+    	<h:inputHidden value="#{sessionScope.clinicaProfissional.idClinicaProfissional}" id="idClinicaProfissional"/>
+    	<h:inputHidden value="#{crudBean.idAgendamento}" id="idAgendamento"/>
+    	    	
     	<a4j:commandButton id="preparaAgendamento" style="display:none;" actionListener="#{crudBean.preparaInserir}" render="panAgendamento" oncomplete="#{rich:component('panAgendamento')}.show();"/>
+    	<a4j:commandButton id="preparaAlterarAgendamento" style="display: none;" actionListener="#{crudBean.preparaAlterar}" render="panAgendamento" oncomplete="#{rich:component('panAgendamento')}.show();"/>
     
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca"> 
@@ -53,7 +64,9 @@
               <div class="col-lg-12 col-md-12">
                 <div class="widget">                  
                   <div class="widget-body">
-                    <div id='calendar'></div>
+                    <h:panelGroup layout="block" id="cal">
+                    	<div id='calendar'></div>
+                    </h:panelGroup>
                   </div>
                 </div>
               </div>
@@ -64,60 +77,25 @@
                 
                 <div class="right-sidebar">
 	            <div class="wrapper">
-	              <button class="btn btn-lg btn-block btn-info" type="button">
-	                Block level button
+	              <button class="btn btn-agendada btn-block" type="button">
+	                Agendada
 	              </button>
-	              <button class="btn btn-lg btn-block btn-warning" type="button">
-	                Block level button
+	              <button class="btn btn-presente btn-block" type="button">
+	                Presente
 	              </button>
-	              <button class="btn btn-lg btn-block btn-success" type="button">
-	                Block level button
+	              <button class="btn btn-atendimento btn-block" type="button">
+	                Em Atendimento
+	              </button>
+	              <button class="btn btn-concluida btn-block" type="button">
+	                Concluída
 	              </button>
 	            </div>
             
             <hr class="hr-stylish-1"/>
             
-            <div class="wrapper">
-              <button class="btn btn-lg btn-info btn-block" type="button">
-                Large button
-              </button>
-              <button class="btn btn-warning btn-block" type="button">
-                Default button
-              </button>
-              <button class="btn btn-sm btn-success btn-block" type="button">
-                Small button
-              </button>
-              <button class="btn btn-xs btn-primary btn-block" type="button">
-                Mini button
-              </button>
-              <a href="#" class="btn btn-xs btn-default disabled btn-block">
-                Primary link
-              </a>
-              <a href="#" class="btn btn-xs disabled btn-block">
-                Link
-              </a>
-            </div>
+           
             
-            <hr class="hr-stylish-1"/>
             
-            <div class="wrapper">
-              <a class="btn btn-sm btn-success" href="">Link</a>
-              <button class="btn btn-sm btn-success" type="submit">Button</button>
-              <input class="btn btn-sm btn-success" type="button" value="Input"/>
-            </div>
-            
-            <hr class="hr-stylish-1"/>
-            
-            <div class="wrapper">
-              <div class="hero-unit no-margin" style="padding: 10px;">
-                <h1 class="text-info">Head1</h1>
-                <h2 class="text-warning">Heading 2</h2>
-                <h3 class="text-danger">Heading 3</h3>
-                <h4 class="text-success">Heading 4</h4>
-                <h5 class="text-info">Heading 5</h5>
-                <h6>Heading 6</h6>
-              </div>
-            </div>
           </div>
           <!-- Right Sidebar End -->
 </div>

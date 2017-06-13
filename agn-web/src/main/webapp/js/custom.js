@@ -367,3 +367,9 @@ function formataSegundos(segundo)
 /**
  *	Contador de Sessao - Fim
  */
+
+
+function setarFoco(element){	
+	element.focus();
+	element.value=element.value;
+}

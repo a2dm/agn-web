@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -16,12 +17,12 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.others.Utilitarios;
-import br.com.a2dm.ngc.configuracao.MenuControl;
-import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.Servico;
+import br.com.a2dm.ngc.functions.MenuControl;
+import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.ConvenioService;
 import br.com.a2dm.ngc.service.PacienteService;
@@ -32,6 +33,7 @@ import br.com.a2dm.ngc.service.ServicoService;
 @ManagedBean
 public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoService>
 {	
+	private BigInteger idAgendamento;
 	private String inicio;
 	private String fim;
 	
@@ -39,8 +41,9 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	private List<Convenio> listaConvenio;
 	private List<Paciente> listaPaciente;
 	
+	private String jsonAgendamento;
+	
 	private String value;
-    private List<String> autocompleteList;
     
     private String mensagem;
     
@@ -59,7 +62,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	@SuppressWarnings("deprecation")
 	protected void setDefaultInserir() throws Exception 
 	{
-		this.setListaPaciente(PacienteService.getInstancia().pesquisar(new Paciente(), 0));
+		//this.setListaPaciente(PacienteService.getInstancia().pesquisar(new Paciente(), 0));
 		
 		Date dataInicio = new Date(inicio);		
 		
@@ -70,7 +73,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.popularServicos();
 		this.popularConvenios();
 	}
-	
+
 	private void popularServicos() throws Exception
 	{
 		List<Servico> listaAll = new ArrayList<Servico>();
@@ -136,18 +139,58 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	    }
 	}
 	
+	public void selecionarHoraInicio()
+	{
+		try
+		{
+			//VERIFICAR FORMATACAO HORA
+			if(this.getEntity() != null
+					&& this.getEntity().getHorInicio() != null
+					&& !this.getEntity().getHorInicio().equals("")
+					&& this.getEntity().getHorInicio().trim().length() < 5)
+			{
+				throw new Exception("Favor informar a Hora Limite no formato correto. Ex: 09:00.");
+			}
+			
+			//CALCULO DE HORA FIM
+			if(this.getEntity() != null
+					&& this.getEntity().getIdServico() != null
+					&& this.getEntity().getIdServico().intValue() > 0)
+			{
+				this.atualizarHoraFim();
+			}
+			else
+			{
+				this.getEntity().setHorFim(null);
+			}
+		}
+		catch (Exception e)
+	    {
+			this.setMensagem(e.getMessage());
+	    }
+	}
+	
 	public void atualizarHoraFim()
 	{
 		try
 		{
-			Servico servico = new Servico();
-			servico.setIdServico(this.getEntity().getIdServico());
-			
-			servico = ServicoService.getInstancia().get(servico, 0);
-			
-			String horaFim = Utilitarios.somarHoras(this.getEntity().getHorInicio(), servico.getDrcServico());
-			
-			this.getEntity().setHorFim(horaFim);
+			if(this.getEntity() != null
+					&& this.getEntity().getHorInicio() != null
+					&& !this.getEntity().getHorInicio().equals(""))
+			{
+				Servico servico = new Servico();
+				servico.setIdServico(this.getEntity().getIdServico());
+				
+				servico = ServicoService.getInstancia().get(servico, 0);
+				
+				String horaFim = Utilitarios.somarHoras(this.getEntity().getHorInicio(), servico.getDrcServico());
+				
+				this.getEntity().setHorFim(horaFim);
+			}
+			else
+			{
+				this.getEntity().setHorFim(null);
+			}
 			
 		}
 		catch (Exception e)
@@ -180,7 +223,70 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 			this.setMensagem(e.getMessage());
 		}
 	}
+	
+	@Override
+	public void preparaAlterar() 
+	{	
+		try
+	      {
+	    	  if(validarAcesso(Variaveis.ACAO_PREPARA_ALTERAR))
+	    	  {	    		
+	    		  setCurrentState(STATE_EDIT);
+	    		  setListaAlterar();
+	    		  
+	    		  this.popularServicos();
+	    			this.popularConvenios();
+	    		  
+	    		  Agendamento agendamento = new Agendamento();
+	    		  agendamento.setIdAgendamento(this.getIdAgendamento());	    		  
+	    		  agendamento = AgendamentoService.getInstancia().get(agendamento, 0);	    	
+	    		  
+	    		  this.setEntity(agendamento);	    		  
+	    	  }
+	      }
+	      catch (Exception e)
+	      {
+	         FacesMessage message = new FacesMessage(e.getMessage());
+	         message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	         if(e.getMessage() == null)
+	        	 FacesContext.getCurrentInstance().addMessage("", message);
+	         else
+	        	 FacesContext.getCurrentInstance().addMessage(null, message);
+	      }
+	}
 		
+	@Override
+	protected void completarAlterar() throws Exception 
+	{
+		this.validarInserir();
+		this.getEntity().setDatAlteracao(new Date());
+		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
+	}
+	
+	public void inativar() 
+	{		
+		try
+		{
+			if(this.getEntity() != null)
+			{
+				if(validarAcesso(Variaveis.ACAO_INATIVAR))
+				{
+					this.setMensagem(null);
+					
+					AgendamentoService.getInstancia().inativar(this.getEntity());
+					
+					FacesMessage message = new FacesMessage("Agendamento inativado com sucesso!");
+					message.setSeverity(FacesMessage.SEVERITY_INFO);
+					FacesContext.getCurrentInstance().addMessage(null, message);
+				}
+			}
+		}
+		catch (Exception e) 
+		{
+			this.setMensagem(e.getMessage());
+		}		
+	}
+	
 	protected void completarInserir() throws Exception
 	{
 		this.getEntity().setIdUsuarioCad(util.getUsuarioLogado().getIdUsuario());
@@ -244,6 +350,30 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		{
 			throw new Exception("O campo Convênio é obrigatório!");
 		}
+				
+		//AGENDAMENTO A PARTIR DA DATA DE HOJE
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(new Date());
+		
+		gc.set(GregorianCalendar.HOUR_OF_DAY, 0);
+		gc.set(GregorianCalendar.MINUTE, 0);
+		gc.set(GregorianCalendar.SECOND, 0);
+		gc.set(GregorianCalendar.MILLISECOND, 0);
+		
+		Date dataAtual = gc.getTime();
+		
+		if(this.getEntity().getDatAgendamento().before(dataAtual))
+		{
+			throw new Exception("O campo Data do Agendamento deve ser maior ou igual a Data de Hoje!");
+		}
+		
+		int horaInicio = Integer.parseInt(this.getEntity().getHorInicio().replace(":", ""));
+		int horaFim = Integer.parseInt(this.getEntity().getHorFim().replace(":", ""));
+		
+		if(horaInicio >= horaFim)
+		{
+			throw new Exception("O campo Hora Fim deve ser maior que o campo Hora Início!");
+		}
 	}
 	
 	public String getInicio() {
@@ -294,19 +424,27 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.value = value;
 	}
 
-	public List<String> getAutocompleteList() {
-		return autocompleteList;
-	}
-
-	public void setAutocompleteList(List<String> autocompleteList) {
-		this.autocompleteList = autocompleteList;
-	}
-
 	public String getMensagem() {
 		return mensagem;
 	}
 
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
+	}
+
+	public String getJsonAgendamento() {
+		return jsonAgendamento;
+	}
+
+	public void setJsonAgendamento(String jsonAgendamento) {
+		this.jsonAgendamento = jsonAgendamento;
+	}
+
+	public BigInteger getIdAgendamento() {
+		return idAgendamento;
+	}
+
+	public void setIdAgendamento(BigInteger idAgendamento) {
+		this.idAgendamento = idAgendamento;
 	}
 }

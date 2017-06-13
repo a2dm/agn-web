@@ -105,7 +105,7 @@ public class Agendamento implements Serializable
 	@JoinColumn(name = "id_usuario_alt", insertable = false, updatable = false)
 	private Usuario usuarioAlt;
 	
-	@Formula("(select des_dominio from agn.tb_dominio where vlr_dominio = id_situacao and ref_dominio = 'SITUACAO_AGENDAMENTO')")
+	@Formula("(select d.des_dominio from agn.tb_dominio d where d.vlr_dominio = id_situacao and d.ref_dominio = 'SITUACAO_AGENDAMENTO')")
 	private String desSituacao;
 	
 	@Column(name = "obs_agendamento")

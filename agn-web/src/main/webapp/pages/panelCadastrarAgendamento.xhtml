@@ -38,7 +38,9 @@
 	                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
 	                    	<div class="form-group">
 	                          <label for="saturation-demo">Hora Inicial <span style="color: red">*</span></label>
-	                          <h:inputText value="#{crudBean.entity.horInicio}" readonly="true" styleClass="form-control" size="12"/>
+	                          <h:inputText value="#{crudBean.entity.horInicio}" styleClass="form-control" size="12" maxlength="5" onkeypress="javascript: mascara(this, mhor);" id="hrIni">
+	                          	<a4j:ajax event="blur" listener="#{crudBean.selecionarHoraInicio}" render="pnlTime, pnlPaciente" oncomplete="validaHora('#{crudBean.mensagem}')"/>
+	                          </h:inputText>
 	                        </div>
 	                    </div>
 	                    
@@ -124,7 +126,7 @@
  					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
                     	<div class="form-group">
                           <label for="saturation-demo">Observações</label>                          
-	               	  		<h:inputTextarea cols="93" rows="5" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" />
+	               	  		<h:inputTextarea cols="93" rows="5" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" styleClass="form-control"/>
 							<label id="lblObsAgendamento" style="font-size: 12px;">(300 caracteres restantes)</label>	                  		
                         </div>
                     </div>
@@ -142,8 +144,11 @@
 		</div>
 	
 		<div class="modal-footer">
-			<a4j:commandButton id="gravar" styleClass="btn btn-primary pull-left" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');"/>
+			<a4j:commandButton id="gravar" styleClass="btn btn-primary pull-left" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');" rendered="#{crudBean.inserting}"/>
+			<a4j:commandButton id="alterar" styleClass="btn btn-primary pull-left" value="Alterar (A)" accesskey="A" actionListener="#{crudBean.alterar}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');" rendered="#{crudBean.editing}"/>
+			<a4j:commandButton id="inativar" styleClass="btn btn-primary pull-left" value="Inativar (I)" accesskey="I" actionListener="#{crudBean.inativar}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');" rendered="#{crudBean.editing}"/>
 			<input type="button" onclick="#{rich:component('panAgendamento')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+			<h:commandLink action="#{agendamentoBean.preparaPesquisar}" style="display:none;" id="btnReset"/>
 		</div>
 		
 		<script>
@@ -156,6 +161,16 @@
 				else
 				{
 					#{rich:component('panAgendamento')}.hide();
+					$("#formulario\\:btnReset").click()
+				}
+			}
+			
+			function validaHora(msg)
+			{
+				if(msg != '')
+				{
+					alert(msg);
+					document.getElementById("formulario:hrIni").value = '';
 				}
 			}
 		</script>

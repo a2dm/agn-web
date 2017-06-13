@@ -14,8 +14,8 @@ import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
-import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Servico;
+import br.com.a2dm.ngc.functions.UtilFuncions;
 
 public class ServicoService extends A2DMHbNgc<Servico>
 {

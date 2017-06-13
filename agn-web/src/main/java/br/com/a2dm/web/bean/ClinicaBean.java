@@ -15,8 +15,8 @@ import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.ws.WebServiceCep;
-import br.com.a2dm.ngc.configuracao.MenuControl;
 import br.com.a2dm.ngc.entity.Clinica;
+import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.service.ClinicaService;
 
 

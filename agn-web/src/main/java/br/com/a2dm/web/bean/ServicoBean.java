@@ -18,9 +18,9 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
-import br.com.a2dm.ngc.configuracao.MenuControl;
-import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Servico;
+import br.com.a2dm.ngc.functions.MenuControl;
+import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.ServicoService;
 
 

@@ -3639,6 +3639,26 @@ a.btn.disabled, fieldset[disabled] a.btn {
 	background-color: #fff
 }
 
+.btn-agendada {
+	color: #fff;
+	background-color: #3187bf;
+}
+
+.btn-presente {
+	color: #fff;
+	background-color: #bf00ff;
+}
+
+.btn-atendimento {
+	color: #fff;
+	background-color: #ffbf00;
+}
+
+.btn-concluida {
+	color: #fff;
+	background-color: #378006;
+}
+
 .btn-danger {
 	color: #fff;
 	background-color: #3187bf;

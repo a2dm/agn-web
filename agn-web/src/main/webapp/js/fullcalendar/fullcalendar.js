@@ -18,7 +18,7 @@
 var defaults = {
 
 	// display
-	defaultView: 'Mês',
+	defaultView: 'Dia',
 	aspectRatio: 1.35,
 	header: {
 		left: 'title',
@@ -2941,7 +2941,7 @@ function AgendaView(element, calendar, viewName) {
 		buildDayTable();
 		
 		slotLayer =
-			$("<div style='position:absolute;z-index:2;left:0;width:100%'/>")
+			$("<div style='position:absolute;z-index:2;left:0;width:100%'; top: 22px;/>")
 				.appendTo(element);
 				
 		if (opt('allDaySlot')) {

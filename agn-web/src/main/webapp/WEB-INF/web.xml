@@ -54,6 +54,15 @@
 		<auth-constraint />
 	</security-constraint>
 	
+	<servlet>
+	     <servlet-name>CalendarServlet</servlet-name>
+	     <servlet-class>br.com.a2dm.web.servlet.CalendarServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	     <servlet-name>CalendarServlet</servlet-name>
+	     <url-pattern>/CalendarServlet</url-pattern>
+	</servlet-mapping>
+	
 	<error-page>
 		<error-code>403</error-code>
 		<location>/index.html</location>

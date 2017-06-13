@@ -12,9 +12,9 @@ import javax.faces.event.ActionEvent;
 
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
-import br.com.a2dm.ngc.configuracao.MenuControl;
-import br.com.a2dm.ngc.configuracao.UtilFuncions;
 import br.com.a2dm.ngc.entity.Horario;
+import br.com.a2dm.ngc.functions.MenuControl;
+import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.HorarioService;
 
 
