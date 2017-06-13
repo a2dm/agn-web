@@ -5,7 +5,10 @@ import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -29,22 +32,38 @@ public class CalendarServlet extends HttpServlet
     {
     	try
     	{
-	    	//SimpleDateFormat sDate = new SimpleDateFormat("yyyy-MM-dd");
+	    	SimpleDateFormat sDate = new SimpleDateFormat("yyyy-MM-dd");
 	    	
-	    	//LISTA TODOS OS AGENDAMENTOS DO DIA
+	    	//LISTA TODOS OS AGENDAMENTOS DO DIA 20 (MES ANTERIOR) AO DIA 20 (PROX MES)
+	    	Date data = sDate.parse(request.getParameter("dtAgn"));
+	    	
+	    	GregorianCalendar gc1 = new GregorianCalendar();
+	    	gc1.setTime(data);
+	    	gc1.set(Calendar.DAY_OF_MONTH, 1);
+	    	gc1.add(GregorianCalendar.DAY_OF_MONTH, -20);	    	
+	    	Date dataInicioFiltro = gc1.getTime();
+	    	
+	    	GregorianCalendar gc2 = new GregorianCalendar();
+	    	gc2.setTime(data);
+	    	gc2.set(Calendar.DAY_OF_MONTH, 28);
+	    	gc2.add(GregorianCalendar.DAY_OF_MONTH, 20);	    	
+	    	Date dataFimFiltro = gc2.getTime();	    	
+	    	
 	    	Agendamento agendamento = new Agendamento();
+	    	agendamento.setFiltroMap(new HashMap<String, Object>());
+	    	agendamento.getFiltroMap().put("datAgendamentoInicio", dataInicioFiltro);
+	    	agendamento.getFiltroMap().put("datAgendamentoFim", dataFimFiltro);
 	    	agendamento.setIdClinicaProfissional(new BigInteger(request.getParameter("idCliPro")));
-	    	agendamento.setFlgAtivo("S");
-	    	//agendamento.setDatAgendamento(sDate.parse(request.getParameter("dtAgn")));	
-	    					
-	    	List<Agendamento> lista = AgendamentoService.getInstancia().pesquisar(agendamento, 0);
+	    	agendamento.setFlgAtivo("S");	    	
+	    
+	    	List<Agendamento> lista = AgendamentoService.getInstancia().pesquisar(agendamento, AgendamentoService.JOIN_SERVICO);
 	    	List<AgendamentoVo> jsonLista = new ArrayList<AgendamentoVo>();		
 	    			
 			for (Agendamento obj : lista)
 			{
 				AgendamentoVo agendamentoVo = new AgendamentoVo();
 				agendamentoVo.setId(obj.getIdAgendamento());
-				agendamentoVo.setTitle(obj.getNomPaciente());
+				agendamentoVo.setTitle(obj.getNomPaciente() + " - (" + obj.getServico().getDesServico() +")");
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 				GregorianCalendar gcIni = new GregorianCalendar();

@@ -36,6 +36,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	private BigInteger idAgendamento;
 	private String inicio;
 	private String fim;
+	private String dataCalendario;
 	
 	private List<Servico> listaServico;
 	private List<Convenio> listaConvenio;
@@ -62,8 +63,6 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	@SuppressWarnings("deprecation")
 	protected void setDefaultInserir() throws Exception 
 	{
-		//this.setListaPaciente(PacienteService.getInstancia().pesquisar(new Paciente(), 0));
-		
 		Date dataInicio = new Date(inicio);		
 		
 		this.getEntity().setDatAgendamento(dataInicio);
@@ -72,6 +71,14 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		
 		this.popularServicos();
 		this.popularConvenios();
+	}
+	
+	@Override
+	protected void setValoresDefault() throws Exception
+	{
+		Date data = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		this.setDataCalendario(sdf.format(data));
 	}
 
 	private void popularServicos() throws Exception
@@ -446,5 +453,13 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 
 	public void setIdAgendamento(BigInteger idAgendamento) {
 		this.idAgendamento = idAgendamento;
+	}
+
+	public String getDataCalendario() {
+		return dataCalendario;
+	}
+
+	public void setDataCalendario(String dataCalendario) {
+		this.dataCalendario = dataCalendario;
 	}
 }

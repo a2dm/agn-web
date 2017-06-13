@@ -24,6 +24,10 @@
 		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
 		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
 	</ui:define>
+	
+	<ui:define name="pageIcon">
+		<h:commandLink actionListener="#{crudBean.preparaPesquisar}" title="Atualizar" render="formulario"> <i class="fa fa-refresh" /></h:commandLink>
+	</ui:define>
     
     <ui:define name="content">
     
@@ -45,6 +49,7 @@
     
     	<h:inputHidden value="#{crudBean.inicio}" id="ini"/>
     	<h:inputHidden value="#{crudBean.fim}" id="fim"/>
+    	<h:inputHidden value="#{crudBean.dataCalendario}" id="dataCalendario"/>
     	<h:inputHidden value="#{crudBean.jsonAgendamento}" id="jsonAgendamento"/>
     	<h:inputHidden value="#{sessionScope.clinicaProfissional.idClinicaProfissional}" id="idClinicaProfissional"/>
     	<h:inputHidden value="#{crudBean.idAgendamento}" id="idAgendamento"/>
@@ -77,18 +82,18 @@
                 
                 <div class="right-sidebar">
 	            <div class="wrapper">
-	              <button class="btn btn-agendada btn-block" type="button">
+	              <span class="btn btn-agendada btn-block" type="button">
 	                Agendada
-	              </button>
-	              <button class="btn btn-presente btn-block" type="button">
+	              </span>
+	              <span class="btn btn-presente btn-block" type="button">
 	                Presente
-	              </button>
-	              <button class="btn btn-atendimento btn-block" type="button">
+	              </span>
+	              <span class="btn btn-atendimento btn-block" type="button">
 	                Em Atendimento
-	              </button>
-	              <button class="btn btn-concluida btn-block" type="button">
+	              </span>
+	              <span class="btn btn-concluida btn-block" type="button">
 	                Concluída
-	              </button>
+	              </span>
 	            </div>
             
             <hr class="hr-stylish-1"/>

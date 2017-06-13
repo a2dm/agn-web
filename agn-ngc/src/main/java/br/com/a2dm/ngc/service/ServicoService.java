@@ -9,6 +9,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.HibernateUtil;
@@ -175,7 +176,7 @@ public class ServicoService extends A2DMHbNgc<Servico>
 		
 		if ((join & JOIN_USUARIO_ALT) != 0)
 	    {
-			criteria.createAlias("usuarioAlt", "usuarioAlt");
+			criteria.createAlias("usuarioAlt", "usuarioAlt", JoinType.LEFT_OUTER_JOIN);
 	    }		
 		
 		return criteria;

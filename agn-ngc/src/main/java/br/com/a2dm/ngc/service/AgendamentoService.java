@@ -11,6 +11,7 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.HibernateUtil;
@@ -27,6 +28,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	public static final int JOIN_USUARIO_CAD = 1;
 	
 	public static final int JOIN_USUARIO_ALT = 2;
+	
+	public static final int JOIN_SERVICO = 4;
 	
 	private JSFUtil util = new JSFUtil();	
 	
@@ -58,8 +61,10 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		adicionarFiltro("idAgendamento", RestritorHb.RESTRITOR_EQ,"idAgendamento");
 		adicionarFiltro("idClinicaProfissional", RestritorHb.RESTRITOR_EQ,"idClinicaProfissional");
 		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_EQ,"datAgendamento");
+		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_DATA_INICIAL,"filtroMap.datAgendamentoInicio");
+		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_DATA_FINAL,"filtroMap.datAgendamentoFim");		
 		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");
-		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
+		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");		
 	}
 	
 	@Override
@@ -162,7 +167,12 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		
 		if ((join & JOIN_USUARIO_ALT) != 0)
 	    {
-			criteria.createAlias("usuarioAlt", "usuarioAlt");
+			criteria.createAlias("usuarioAlt", "usuarioAlt", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
+		if ((join & JOIN_SERVICO) != 0)
+	    {
+			criteria.createAlias("servico", "servico");
 	    }
 		
 		return criteria;

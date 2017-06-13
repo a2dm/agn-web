@@ -28,6 +28,8 @@ $('.dropdown-toggle').dropdown();
     var m = date.getMonth();
     var y = date.getFullYear();
     
+    var data = y + '-' + m + '-' + d;
+    
     var calendar = $('#calendar').fullCalendar({
 	  header: {
 	    left: 'prev,next today',
@@ -45,7 +47,7 @@ $('.dropdown-toggle').dropdown();
   
 	  editable: false,
 	  
-	  events: "/agn-web/CalendarServlet?idCliPro="+document.getElementById('formulario:idClinicaProfissional').value ,
+	  events: "/agn-web/CalendarServlet?idCliPro="+document.getElementById('formulario:idClinicaProfissional').value+"&dtAgn="+document.getElementById('formulario:dataCalendario').value ,
 	  
 	  eventColor: '#ffbf00',
 	  
@@ -78,9 +80,13 @@ $('.dropdown-toggle').dropdown();
 	            });
 	        }
 	    },
+	    
+	  viewRender: function(start, view,element) {
+		  document.getElementById('formulario:dataCalendario').value = start;
+	    },
 	  
 	  eventClick: 
-		  function(calEvent, jsEvent, view) 
+		  function(start, calEvent, jsEvent, view) 
 		  {
 		  	abrirModalAlterarAgendamento(calEvent.id);
 		  }	  

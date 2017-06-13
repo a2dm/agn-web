@@ -3,6 +3,7 @@ package br.com.a2dm.ngc.entity;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,6 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Proxy;
@@ -44,6 +46,10 @@ public class Agendamento implements Serializable
 	
 	@Column(name = "id_servico")
 	private BigInteger idServico;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_servico", insertable = false, updatable = false)
+	private Servico servico;
 	
 	@Column(name = "id_paciente")
 	private BigInteger idPaciente;
@@ -110,6 +116,9 @@ public class Agendamento implements Serializable
 	
 	@Column(name = "obs_agendamento")
 	private String obsAgendamento;
+	
+	@Transient
+	private HashMap<String, Object> filtroMap;
 
 	public BigInteger getIdAgendamento() {
 		return idAgendamento;
@@ -293,5 +302,21 @@ public class Agendamento implements Serializable
 
 	public void setCpfPaciente(String cpfPaciente) {
 		this.cpfPaciente = cpfPaciente;
+	}
+
+	public Servico getServico() {
+		return servico;
+	}
+
+	public void setServico(Servico servico) {
+		this.servico = servico;
+	}
+
+	public HashMap<String, Object> getFiltroMap() {
+		return filtroMap;
+	}
+
+	public void setFiltroMap(HashMap<String, Object> filtroMap) {
+		this.filtroMap = filtroMap;
 	}
 }
