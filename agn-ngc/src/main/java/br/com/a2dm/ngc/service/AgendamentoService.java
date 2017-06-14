@@ -31,6 +31,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	
 	public static final int JOIN_SERVICO = 4;
 	
+	public static final int JOIN_CONVENIO = 8;
+	
 	private JSFUtil util = new JSFUtil();	
 	
 	//SITUACOES DO AGENDAMENTO
@@ -60,11 +62,13 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	{
 		adicionarFiltro("idAgendamento", RestritorHb.RESTRITOR_EQ,"idAgendamento");
 		adicionarFiltro("idClinicaProfissional", RestritorHb.RESTRITOR_EQ,"idClinicaProfissional");
+		adicionarFiltro("idSituacao", RestritorHb.RESTRITOR_EQ,"idSituacao");
 		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_EQ,"datAgendamento");
 		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_DATA_INICIAL,"filtroMap.datAgendamentoInicio");
 		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_DATA_FINAL,"filtroMap.datAgendamentoFim");		
 		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");
-		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");		
+		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
+		adicionarFiltro("flgConfirmado", RestritorHb.RESTRITOR_EQ, "flgConfirmado");	
 	}
 	
 	@Override
@@ -155,6 +159,40 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		return vo;
 	}
 	
+	public Agendamento confirmar(Agendamento vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			vo = confirmar(sessao, vo);
+			tx.commit();
+			return vo;
+		}
+		catch (Exception e)
+		{
+			vo.setFlgConfirmado("N");
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	public Agendamento confirmar(Session sessao, Agendamento vo) throws Exception
+	{
+		vo.setFlgConfirmado("S");
+		vo.setIdUsuarioConfirm(util.getUsuarioLogado().getIdUsuario());
+		vo.setDatConfirmacao(new Date());
+		
+		super.alterar(sessao, vo);
+		
+		return vo;
+	}
+	
 	@Override
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
@@ -175,6 +213,11 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 			criteria.createAlias("servico", "servico");
 	    }
 		
+		if ((join & JOIN_CONVENIO) != 0)
+	    {
+			criteria.createAlias("convenio", "convenio", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
 		return criteria;
 	}
 	
@@ -182,6 +225,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	protected void setarOrdenacao(Criteria criteria, Agendamento vo, int join)
 	{
 		criteria.addOrder(Order.asc("datAgendamento"));
+		criteria.addOrder(Order.asc("horInicio"));
 	}
 	
 	@Override

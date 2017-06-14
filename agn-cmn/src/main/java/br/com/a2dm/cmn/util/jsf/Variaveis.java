@@ -16,6 +16,7 @@ public class Variaveis
 	public static final String ACAO_REMOVER = "REMOVER";
 	public static final String ACAO_INATIVAR = "INATIVAR";
 	public static final String ACAO_CONFIGURAR = "CONFIGURAR";
+	public static final String ACAO_CONFIRMAR = "CONFIRMAR";
 	public static final String ACAO_ATIVAR = "ATIVAR";
 	public static final String ACAO_REPORT = "REPORT";
 	public static final String ACAO_PREPARA_ORCAMENTO_GRUPO = "PREPARAORCAMENTOGRUPO";

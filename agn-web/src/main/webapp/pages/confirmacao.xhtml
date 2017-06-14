@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{confirmacaoBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+    
+    	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
+			<f:subview id="viewBusca"> 
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Período *</label>
+	          	  <div class="col-md-5">
+		          	<rich:calendar value="#{crudBean.dataAgendamentoInicio}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="fc-calendar" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" readonly="#{crudBean.viewing}"/>
+		          	a 
+		          	<rich:calendar value="#{crudBean.dataAgendamentoFim}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="fc-calendar" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" readonly="#{crudBean.viewing}"/>
+		          </div>
+		       </div>
+		       
+			   <div class="form-group">
+		          <label class="col-md-2 control-label">Confirmada *</label>
+		          <div class="col-md-6" style="width: 400px;">
+		          	<div style="width: 230px; padding-left: 20px;" class="radio">
+						<h:selectOneRadio value="#{crudBean.searchObject.flgConfirmado}" style="width: 100%;">
+							<f:selectItem itemValue="T" itemLabel="Todos" />
+							<f:selectItem itemValue="S" itemLabel="Sim"/>
+							<f:selectItem itemValue="N" itemLabel="Não"/>
+						</h:selectOneRadio>
+					</div>
+		          </div>
+		       </div>		       
+	       
+	       </f:subview>
+		</h:panelGroup>
+	</ui:define>
+	
+	
+	<ui:define name="list">	
+		<h:panelGrid id="tblResult" layout="block" style="width: 100%; height: 100%;z" >
+			<f:subview id="viewListagem">
+				<div class="box-content">
+					<rich:dataTable id="tblData" 
+								 value="#{crudBean.searchResult}" 
+							       var="rst" rows="10"
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="width: 5%; text-align: center;">
+									Código
+								</rich:column>
+								<rich:column style="width:9%; text-align: center;">
+									Data
+								</rich:column>
+								<rich:column style="width: 6%; text-align: center;">
+									Início
+								</rich:column>
+								<rich:column style="width: 6%; text-align: center;">
+									Fim
+								</rich:column>
+								<rich:column style="text-align: center;">
+									Nome
+								</rich:column>
+								<rich:column style="width: 9%; text-align: center;">
+									Cpf
+								</rich:column>
+								<rich:column style="width: 18%; text-align: center;">
+									Serviço
+								</rich:column>
+								<rich:column style="width: 9%; text-align: center;">
+									Tipo
+								</rich:column>
+								<rich:column style="width: 15%; text-align: center;">
+									Convênio
+								</rich:column>
+								<rich:column style="width: 3%; text-align: center;"/>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column style="text-align: right;">
+							<h:outputText value="#{rst.idAgendamento}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.datAgendamento}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.horInicio}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.horFim}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.nomPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.cpfPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.servico.desServico}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="Convênio" rendered="#{rst.tpAgendamento == 'C'}"/>
+							<h:outputText value="Particular" rendered="#{rst.tpAgendamento == 'P'}"/>
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.convenio.desConvenio}" />
+						</rich:column>
+						<rich:column style="text-align: center;">												
+							<a4j:commandButton image="../img/confirmAgend.png" style="border:none; width: 20px; height: 20px;" title="CONFIRMAR" render="pnFrm" action="#{crudBean.confirmar}" rendered="#{rst.flgConfirmado == 'N'}" onclick="if (!confirm('Deseja realmente confirmar a presença do paciente?')) return false">
+								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+							</a4j:commandButton>
+						</rich:column>						
+					</rich:dataTable>
+				</div>
+				<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
+				<h:panelGroup style="color: #333333" rendered="#{empty crudBean.searchResult and crudBean.searching}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
+				<div align="center">
+					<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
+				</div>
+			</f:subview>
+		</h:panelGrid>
+	</ui:define>
+	
+	<ui:define name="buttonItens" style="height:100%; width:100%;">
+	
+		<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult"/>
+	
+	</ui:define>
+			
+</ui:composition>

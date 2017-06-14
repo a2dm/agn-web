@@ -12,6 +12,7 @@ public class MenuControl
 	{
 		util.getSession().removeAttribute("flgMenuDsh");
 		util.getSession().removeAttribute("flgMenuAgn");
+		util.getSession().removeAttribute("flgMenuCfm");
 		util.getSession().removeAttribute("flgMenuRcp");
 		util.getSession().removeAttribute("flgMenuPct");
 		util.getSession().removeAttribute("flgMenuRlt");

@@ -67,6 +67,10 @@ public class Agendamento implements Serializable
 	@Column(name = "id_convenio")
 	private BigInteger idConvenio;
 	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_convenio", insertable = false, updatable = false)
+	private Convenio convenio;
+	
 	@Column(name = "hor_inicio")
 	private String horInicio;
 	
@@ -110,6 +114,17 @@ public class Agendamento implements Serializable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_alt", insertable = false, updatable = false)
 	private Usuario usuarioAlt;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name = "dat_confirmacao")
+	private Date datConfirmacao;
+	
+	@Column(name = "id_usuario_confirm")
+	private BigInteger idUsuarioConfirm;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_usuario_confirm", insertable = false, updatable = false)
+	private Usuario usuarioConfirm;
 	
 	@Formula("(select d.des_dominio from agn.tb_dominio d where d.vlr_dominio = id_situacao and d.ref_dominio = 'SITUACAO_AGENDAMENTO')")
 	private String desSituacao;
@@ -318,5 +333,37 @@ public class Agendamento implements Serializable
 
 	public void setFiltroMap(HashMap<String, Object> filtroMap) {
 		this.filtroMap = filtroMap;
+	}
+
+	public Convenio getConvenio() {
+		return convenio;
+	}
+
+	public void setConvenio(Convenio convenio) {
+		this.convenio = convenio;
+	}
+
+	public Date getDatConfirmacao() {
+		return datConfirmacao;
+	}
+
+	public void setDatConfirmacao(Date datConfirmacao) {
+		this.datConfirmacao = datConfirmacao;
+	}
+
+	public BigInteger getIdUsuarioConfirm() {
+		return idUsuarioConfirm;
+	}
+
+	public void setIdUsuarioConfirm(BigInteger idUsuarioConfirm) {
+		this.idUsuarioConfirm = idUsuarioConfirm;
+	}
+
+	public Usuario getUsuarioConfirm() {
+		return usuarioConfirm;
+	}
+
+	public void setUsuarioConfirm(Usuario usuarioConfirm) {
+		this.usuarioConfirm = usuarioConfirm;
 	}
 }
