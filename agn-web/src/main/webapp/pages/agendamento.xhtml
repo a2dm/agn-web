@@ -42,6 +42,7 @@
 			
 			function abrirModalAlterarAgendamento(id)
 			{
+				alert(id);
 				document.getElementById("formulario:idAgendamento").value = id;
 				$('#formulario\\:preparaAlterarAgendamento').click();
 			}
@@ -117,7 +118,7 @@
 	
 	
 	<ui:define name="modal">
-		<rich:popupPanel id="panAgendamento" styleClass="modal-content" domElementAttachment="form" modal="true" width="800" height="730" resizeable="false" onmaskclick="#{rich:component('panAgendamento')}.hide()">
+		<rich:popupPanel id="panAgendamento" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="810" resizeable="false" onmaskclick="#{rich:component('panAgendamento')}.hide()">
 			<ui:include src="panelCadastrarAgendamento.xhtml" />
 		</rich:popupPanel>
 		

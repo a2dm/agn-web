@@ -75,8 +75,27 @@
 	                      
 		            </div>
 	            </div>	            
-            </h:panelGroup>            
-            
+           			
+	            <div class="widget-body">
+	            	<div class="row">
+	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="hue-demo">Telefone <span style="color: red">*</span></label>       
+	                          <h:inputText value="#{crudBean.entity.telPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="14" id="tel" readonly="#{crudBean.entity.idPaciente != null}"/>                   
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="saturation-demo">E-mail </label>
+							  <h:inputText value="#{crudBean.entity.emlPaciente}" styleClass="form-control" onblur="validarEmail(this);" maxlength="200" id="eml" readonly="#{crudBean.entity.idPaciente != null}"/>
+	                        </div>
+	                    </div>   
+	                      
+		            </div>
+	            </div>	            
+            </h:panelGroup>   
+                        
 			<div class="widget-body">
             	<div class="row">
                 	<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">

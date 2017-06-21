@@ -86,9 +86,10 @@ $('.dropdown-toggle').dropdown();
 	    },
 	  
 	  eventClick: 
-		  function(start, calEvent, jsEvent, view) 
+		  function(event, jsEvent, view) 
 		  {
-		  	abrirModalAlterarAgendamento(calEvent.id);
+		  	alert(event.id);
+		  	abrirModalAlterarAgendamento(event.id);
 		  }	  
 	    });
 	  });

@@ -131,11 +131,15 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 				
 				this.getEntity().setIdPaciente(paciente != null ? paciente.getIdPaciente() : null);
 				this.getEntity().setNomPaciente(paciente != null ? paciente.getNomPaciente() : null);
+				this.getEntity().setTelPaciente(paciente != null ? paciente.getTelPaciente() : null);
+				this.getEntity().setEmlPaciente(paciente != null ? paciente.getEmlPaciente() : null);
 			}
 			else
 			{
 				this.getEntity().setIdPaciente(null);
 				this.getEntity().setNomPaciente(null);
+				this.getEntity().setTelPaciente(null);
+				this.getEntity().setEmlPaciente(null);
 			}
 		}
 		catch (Exception e)

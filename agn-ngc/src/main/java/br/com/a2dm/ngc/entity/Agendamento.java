@@ -132,6 +132,12 @@ public class Agendamento implements Serializable
 	@Column(name = "obs_agendamento")
 	private String obsAgendamento;
 	
+	@Column(name = "tel_paciente")
+	private String telPaciente;
+	
+	@Column(name = "eml_paciente")
+	private String emlPaciente;
+	
 	@Transient
 	private HashMap<String, Object> filtroMap;
 
@@ -365,5 +371,21 @@ public class Agendamento implements Serializable
 
 	public void setUsuarioConfirm(Usuario usuarioConfirm) {
 		this.usuarioConfirm = usuarioConfirm;
+	}
+
+	public String getTelPaciente() {
+		return telPaciente;
+	}
+
+	public void setTelPaciente(String telPaciente) {
+		this.telPaciente = telPaciente;
+	}
+
+	public String getEmlPaciente() {
+		return emlPaciente;
+	}
+
+	public void setEmlPaciente(String emlPaciente) {
+		this.emlPaciente = emlPaciente;
 	}
 }
