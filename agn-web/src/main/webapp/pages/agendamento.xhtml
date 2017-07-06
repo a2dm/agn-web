@@ -42,9 +42,13 @@
 			
 			function abrirModalAlterarAgendamento(id)
 			{
-				alert(id);
 				document.getElementById("formulario:idAgendamento").value = id;
 				$('#formulario\\:preparaAlterarAgendamento').click();
+			}
+			
+			function setarDataCorrente(start)
+			{
+				document.getElementById("formulario:dataCalendario").value = start;				
 			}
 		</script>
     

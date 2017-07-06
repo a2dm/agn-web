@@ -1,5 +1,7 @@
 package br.com.a2dm.ngc.service;
 
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,8 +20,10 @@ import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 import br.com.a2dm.ngc.entity.vo.RetornoVo;
 import br.com.a2dm.ngc.functions.UtilFuncions;
+import br.com.a2dm.ngc.service.log.AgendamentoLogService;
 
 public class AgendamentoService extends A2DMHbNgc<Agendamento>
 {
@@ -189,6 +193,125 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setDatConfirmacao(new Date());
 		
 		super.alterar(sessao, vo);
+		
+		return vo;
+	}
+	
+	public Agendamento marcarPresenca(Agendamento vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			vo = marcarPresenca(sessao, vo);
+			tx.commit();
+			return vo;
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	public Agendamento marcarPresenca(Session sessao, Agendamento vo) throws Exception
+	{
+		//VALIDACAO DA SITUACAO DO AGENDAMENTO
+		Agendamento agendamento = new Agendamento();
+		agendamento.setIdAgendamento(vo.getIdAgendamento());
+		agendamento = this.get(agendamento, 0);
+		
+		if(agendamento != null
+				&& agendamento.getIdSituacao() != null
+				&& agendamento.getIdSituacao().intValue() != SITUACAO_AGENDADA)
+		{
+			throw new Exception("Só podem ser marcados como presente os agendamentos com situação agendada! Situação do agendamento: " + agendamento.getDesSituacao());
+		}
+		
+		//ALTERAR SITUACAO DO AGENDAMENTO PARA PRESENTE
+		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)));
+		vo.setHorPresenca(new SimpleDateFormat("HH:mm").format(new Date()));
+		
+		super.alterar(sessao, vo);
+		
+		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
+		AgendamentoLog log = new AgendamentoLog();
+		log.setIdAgendamento(vo.getIdAgendamento());
+		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		log.setDatCadastro(new Date());
+		log.setDesOperacao("MACANDO O AGENDAMENTO COMO PRESENTE");
+		
+		AgendamentoLogService.getInstancia().inserir(sessao, log);
+		
+		return vo;
+	}
+	
+	public Agendamento atenderPaciente(Agendamento vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			vo = atenderPaciente(sessao, vo);
+			tx.commit();
+			return vo;
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	public Agendamento atenderPaciente(Session sessao, Agendamento vo) throws Exception
+	{
+		//VALIDACAO DA SITUACAO DO AGENDAMENTO
+		Agendamento agendamento = new Agendamento();
+		agendamento.setIdAgendamento(vo.getIdAgendamento());
+		agendamento = this.get(agendamento, 0);
+		
+		if(agendamento != null
+				&& agendamento.getIdSituacao() != null
+				&& agendamento.getIdSituacao().intValue() != SITUACAO_PRESENTE)
+		{
+			throw new Exception("Só podem ser colocado em atendimento os agendamentos com situação presente! Situação do agendamento: " + agendamento.getDesSituacao());
+		}
+		
+		//NAO PODE COLOCAR EM ATENDIMENTO SE JA POSSUIR PACIENTE EM ATENDIMENTO
+		Agendamento agendamentoAtendimento = new Agendamento();
+		agendamentoAtendimento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+		agendamentoAtendimento.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));		
+		
+		List<Agendamento> listaAgendamentosAtendimento = this.pesquisar(sessao, agendamentoAtendimento, 0);
+		
+		if(listaAgendamentosAtendimento != null
+				&& listaAgendamentosAtendimento.size() > 0)
+		{
+			throw new Exception("Não foi possível colocar o paciente em atendimento pois já existe um atendimento para o profissional!");
+		}		
+		
+		//ALTERAR SITUACAO DO AGENDAMENTO PARA PRESENTE
+		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
+		super.alterar(sessao, vo);
+		
+		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
+		AgendamentoLog log = new AgendamentoLog();
+		log.setIdAgendamento(vo.getIdAgendamento());
+		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		log.setDatCadastro(new Date());
+		log.setDesOperacao("MACANDO O AGENDAMENTO COMO EM ATENDIMENTO");
+		
+		AgendamentoLogService.getInstancia().inserir(sessao, log);
 		
 		return vo;
 	}

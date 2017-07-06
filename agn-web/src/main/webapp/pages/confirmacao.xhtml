@@ -49,6 +49,7 @@
 	       
 	       </f:subview>
 		</h:panelGroup>
+		
 	</ui:define>
 	
 	
@@ -68,7 +69,7 @@
 								<rich:column style="width: 5%; text-align: center;">
 									Código
 								</rich:column>
-								<rich:column style="width:9%; text-align: center;">
+								<rich:column style="width:8%; text-align: center;">
 									Data
 								</rich:column>
 								<rich:column style="width: 6%; text-align: center;">
@@ -86,11 +87,14 @@
 								<rich:column style="width: 18%; text-align: center;">
 									Serviço
 								</rich:column>
-								<rich:column style="width: 9%; text-align: center;">
+								<rich:column style="width: 8%; text-align: center;">
 									Tipo
 								</rich:column>
-								<rich:column style="width: 15%; text-align: center;">
+								<rich:column style="width: 13%; text-align: center;">
 									Convênio
+								</rich:column>
+								<rich:column style="width: 6%; text-align: center;">
+									Confirmada
 								</rich:column>
 								<rich:column style="width: 3%; text-align: center;"/>
 							</rich:columnGroup>
@@ -123,6 +127,10 @@
 						<rich:column style="text-align: left;">
 							<h:outputText value="#{rst.convenio.desConvenio}" />
 						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="Sim" rendered="#{rst.flgConfirmado == 'S'}" style="color: blue; font-weight: bold;"/>
+							<h:outputText value="Não" rendered="#{rst.flgConfirmado == 'N'}" style="color: red; font-weight: bold;"/>
+						</rich:column>
 						<rich:column style="text-align: center;">												
 							<a4j:commandButton image="../img/confirmAgend.png" style="border:none; width: 20px; height: 20px;" title="CONFIRMAR" render="pnFrm" action="#{crudBean.confirmar}" rendered="#{rst.flgConfirmado == 'N'}" onclick="if (!confirm('Deseja realmente confirmar a presença do paciente?')) return false">
 								<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
@@ -137,6 +145,7 @@
 				</div>
 			</f:subview>
 		</h:panelGrid>
+		
 	</ui:define>
 	
 	<ui:define name="buttonItens" style="height:100%; width:100%;">
@@ -144,5 +153,5 @@
 		<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult"/>
 	
 	</ui:define>
-			
+	
 </ui:composition>

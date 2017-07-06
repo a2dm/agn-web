@@ -16,7 +16,6 @@ import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.service.AgendamentoService;
-import br.com.a2dm.ngc.service.ServicoService;
 
 
 @RequestScoped
@@ -45,7 +44,7 @@ public class ConfirmacaoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.setDataAgendamentoInicio(new Date());
 		
 		GregorianCalendar gc = new GregorianCalendar();
-		gc.setTime(new Date());		
+		gc.setTime(new Date());
 		gc.add(Calendar.DAY_OF_MONTH, 3);
 		
 		this.setDataAgendamentoFim(gc.getTime());
@@ -67,6 +66,22 @@ public class ConfirmacaoBean extends AbstractBean<Agendamento, AgendamentoServic
 		}
 	}
 	
+	private void validarConfirmar() throws Exception
+	{
+		GregorianCalendar gc = new GregorianCalendar();
+		gc.setTime(new Date());
+		
+		gc.set(Calendar.HOUR_OF_DAY, 0);
+		gc.set(Calendar.MINUTE, 0);
+		gc.set(Calendar.SECOND, 0);
+		gc.set(Calendar.MILLISECOND, 0);
+		
+		if(this.getEntity().getDatAgendamento().before(gc.getTime()))
+		{
+			throw new Exception("Só é permitido a confirmação de agendamentos com data maior ou igual a data de hoje!");
+		}
+	}
+
 	public void confirmar() 
 	{		
 		try
@@ -75,6 +90,7 @@ public class ConfirmacaoBean extends AbstractBean<Agendamento, AgendamentoServic
 			{
 				if(validarAcesso(Variaveis.ACAO_CONFIRMAR))
 				{
+					this.validarConfirmar();					
 					AgendamentoService.getInstancia().confirmar(this.getEntity());
 					
 					FacesMessage message = new FacesMessage("Paciente confirmado com sucesso!");

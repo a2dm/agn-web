@@ -77,6 +77,9 @@ public class Agendamento implements Serializable
 	@Column(name = "hor_fim")
 	private String horFim;
 	
+	@Column(name = "hor_presenca")
+	private String horPresenca;
+	
 	@Temporal(TemporalType.DATE)
 	@Column(name = "dat_agendamento")
 	private Date datAgendamento;
@@ -387,5 +390,13 @@ public class Agendamento implements Serializable
 
 	public void setEmlPaciente(String emlPaciente) {
 		this.emlPaciente = emlPaciente;
+	}
+
+	public String getHorPresenca() {
+		return horPresenca;
+	}
+
+	public void setHorPresenca(String horPresenca) {
+		this.horPresenca = horPresenca;
 	}
 }

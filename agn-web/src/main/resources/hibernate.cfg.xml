@@ -41,5 +41,7 @@
 		<mapping class="br.com.a2dm.ngc.entity.Paciente"/>
 		<mapping class="br.com.a2dm.ngc.entity.Horario"/>
 		<mapping class="br.com.a2dm.ngc.entity.Agendamento"/>
+		
+		<mapping class="br.com.a2dm.ngc.entity.log.AgendamentoLog"/>
 	</session-factory>
 </hibernate-configuration>

@@ -167,10 +167,10 @@
 				              </h:commandLink>
 				            </li>
 				            <li class='#{sessionScope.flgMenuRcp}'>
-				              <a href="forms.html">
+				              <h:commandLink action="#{recepcaoBean.preparaPesquisar}">
 				                <i class="fa fa-bullhorn"></i>
 				                Recepção
-				              </a>
+				              </h:commandLink>
 				            </li>
 				            <li class='#{sessionScope.flgMenuPct}'>
 				              <h:commandLink action="#{pacienteBean.preparaPesquisar}">

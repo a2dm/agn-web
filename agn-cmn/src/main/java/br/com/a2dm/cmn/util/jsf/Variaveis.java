@@ -21,4 +21,6 @@ public class Variaveis
 	public static final String ACAO_REPORT = "REPORT";
 	public static final String ACAO_PREPARA_ORCAMENTO_GRUPO = "PREPARAORCAMENTOGRUPO";
 	public static final String ACAO_PREPARA_ORCAMENTO_GRUPO_CONTA = "PREPARAORCAMENTOGRUPOCONTA";
+	public static final String ACAO_PRESENCA = "PRESENCA";
+	public static final String ACAO_ATENDER = "ATENDER";
 }

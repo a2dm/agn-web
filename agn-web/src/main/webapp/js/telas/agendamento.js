@@ -47,7 +47,10 @@ $('.dropdown-toggle').dropdown();
   
 	  editable: false,
 	  
-	  events: "/agn-web/CalendarServlet?idCliPro="+document.getElementById('formulario:idClinicaProfissional').value+"&dtAgn="+document.getElementById('formulario:dataCalendario').value ,
+	  events: { url: "/agn-web/CalendarServlet?idCliPro="+document.getElementById('formulario:idClinicaProfissional').value ,
+		  		data: { dtAgn : document.getElementById('formulario:dataCalendario').value }
+		  				
+	  },
 	  
 	  eventColor: '#ffbf00',
 	  
@@ -81,14 +84,13 @@ $('.dropdown-toggle').dropdown();
 	        }
 	    },
 	    
-	  viewRender: function(start, view,element) {
-		  document.getElementById('formulario:dataCalendario').value = start;
+	  viewRender: function(start, view, element) {
+		  setarDataCorrente(start);
 	    },
 	  
 	  eventClick: 
 		  function(event, jsEvent, view) 
 		  {
-		  	alert(event.id);
 		  	abrirModalAlterarAgendamento(event.id);
 		  }	  
 	    });
