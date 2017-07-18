@@ -45,7 +45,7 @@ public class CalendarServlet extends HttpServlet
 //	    	gc2.setTime(data);
 //	    	gc2.set(Calendar.DAY_OF_MONTH, 28);
 //	    	gc2.add(GregorianCalendar.DAY_OF_MONTH, 20);	    	
-//	    	Date dataFimFiltro = gc2.getTime();	    	
+//	    	Date dataFimFiltro = gc2.getTime();
 	    	
 	    	Agendamento agendamento = new Agendamento();
 	    	agendamento.setFiltroMap(new HashMap<String, Object>());

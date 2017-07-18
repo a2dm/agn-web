@@ -45,6 +45,7 @@ public class PacienteService extends A2DMHbNgc<Paciente>
 		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");
 		adicionarFiltro("nomPaciente", RestritorHb.RESTRITOR_LIKE,"nomPaciente");
 		adicionarFiltro("cpfPaciente", RestritorHb.RESTRITOR_EQ,"cpfPaciente");
+		adicionarFiltro("idProfissional", RestritorHb.RESTRITOR_EQ,"idProfissional");
 	}
 		
 	@Override

@@ -23,4 +23,5 @@ public class Variaveis
 	public static final String ACAO_PREPARA_ORCAMENTO_GRUPO_CONTA = "PREPARAORCAMENTOGRUPOCONTA";
 	public static final String ACAO_PRESENCA = "PRESENCA";
 	public static final String ACAO_ATENDER = "ATENDER";
+	public static final String ACAO_VINCULAR_PACIENTE = "VINCULARPACIENTE";
 }

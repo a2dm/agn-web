@@ -17,6 +17,7 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.validators.ValidaPermissao;
+import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
@@ -31,7 +32,7 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	private String siglaEstado;
 	private String activeTab;
 	
-	private List<Paciente> pacientes;
+	private Agendamento agendamento;
 	
 	
 	private JSFUtil util = new JSFUtil();
@@ -67,6 +68,27 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 		
 		this.setListaEstado(listaEstado);
 	}
+	
+	   public String preparaCompletarInserir()
+	   {
+	      try
+	      {
+	    	  if(validarAcesso(Variaveis.ACAO_PREPARA_INSERIR))
+	    	  {
+	    		  setCurrentState(STATE_INSERT);
+	    	  }
+	      }
+	      catch (Exception e)
+	      {
+	         FacesMessage message = new FacesMessage(e.getMessage());
+	         message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	         if(e.getMessage() == null)
+	        	 FacesContext.getCurrentInstance().addMessage("", message);
+	         else
+	        	 FacesContext.getCurrentInstance().addMessage(null, message);
+	      }
+	      return ACTION_SEARCH;
+	   }
 	
 	@Override
 	public void preparaAlterar()
@@ -140,6 +162,12 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 		this.getEntity().setDatAlteracao(new Date());
 		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 		this.getEntity().setFlgCompleto("S");
+	}
+	
+	@Override
+	protected void completarPesquisar() throws Exception
+	{
+		this.getSearchObject().setIdProfissional(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 	}
 	
 	@Override
@@ -261,20 +289,11 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 		this.activeTab = activeTab;
 	}
 
-	public List<Paciente> getPacientes() {
-		
-		Paciente paciente = new Paciente();
-		paciente.setNomPaciente("andresa de lima");
-		
-		pacientes = new ArrayList<Paciente>();
-		pacientes.add(paciente);
-		
-		return pacientes;
+	public Agendamento getAgendamento() {
+		return agendamento;
 	}
 
-	public void setPacientes(List<Paciente> pacientes) {
-		this.pacientes = pacientes;
+	public void setAgendamento(Agendamento agendamento) {
+		this.agendamento = agendamento;
 	}
-	
-	
 }

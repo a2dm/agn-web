@@ -64,51 +64,51 @@
     
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca"> 
-		              <div class="dashboard-wrapper">
+		       <div class="dashboard-wrapper">
           
-          <!-- Left Sidebar Start -->
-          <div class="left-sidebar">
-            
-            <!-- Row Start -->
-            <div class="row">
-              <div class="col-lg-12 col-md-12">
-                <div class="widget">                  
-                  <div class="widget-body">
-                    <h:panelGroup layout="block" id="cal">
-                    	<div id='calendar'></div>
-                    </h:panelGroup>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- Row End -->           
-
-          </div>
-                
-                <div class="right-sidebar">
-	            <div class="wrapper">
-	              <span class="btn btn-agendada btn-block" type="button">
-	                Agendada
-	              </span>
-	              <span class="btn btn-presente btn-block" type="button">
-	                Presente
-	              </span>
-	              <span class="btn btn-atendimento btn-block" type="button">
-	                Em Atendimento
-	              </span>
-	              <span class="btn btn-concluida btn-block" type="button">
-	                Concluída
-	              </span>
-	            </div>
-            
-            <hr class="hr-stylish-1"/>
-            
-           
-            
-            
-          </div>
-          <!-- Right Sidebar End -->
-</div>
+		          <!-- Left Sidebar Start -->
+		          <div class="left-sidebar">
+		            
+		            <!-- Row Start -->
+		            <div class="row">
+		              <div class="col-lg-12 col-md-12">
+		                <div class="widget">                  
+		                  <div class="widget-body">
+		                    <h:panelGroup layout="block" id="cal">
+		                    	<div id='calendar'></div>
+		                    </h:panelGroup>
+		                  </div>
+		                </div>
+		              </div>
+		            </div>
+		            <!-- Row End -->           
+		
+		          </div>
+		                
+		                <div class="right-sidebar">
+			            <div class="wrapper">
+			              <span class="btn btn-agendada btn-block" type="button">
+			                Agendada
+			              </span>
+			              <span class="btn btn-presente btn-block" type="button">
+			                Presente
+			              </span>
+			              <span class="btn btn-atendimento btn-block" type="button">
+			                Em Atendimento
+			              </span>
+			              <span class="btn btn-concluida btn-block" type="button">
+			                Concluída
+			              </span>
+			            </div>
+		            
+		            <hr class="hr-stylish-1"/>
+		            
+		           
+		            
+		            
+		          </div>
+		          <!-- Right Sidebar End -->
+			  </div>
 	       </f:subview>
 		</h:panelGroup>
 		
@@ -122,7 +122,7 @@
 	
 	
 	<ui:define name="modal">
-		<rich:popupPanel id="panAgendamento" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="810" resizeable="false" onmaskclick="#{rich:component('panAgendamento')}.hide()">
+		<rich:popupPanel id="panAgendamento" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="780" resizeable="false" onmaskclick="#{rich:component('panAgendamento')}.hide()">
 			<ui:include src="panelCadastrarAgendamento.xhtml" />
 		</rich:popupPanel>
 		

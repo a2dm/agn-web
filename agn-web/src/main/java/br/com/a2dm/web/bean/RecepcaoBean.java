@@ -2,6 +2,7 @@ package br.com.a2dm.web.bean;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -13,17 +14,20 @@ import org.richfaces.component.SortOrder;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.AgendamentoService;
+import br.com.a2dm.ngc.service.PacienteService;
 
 @RequestScoped
 @ManagedBean
 public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 {	
-	private Date dataInicio;
-	
+	private Date dataInicio;	
 	private Date dataFim;
+	
+	private String mensagem;
 		
 	private SortOrder nomeOrder;	
 	private SortOrder inicioOrder;
@@ -31,6 +35,9 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 	private SortOrder datAgendamentoOrder;
 	private SortOrder situacaoOrder;	
 	private SortOrder presencaOrder;
+	
+	private List<Paciente> listaPaciente;
+	private Paciente paciente;
 	
 	public RecepcaoBean()
 	{
@@ -113,6 +120,56 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 		this.getSearchObject().getFiltroMap().put("datAgendamentoFim", this.getDataFim());
 	}
 	
+	public void preparaVincularPaciente()
+	{
+		this.pesquisarPaciente();
+	}
+	
+	public void vincularPaciente()
+	{
+		try
+		{
+			if(validarAcesso(Variaveis.ACAO_VINCULAR_PACIENTE))
+			{
+				AgendamentoService.getInstancia().vincularPaciente(this.getEntity(), paciente);
+				
+				FacesMessage message = new FacesMessage("O paciente foi vinculado para o agendamento!");
+				message.setSeverity(FacesMessage.SEVERITY_INFO);
+				FacesContext.getCurrentInstance().addMessage(null, message);
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	        if(e.getMessage() == null)
+	        	FacesContext.getCurrentInstance().addMessage("", message);
+	         else
+	        	FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	public void pesquisarPaciente()
+	{
+		try
+		{
+			this.setMensagem(null);			
+			this.validarPesquisarPaciente();
+			
+			Paciente paciente = new Paciente();
+			paciente.setNomPaciente(this.getEntity().getNomPaciente());
+			paciente.setCpfPaciente(this.getEntity().getCpfPaciente());
+			paciente.setIdProfissional(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
+			
+			List<Paciente> lista = PacienteService.getInstancia().pesquisar(paciente, 0);
+			this.setListaPaciente(lista);		
+		}
+		catch (Exception e)
+		{
+			this.setMensagem(e.getMessage());
+		}
+	}
+	
 	@Override
 	protected void setValoresDefault() throws Exception
 	{
@@ -140,6 +197,17 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 				|| this.getDataFim().toString().equals(""))
 		{
 			throw new Exception("O campo Período Fim é obrigatório!");
+		}
+	}
+	
+	public void validarPesquisarPaciente() throws Exception
+	{
+		if((this.getEntity().getCpfPaciente() == null
+				|| this.getEntity().getCpfPaciente().equals(""))
+				&& (this.getEntity().getNomPaciente() == null
+				|| this.getEntity().getNomPaciente().equals("")))
+		{
+			throw new Exception("Pelo menos um dos campos com * são obrigatórios!");
 		}
 	}
 	
@@ -265,5 +333,29 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 
 	public void setPresencaOrder(SortOrder presencaOrder) {
 		this.presencaOrder = presencaOrder;
+	}
+
+	public List<Paciente> getListaPaciente() {
+		return listaPaciente;
+	}
+
+	public void setListaPaciente(List<Paciente> listaPaciente) {
+		this.listaPaciente = listaPaciente;
+	}
+
+	public String getMensagem() {
+		return mensagem;
+	}
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
+	}
+
+	public Paciente getPaciente() {
+		return paciente;
+	}
+
+	public void setPaciente(Paciente paciente) {
+		this.paciente = paciente;
 	}
 }

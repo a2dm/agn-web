@@ -164,7 +164,7 @@
 				<div class="box-content">
 					<rich:dataTable id="tblData" 
 								 value="#{crudBean.searchResult}" 
-							       var="rst" rows="10"
+							       var="rst" rows="5"
 							styleClass="table table-bordered table-striped dataTable"
 							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
 							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -221,7 +221,7 @@
 				<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
 				<h:panelGroup style="color: #333333" rendered="#{empty crudBean.searchResult and crudBean.searching}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
 				<div align="center">
-					<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
+					<rich:dataScroller for="tblData" maxPages="5" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
 				</div>
 			</f:subview>
 		</h:panelGrid>

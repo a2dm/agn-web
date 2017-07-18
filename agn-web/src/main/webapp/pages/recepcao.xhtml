@@ -20,6 +20,8 @@
 		<t:saveState value="#{crudBean.datAgendamentoOrder}" />
 		<t:saveState value="#{crudBean.situacaoOrder}" />
 		<t:saveState value="#{crudBean.presencaOrder}" />
+		<t:saveState value="#{crudBean.mensagem}" />
+		<t:saveState value="#{crudBean.listaPaciente}" />
 	</ui:define>
 	
 	<ui:define name="pageIcon"/>
@@ -81,7 +83,7 @@
 		                <h:outputText value="#{rst.datAgendamento}"/>		                
 		            </rich:column>
 		            
-		            <rich:column style="width: 5%; text-align: center;" sortBy="#{rst.horInicio}" sortOrder="#{crudBean.inicioOrder}" sortType="custom">
+		            <rich:column style="width: 6%; text-align: center;" sortBy="#{rst.horInicio}" sortOrder="#{crudBean.inicioOrder}" sortType="custom">
 		                <f:facet name="header">
 		                    <i class="fa fa-sort"></i>
 		                    <h:outputText value=" "/>
@@ -99,7 +101,7 @@
 		                <h:outputText value="#{rst.horFim}"/>		                
 		            </rich:column>
 					
-					<rich:column style="width: 6%; text-align: center;" sortBy="#{rst.horPresenca}" sortOrder="#{crudBean.presencaOrder}" sortType="custom">
+					<rich:column style="width: 8%; text-align: center;" sortBy="#{rst.horPresenca}" sortOrder="#{crudBean.presencaOrder}" sortType="custom">
 		                <f:facet name="header">
 		                    <i class="fa fa-sort"></i>
 		                    <h:outputText value=" "/>
@@ -153,13 +155,13 @@
 		            </rich:column>
 		            
 		            <rich:column style="width: 3%; text-align: center;">												
-						<a4j:commandButton image="../img/person.png" style="border:none; width: 20px; height: 20px;" title="MARCAR COMO PRESENTE" render="pnFrm" action="#{crudBean.marcarPresenca}" rendered="#{rst.idSituacao == 1}" onclick="if (!confirm('Deseja realmente confirmar a presença do paciente?')) return false">
+						<a4j:commandButton image="../img/person.png" style="border:none; width: 20px; height: 20px;" title="MARCAR COMO PRESENTE" render="pnFrm" action="#{crudBean.marcarPresenca}" rendered="#{rst.idSituacao == 1}" onclick="if (!confirm('Deseja realmente marcar o paciente como presente?')) return false">
 							<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 						</a4j:commandButton>
 					</rich:column>
 					
 					<rich:column style="width: 3%;text-align: center;">												
-						<a4j:commandButton image="../img/vincular.png" style="border:none; width: 20px; height: 20px;" title="VINCULAR PACIENTE" render="pnFrm" action="#{crudBean.marcarPresenca}" rendered="#{rst.idSituacao == 2 and rst.idPaciente == null}">
+						<a4j:commandButton image="../img/vincular.png" style="border:none; width: 20px; height: 20px;" title="VINCULAR PACIENTE" render="panVincularPaciente" action="#{crudBean.preparaVincularPaciente}" oncomplete="#{rich:component('panVincularPaciente')}.show();" rendered="#{rst.idSituacao == 2 and rst.idPaciente == null}">
 							<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 						</a4j:commandButton>
 					</rich:column>
@@ -184,5 +186,15 @@
 	</ui:define>
 			
 	<ui:define name="buttonItens" style="height:100%; width:100%;"/>		
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panVincularPaciente" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="680" resizeable="false" onmaskclick="#{rich:component('panVincularPaciente')}.hide()">
+			<ui:include src="panelVincularPaciente.xhtml" />
+		</rich:popupPanel>
+		
+		<rich:popupPanel id="panMensagem" styleClass="modal-content" domElementAttachment="form" modal="true" width="650" height="200" resizeable="false" onmaskclick="#{rich:component('panMensagem')}.hide()">
+			<ui:include src="panelMensagem.xhtml" />
+		</rich:popupPanel>
+	</ui:define>
 	
 </ui:composition>

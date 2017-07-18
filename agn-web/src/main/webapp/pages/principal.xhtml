@@ -172,6 +172,12 @@
 				                Recepção
 				              </h:commandLink>
 				            </li>
+				            <li class='#{sessionScope.flgMenuAtn}'>			              
+				              <h:commandLink action="#{atendimentoBean.preparaPesquisar}">
+				                <i class="fa fa-stethoscope"></i>
+				                Atendimento
+				              </h:commandLink>
+				            </li>
 				            <li class='#{sessionScope.flgMenuPct}'>
 				              <h:commandLink action="#{pacienteBean.preparaPesquisar}">
 				                <i class="fa fa-user"></i>

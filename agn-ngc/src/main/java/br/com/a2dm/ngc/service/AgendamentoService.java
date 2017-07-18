@@ -20,6 +20,7 @@ import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 import br.com.a2dm.ngc.entity.vo.RetornoVo;
 import br.com.a2dm.ngc.functions.UtilFuncions;
@@ -310,6 +311,59 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
 		log.setDatCadastro(new Date());
 		log.setDesOperacao("MACANDO O AGENDAMENTO COMO EM ATENDIMENTO");
+		
+		AgendamentoLogService.getInstancia().inserir(sessao, log);
+		
+		return vo;
+	}
+	
+	public Agendamento vincularPaciente(Agendamento vo, Paciente paciente) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			vo = vincularPaciente(sessao, vo, paciente);
+			tx.commit();
+			return vo;
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	public Agendamento vincularPaciente(Session sessao, Agendamento vo, Paciente paciente) throws Exception
+	{
+		//VALIDACAO DA SITUACAO DO AGENDAMENTO
+		Agendamento agendamento = new Agendamento();
+		agendamento.setIdAgendamento(vo.getIdAgendamento());
+		agendamento = this.get(agendamento, 0);
+		
+		if(agendamento != null
+				&& agendamento.getIdSituacao() != null
+				&& agendamento.getIdSituacao().intValue() != SITUACAO_PRESENTE)
+		{
+			throw new Exception("Só pode vincular pacientes para agendamentos com situação presente! Situação do agendamento: " + agendamento.getDesSituacao());
+		}
+		
+		vo.setIdPaciente(paciente.getIdPaciente());
+		vo.setNomPaciente(paciente.getNomPaciente());
+		vo.setCpfPaciente(paciente.getCpfPaciente());
+		super.alterar(vo);
+		
+		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
+		AgendamentoLog log = new AgendamentoLog();
+		log.setIdAgendamento(vo.getIdAgendamento());
+		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		log.setDatCadastro(new Date());
+		log.setDesOperacao("VINCULANDO O PACIENTE PARA O AGENDAMENTO");
 		
 		AgendamentoLogService.getInstancia().inserir(sessao, log);
 		
