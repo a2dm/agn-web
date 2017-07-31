@@ -41,6 +41,8 @@
 		<mapping class="br.com.a2dm.ngc.entity.Paciente"/>
 		<mapping class="br.com.a2dm.ngc.entity.Horario"/>
 		<mapping class="br.com.a2dm.ngc.entity.Agendamento"/>
+		<mapping class="br.com.a2dm.ngc.entity.Exame"/>
+		<mapping class="br.com.a2dm.ngc.entity.AgendamentoExame"/>
 		
 		<mapping class="br.com.a2dm.ngc.entity.log.AgendamentoLog"/>
 	</session-factory>

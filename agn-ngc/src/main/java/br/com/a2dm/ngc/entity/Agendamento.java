@@ -132,6 +132,12 @@ public class Agendamento implements Serializable
 	@Formula("(select d.des_dominio from agn.tb_dominio d where d.vlr_dominio = id_situacao and d.ref_dominio = 'SITUACAO_AGENDAMENTO')")
 	private String desSituacao;
 	
+	@Column(name = "vlr_desconto")
+	private Double vlrDesconto;
+	
+	@Column(name = "vlr_agendamento")
+	private Double vlrAgendamento;
+	
 	@Column(name = "obs_agendamento")
 	private String obsAgendamento;
 	
@@ -140,6 +146,18 @@ public class Agendamento implements Serializable
 	
 	@Column(name = "eml_paciente")
 	private String emlPaciente;
+	
+	@Column(name = "des_prescricao")
+	private String desAnamnese;
+	
+	@Column(name = "des_anamnese")
+	private String desPrescricao;
+	
+	@Transient
+	private String vlrAgendamentoFormatado;
+	
+	@Transient
+	private String vlrDescontoFormatado;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
@@ -398,5 +416,53 @@ public class Agendamento implements Serializable
 
 	public void setHorPresenca(String horPresenca) {
 		this.horPresenca = horPresenca;
+	}
+
+	public Double getVlrDesconto() {
+		return vlrDesconto;
+	}
+
+	public void setVlrDesconto(Double vlrDesconto) {
+		this.vlrDesconto = vlrDesconto;
+	}
+
+	public Double getVlrAgendamento() {
+		return vlrAgendamento;
+	}
+
+	public void setVlrAgendamento(Double vlrAgendamento) {
+		this.vlrAgendamento = vlrAgendamento;
+	}
+
+	public String getVlrAgendamentoFormatado() {
+		return vlrAgendamentoFormatado;
+	}
+
+	public void setVlrAgendamentoFormatado(String vlrAgendamentoFormatado) {
+		this.vlrAgendamentoFormatado = vlrAgendamentoFormatado;
+	}
+
+	public String getVlrDescontoFormatado() {
+		return vlrDescontoFormatado;
+	}
+
+	public void setVlrDescontoFormatado(String vlrDescontoFormatado) {
+		this.vlrDescontoFormatado = vlrDescontoFormatado;
+	}
+
+	public String getDesAnamnese() {
+		return desAnamnese;
+	}
+
+	public void setDesAnamnese(String desAnamnese) {
+		this.desAnamnese = desAnamnese;
+	}
+
+	public String getDesPrescricao() {
+		return desPrescricao;
+	}
+
+	public void setDesPrescricao(String desPrescricao) {
+		this.desPrescricao = desPrescricao;
 	}
 }

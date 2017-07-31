@@ -30,9 +30,10 @@
 	    <link href="../css/new.css" rel="stylesheet"/> 
 	    <link href="../css/charts-graphs.css" rel="stylesheet"/>
 	    <link href="../css/barIndicator.css" rel="stylesheet" />
-	    <link href="../fonts/font-awesome.min.css" rel="stylesheet"/>
 	    <link href="../css/main.css" rel="stylesheet"/>
 		<link href="../css/fullcalendar.css" rel="stylesheet"/>
+		<link href="../css/wysi/bootstrap-wysihtml5.css" rel="stylesheet"/>
+	    <link href="../fonts/font-awesome.min.css" rel="stylesheet"/>
 
 	</h:head>
 
@@ -135,7 +136,7 @@
 			              </h:commandLink>
 			            </li>
 			            <li class='#{sessionScope.flgMenuAtn}'>			              
-			              <h:commandLink action="#{atendimentoBean.preparaPesquisar}">
+			              <h:commandLink action="#{atendimentoBean.preparaAtendimento}">
 			                <i class="fa fa-stethoscope"></i>
 			                Atendimento
 			              </h:commandLink>

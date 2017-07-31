@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
+import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 
 public class AgendamentoLogService extends A2DMHbNgc<AgendamentoLog>
@@ -29,7 +30,11 @@ public class AgendamentoLogService extends A2DMHbNgc<AgendamentoLog>
 		return instancia;
 	}
 	
-	public AgendamentoLogService(){}
+	public AgendamentoLogService()
+	{
+		adicionarFiltro("idAgendamento", RestritorHb.RESTRITOR_EQ, "idAgendamento");
+		adicionarFiltro("idSituacao", RestritorHb.RESTRITOR_EQ, "idSituacao");
+	}
 
 	@Override
 	protected Criteria montaCriteria(Session sessao, int join)

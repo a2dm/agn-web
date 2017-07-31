@@ -45,6 +45,9 @@ public class AgendamentoLog implements Serializable
 	
 	@Column(name = "des_operacao")
 	private String desOperacao;
+	
+	@Column(name = "id_situacao")
+	private BigInteger idSituacao;
 
 	public BigInteger getIdAgendamentoLog() {
 		return idAgendamentoLog;
@@ -84,5 +87,13 @@ public class AgendamentoLog implements Serializable
 
 	public void setDesOperacao(String desOperacao) {
 		this.desOperacao = desOperacao;
+	}
+
+	public BigInteger getIdSituacao() {
+		return idSituacao;
+	}
+
+	public void setIdSituacao(BigInteger idSituacao) {
+		this.idSituacao = idSituacao;
 	}
 }

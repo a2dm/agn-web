@@ -295,7 +295,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		catch (Exception e) 
 		{
 			this.setMensagem(e.getMessage());
-		}		
+		}
 	}
 	
 	protected void completarInserir() throws Exception
@@ -305,7 +305,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.getEntity().setFlgAtivo("S");
 		this.getEntity().setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)));
 		this.getEntity().setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
-		this.getEntity().setFlgConfirmado("N");
+		this.getEntity().setFlgConfirmado("N");		
 	}
 	
 	@Override

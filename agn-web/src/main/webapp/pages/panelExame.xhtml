@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	<div class="box-body">					
+		<div class="form-group">
+	        <h:panelGroup id="panListaExames">
+		        <label class="col-md-2 control-label">Exame</label>
+		        <div class="col-md-6">
+		         	<h:selectOneMenu value="#{crudBean.exame}" styleClass="form-control" converter="simpleIndexConverter">								
+						<t:selectItems var="i" itemValue="#{i}" itemLabel="#{i.desExame}" value="#{crudBean.listaExames}" />
+					</h:selectOneMenu>
+		        </div>
+		        
+				<a4j:commandButton image="../img/ok.png" id="b" style="border:none; width: 40px; height: 30px; vertical-align: middle; padding-left:15px; padding-top: 5px;" title="ADICIONAR EXAME" actionListener="#{crudBean.adicionarExame}" render="panListaExamesSelecionados"/>
+		        <a4j:commandButton image="../img/add.png" id="a" style="border:none; width: 38px; height: 26px; vertical-align: middle; padding-left:15px; padding-top: 5px;" title="CADASTRAR NOVO EXAME" actionListener="#{crudBean.preparaInserirExame}" oncomplete="#{rich:component('panExame')}.show()" render="panExame"/>
+				
+			</h:panelGroup>
+
+			<br/>
+			<br/>
+			<br/>
+			
+			<h:panelGroup id="panListaExamesSelecionados">
+				<f:subview id="viewListagem">
+					<div class="box-content">
+						<rich:dataTable id="tblExamesSelecionados" 
+								 value="#{crudBean.listaExamesSelecionados}" 
+							       var="rst" rows="5"
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							  rendered="#{not empty crudBean.listaExamesSelecionados}">						     
+							<f:facet name="header">
+								<rich:columnGroup>
+									<rich:column style="width: 5%; text-align: center;">
+										Código
+									</rich:column>
+									<rich:column style="width:50%; text-align: center;">
+										Nome
+									</rich:column>									
+									<rich:column style="width: 3%; text-align: center;"/>
+								</rich:columnGroup>
+							</f:facet>
+							<rich:column style="text-align: right;">
+								<h:outputText value="#{rst.idExame}" />
+							</rich:column>
+							<rich:column style="text-align: left;">
+								<h:outputText value="#{rst.desExame}" />
+							</rich:column>
+														
+							<rich:column style="text-align: center;">
+								<a4j:commandButton image="../img/remove.png" style="border:none; width: 20px; height: 20px;" title="REMOVER" action="#{crudBean.removerExame}" render="panListaExamesSelecionados" >
+									<f:setPropertyActionListener target="#{crudBean.exame}" value="#{rst}" />
+								</a4j:commandButton>
+							</rich:column>
+						</rich:dataTable>
+					</div>				
+					<h:panelGroup style="color: #333333" rendered="#{empty crudBean.listaExamesSelecionados}"><div align="right">Não existem exames adicionados. &nbsp;&nbsp; </div></h:panelGroup>
+					<div align="center">
+						<rich:dataScroller for="tblExamesSelecionados" maxPages="5" rendered="#{not empty crudBean.listaExamesSelecionados}"/>
+					</div>
+				</f:subview>
+			</h:panelGroup>
+	    </div>
+    </div>
+		
+</ui:composition>

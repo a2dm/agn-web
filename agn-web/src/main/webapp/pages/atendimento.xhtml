@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{atendimentoBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">
+		<t:saveState value="#{crudBean.exame}" />
+		<t:saveState value="#{crudBean.listaExames}" />
+		<t:saveState value="#{crudBean.listaExamesSelecionados}" />
+		<t:saveState value="#{crudBean.mensagem}" />
+	</ui:define>
+	
+	<ui:define name="pageIcon"/>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+    
+    	<h:panelGroup rendered="#{crudBean.entity.idAgendamento == null}">
+    		Não existe paciente em atendimento no momento.
+    	</h:panelGroup>
+    
+    	<h:panelGroup rendered="#{crudBean.entity.idAgendamento != null}">
+
+	    	<div class="widget-body clearfix">
+	        	<ul id="myTab" class="nav nav-tabs">
+	           		<li class="active"><a href="#paciente" data-toggle="tab">Paciente</a></li>
+	           		<li><a href="#atendimento" data-toggle="tab">Atendimento</a></li>
+	             	<li><a href="#anamnese" data-toggle="tab">Anamnese</a></li>                                           
+	             	<li><a href="#prescricao" data-toggle="tab">Prescrição</a></li>
+	             	<li><a href="#exame" data-toggle="tab">Exame</a></li>                      
+	           	</ul>
+		  	
+			  	<div id="myTabContent" class="tab-content">
+		        	<div class="tab-pane fade in active" id="paciente">
+						<div class="box-body">
+							<fieldset>
+							
+							<legend>Dados Pessoais</legend>
+						
+							<div class="form-group">
+						        <label class="col-md-2 control-label">Nome</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.entity.paciente.nomPaciente}" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Cpf</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.entity.paciente.cpfPaciente}" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Rg</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.entity.paciente.rgPaciente}" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Nascimento</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.entity.paciente.datNascimento}" />
+						         	<h:outputText value=" ( #{crudBean.entity.paciente.idade} anos )" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Sexo</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="Masculino" rendered="#{crudBean.entity.paciente.sexPaciente == 'M'}" />
+						         	<h:outputText value="Feminino" rendered="#{crudBean.entity.paciente.sexPaciente == 'F'}" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Telefone</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.entity.paciente.telPaciente}" />
+						        </div>
+						    </div>
+						    
+						    <h:panelGroup layout="block" rendered="#{crudBean.entity.paciente.emlPaciente != null}">
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">E-mail</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.emlPaciente}" />
+							        </div>
+							    </div>
+						    </h:panelGroup>
+						    
+						    </fieldset>
+						    
+						    <fieldset>
+						    	<legend>Endereço</legend>
+						    	
+						    	<div class="form-group">
+							        <label class="col-md-2 control-label">Cep</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.cepPaciente}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Logradouro</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.lgdPaciente}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Número</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.numEndereco}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Bairro</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.brrPaciente}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Cidade</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.cidPaciente}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Estado</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.estado.descricao}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Complemento</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.cmpPaciente}" />
+							        </div>
+							    </div>
+							    
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Referência</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.paciente.refPaciente}" />
+							        </div>
+							    </div>
+						    </fieldset>
+						    
+					    </div>	
+		          	</div>
+		          
+		          	<div class="tab-pane fade" id="atendimento">            
+						<div class="box-body">
+						
+							<div class="form-group">
+						        <label class="col-md-2 control-label">Início do Atendimento</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.datInicioAtendimento}" converter="converterDataHora"/>
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Serviço</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.entity.servico.desServico}" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Valor</label>
+						        <div class="col-md-2" style="margin-top: 5px;">
+						         	<h:inputText value="#{crudBean.entity.vlrAgendamentoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
+						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+						           	</h:inputText>
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Desconto</label>
+						        <div class="col-md-2" style="margin-top: 5px;">
+						         	<h:inputText value="#{crudBean.entity.vlrDescontoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
+						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+						           	</h:inputText>
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Tipo</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="Particular" rendered="#{crudBean.entity.tpAgendamento == 'P'}" />
+						         	<h:outputText value="Convênio" rendered="#{crudBean.entity.tpAgendamento == 'C'}" />
+						        </div>
+						    </div>
+						    
+						    <h:panelGroup layout="block" rendered="#{crudBean.entity.tpAgendamento == 'C'}">
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Convênio</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.convenio.desConvenio}" />
+							        </div>
+							    </div>
+						    </h:panelGroup>
+						    
+						    <h:panelGroup layout="block" rendered="#{crudBean.entity.obsAgendamento != null}">
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Observações</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.entity.obsAgendamento}" />
+							        </div>
+							    </div>
+						    </h:panelGroup>
+					    
+					    	
+					    </div>
+			        </div>
+			        
+			        <div class="tab-pane fade" id="anamnese">            
+						<div class="widget">	                  
+		                    <div class="hero-unit">
+		                      <h:inputTextarea id="txtAnamnese" value="#{crudBean.entity.desAnamnese}"/>
+		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                    </div>
+		                </div>	
+		          	</div>
+		          
+		          	<div class="tab-pane fade" id="prescricao">            
+						<div class="widget">	                  
+		                    <div class="hero-unit">
+		                      <h:inputTextarea id="txtPrescricao" value="#{crudBean.entity.desPrescricao}"/>
+		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                    </div>
+		                </div>
+			        </div>
+			        
+			        <div class="tab-pane fade" id="exame">            
+						<ui:include src="panelExame.xhtml" />
+			        </div>
+		          
+		        </div>
+	        </div>
+        </h:panelGroup>
+	  	
+	  	<script src="../tinymce/js/tinymce/tinymce.min.js"></script>
+	  	<script>
+	  		//<![CDATA[
+	  		tinymce.init({ selector:'textarea', height: 400, menubar: false, plugins: [
+	  		    'advlist autolink lists link image charmap print preview anchor',
+	  		    'searchreplace visualblocks code fullscreen',
+	  		    'insertdatetime media table contextmenu paste code'
+	  		  ],
+	  		  toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent ',
+
+	  		  setup : function(ed) {
+
+	             var limit = 5000;
+
+	             ed.on('keyup', function(e) {
+	            	 
+	 			 	 var chars = (tinyMCE.activeEditor.getContent()).replace(/(&lt;([^&gt;]+)&gt;)/ig,"").length;
+	 			 	 	 			 	 
+	 			 	 if(this.id == 'formulario:txtPrescricao'){	 			 	 
+	                 	var charcount = document.getElementById('lblPrescricao');
+	                 	document.getElementById('formulario:txtPrescricao').value = tinyMCE.activeEditor.getContent();
+	 			 	 }
+	 			 	 
+	 			 	 if(this.id == 'formulario:txtAnamnese'){
+	 			 		var charcount = document.getElementById('lblAnamnese');
+	 			 		document.getElementById('formulario:txtAnamnese').value = tinyMCE.activeEditor.getContent();
+	 			 	 }
+	 			 	 
+					 charcount.innerHTML =  '( ' + (limit-chars) + ' caracteres )';
+	                 
+					 if((limit - chars) <= 0){
+						 charcount.style = 'color: red; font-size: 12px;'
+					 }else{
+						 charcount.style = 'color: black; font-size: 12px;'
+					 }						 
+	                  
+	             });	           
+	           }
+	  		});
+	  	//]]>
+	  	</script>
+    </ui:define>
+    
+    <ui:define name="buttonItens">
+    	<h:panelGroup rendered="#{crudBean.entity.idAgendamento != null}">
+    		<a4j:commandButton id="inserir" styleClass="btn btn-primary" value="Concluir Atendimento (C)" accesskey="C" actionListener="#{crudBean.concluirAtendimento}" render="pnFrm, panelTitle, comentTela"/>
+    	</h:panelGroup>
+    </ui:define>
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panExame" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="300" resizeable="false" onmaskclick="#{rich:component('panExame')}.hide()">
+			<ui:include src="panelCadastrarExame.xhtml" />
+		</rich:popupPanel>
+		
+		<rich:popupPanel id="panMensagem" styleClass="modal-content" domElementAttachment="form" modal="true" width="650" height="200" resizeable="false" onmaskclick="#{rich:component('panMensagem')}.hide()">
+			<ui:include src="panelMensagem.xhtml" />
+		</rich:popupPanel>
+	</ui:define>
+	
+</ui:composition>

@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.Proxy;
 
 import br.com.a2dm.cmn.entity.Estado;
@@ -125,6 +126,9 @@ public class Paciente implements Serializable
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_usuario_alt", insertable = false, updatable = false)
 	private Usuario usuarioAlt;
+	
+	@Formula("( extract(year from age(dat_nascimento)) )")
+	private String idade;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
@@ -352,5 +356,13 @@ public class Paciente implements Serializable
 
 	public void setEstado(Estado estado) {
 		this.estado = estado;
+	}
+
+	public String getIdade() {
+		return idade;
+	}
+
+	public void setIdade(String idade) {
+		this.idade = idade;
 	}
 }

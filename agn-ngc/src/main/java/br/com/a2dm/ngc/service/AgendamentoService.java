@@ -20,6 +20,8 @@ import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.ngc.entity.AgendamentoExame;
+import br.com.a2dm.ngc.entity.Exame;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 import br.com.a2dm.ngc.entity.vo.RetornoVo;
@@ -37,6 +39,10 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	public static final int JOIN_SERVICO = 4;
 	
 	public static final int JOIN_CONVENIO = 8;
+	
+	public static final int JOIN_PACIENTE = 16;
+	
+	public static final int JOIN_PACIENTE_ESTADO = 32;
 	
 	private JSFUtil util = new JSFUtil();	
 	
@@ -126,6 +132,68 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		}
 	}
 	
+	public Agendamento concluirAtendimento(Agendamento vo, List<Exame> lista) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			vo = concluirAtendimento(sessao, vo, lista);
+			tx.commit();
+			return vo;
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+
+	public Agendamento concluirAtendimento(Session sessao, Agendamento vo, List<Exame> lista) throws Exception
+	{
+		//ALTERANDO O AGENDAMENTO				
+		Agendamento agendamento = new Agendamento();
+		agendamento.setIdAgendamento(vo.getIdAgendamento());
+		agendamento = this.get(agendamento, 0);
+		
+		agendamento.setVlrAgendamento(vo.getVlrAgendamento());
+		agendamento.setVlrDesconto(vo.getVlrDesconto());
+		agendamento.setDesAnamnese(vo.getDesAnamnese());
+		agendamento.setDesPrescricao(vo.getDesPrescricao());
+		
+		agendamento.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA)));
+		
+		sessao.merge(agendamento);
+		
+		//INSERINDO OS EXAMES
+		for (Exame exame : lista) 
+		{
+			AgendamentoExame agendamentoExame = new AgendamentoExame();
+			agendamentoExame.setIdExame(exame.getIdExame());
+			agendamentoExame.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+			agendamentoExame.setIdAgendamento(agendamento.getIdAgendamento());
+			
+			AgendamentoExameService.getInstancia().inserir(sessao, agendamentoExame);
+		}
+		
+		//INSERINDO O LOG
+		AgendamentoLog log = new AgendamentoLog();
+		log.setIdAgendamento(vo.getIdAgendamento());
+		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
+		log.setDatCadastro(new Date());
+		log.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA)));
+		log.setDesOperacao("MACANDO O AGENDAMENTO COMO CONCLUÍDO");
+		
+		AgendamentoLogService.getInstancia().inserir(sessao, log);
+		
+		return vo;
+	}
+	
 	public Agendamento inativar(Agendamento vo) throws Exception
 	{
 		Session sessao = HibernateUtil.getSession();
@@ -211,6 +279,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		}
 		catch (Exception e)
 		{
+			vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)));
+			vo.setHorPresenca(null);
 			tx.rollback();
 			throw e;
 		}
@@ -265,6 +335,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		}
 		catch (Exception e)
 		{
+			vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)));
 			tx.rollback();
 			throw e;
 		}
@@ -356,6 +427,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setIdPaciente(paciente.getIdPaciente());
 		vo.setNomPaciente(paciente.getNomPaciente());
 		vo.setCpfPaciente(paciente.getCpfPaciente());
+		vo.setTelPaciente(paciente.getTelPaciente());
+		vo.setEmlPaciente(paciente.getEmlPaciente());
 		super.alterar(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
@@ -393,6 +466,16 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		if ((join & JOIN_CONVENIO) != 0)
 	    {
 			criteria.createAlias("convenio", "convenio", JoinType.LEFT_OUTER_JOIN);
+	    }
+		
+		if ((join & JOIN_PACIENTE) != 0)
+	    {
+			criteria.createAlias("paciente", "paciente", JoinType.INNER_JOIN);
+			
+			if ((join & JOIN_PACIENTE_ESTADO) != 0)
+		    {
+				criteria.createAlias("paciente.estado", "estado", JoinType.INNER_JOIN);
+		    }
 	    }
 		
 		return criteria;
