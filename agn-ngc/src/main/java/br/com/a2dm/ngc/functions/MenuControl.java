@@ -15,6 +15,7 @@ public class MenuControl
 		util.getSession().removeAttribute("flgMenuCfm");
 		util.getSession().removeAttribute("flgMenuRcp");
 		util.getSession().removeAttribute("flgMenuAtn");
+		util.getSession().removeAttribute("flgMenuAts");
 		util.getSession().removeAttribute("flgMenuPct");
 		util.getSession().removeAttribute("flgMenuRlt");
 		util.getSession().removeAttribute("flgMenuCfg");

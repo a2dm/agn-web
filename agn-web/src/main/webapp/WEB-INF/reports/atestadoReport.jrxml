@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-08-02T10:48:52 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="atestadoReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f038daa4-ab8d-4a6a-a7c8-f5492a306ea2">
+	<parameter name="NOME_PACIENTE" class="java.lang.String"/>
+	<parameter name="RG_PACIENTE" class="java.lang.String"/>
+	<parameter name="DATA_ATESTADO" class="java.lang.String"/>
+	<parameter name="DIAS" class="java.lang.Integer"/>
+	<parameter name="PROFISSIONAL" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="101" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="550" height="30" uuid="00f32860-4fd9-4247-8a9b-217fe2888254"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Atestado]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="177" splitType="Stretch">
+			<textField>
+				<reportElement x="251" y="10" width="293" height="18" uuid="c33aecf1-400d-4692-bbd9-ac46bdddb877"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{NOME_PACIENTE}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="111" y="44" width="118" height="18" uuid="db59d564-9d85-4010-bfd0-8c0ce5b4ba91"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{RG_PACIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="9" width="554" height="167" uuid="f2b1b37d-a148-4586-9739-04951ff9c178"/>
+				<textElement>
+					<font size="14"/>
+					<paragraph lineSpacingSize="1.0"/>
+				</textElement>
+				<text><![CDATA[Atesto para devidos fins que o(a) Sr(a).                                                                             , 
+
+portador do R.G:                                , esteve sob os meus cuidados profissionais no dia
+
+                       , necessitando se afastar de suas atividades durante um período de         
+
+dias, a partir desta data.
+
+]]></text>
+			</staticText>
+			<line>
+				<reportElement x="248" y="26" width="296" height="1" uuid="7e6ea961-3139-4f89-a964-48ef1b33c22b"/>
+			</line>
+			<line>
+				<reportElement x="110" y="60" width="119" height="1" uuid="03bd91e2-0844-4ad7-821d-ac4e844e53cb"/>
+			</line>
+			<line>
+				<reportElement x="2" y="93" width="86" height="1" uuid="c50d786c-aec1-4507-9b33-12b7effacb89"/>
+			</line>
+			<textField>
+				<reportElement x="2" y="77" width="86" height="18" uuid="e4f0cbc8-d4d7-4991-9396-9baca846dd99"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_ATESTADO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="516" y="80" width="29" height="19" uuid="665ed4c7-cd90-47f6-8eb7-979790a09491"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DIAS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="516" y="94" width="29" height="1" uuid="168a8d45-73a9-4a87-b83f-dc0f9075a3fd"/>
+			</line>
+		</band>
+	</pageHeader>
+	<pageFooter>
+		<band height="71" splitType="Stretch">
+			<line>
+				<reportElement x="134" y="5" width="300" height="1" uuid="ec6e924a-43e1-4977-9a2d-0d148e8b14fb"/>
+			</line>
+			<textField>
+				<reportElement x="158" y="12" width="260" height="18" uuid="8d598c6a-5fd5-44b1-84d5-d65345e807da"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{PROFISSIONAL}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

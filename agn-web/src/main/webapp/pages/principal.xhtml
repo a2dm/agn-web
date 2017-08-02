@@ -178,6 +178,12 @@
 				                Atendimento
 				              </h:commandLink>
 				            </li>
+				            <li class='#{sessionScope.flgMenuAts}'>			              
+				              <h:commandLink action="#{atestadoBean.preparaPesquisar}">
+				                <i class="fa fa-pencil-square-o"></i>
+				                Atestado
+				              </h:commandLink>
+				            </li>
 				            <li class='#{sessionScope.flgMenuPct}'>
 				              <h:commandLink action="#{pacienteBean.preparaPesquisar}">
 				                <i class="fa fa-user"></i>

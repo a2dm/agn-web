@@ -1292,7 +1292,7 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
 				return null;
 			}
 			
-			String pathJasper = request.getRealPath("WEB-INF/relatorios");
+			String pathJasper = request.getRealPath("WEB-INF/reports");
 			
 			String os = System.getProperty("os.name");
 			File pasta = new File((os.toLowerCase().indexOf("linux") > -1 ? "/" : "\\"));
@@ -1343,7 +1343,7 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
    	 * Setar parametros
    	 */
    	@SuppressWarnings("rawtypes")
-	public void configuraRelatorio(Map parameters, HttpServletRequest request){}
+	public void configuraRelatorio(Map parameters, HttpServletRequest request) throws Exception{}
    	
    	/**
    	 * Realizar validacoes para o relatorio

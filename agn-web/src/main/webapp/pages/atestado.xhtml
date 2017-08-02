@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{atestadoBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">		
+		<t:saveState value="#{crudBean.atestado}" />
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+    	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
+			<f:subview id="viewBusca"> 
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Paciente</label>
+		          <div class="col-md-6">
+		          	<h:inputText value="#{crudBean.atestado.nomPaciente}" styleClass="form-control" maxlength="200" id="nom" />
+		          </div>
+		       </div>
+		       
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Rg</label>
+		          <div class="col-md-2" style="width: 200px;">
+		          	<h:inputText value="#{crudBean.atestado.rgPaciente}" onkeypress="return soNumero(event, this);" styleClass="form-control" maxlength="20" id="rg"/>
+		          </div>
+		       </div>
+		       
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Data do Atestado</label>
+		          <div class="col-md-2" style="width: 200px;">
+		          	<rich:calendar value="#{crudBean.atestado.datAtestado}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" readonly="#{crudBean.viewing}"/>
+		          </div>
+		       </div>
+		       
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Dias</label>
+		          <div class="col-md-1">
+		          	<h:inputText value="#{crudBean.atestado.qtdDias}" onkeypress="return soNumero(event, this);" styleClass="form-control" maxlength="2" id="qtdDias"/>
+		          </div>
+		       </div>
+		       
+	       </f:subview>
+		</h:panelGroup>
+    </ui:define>
+    
+    <ui:define name="buttonItens">
+    	<t:commandLink target="_blank" styleClass="btn btn-primary" title="GERAR ATESTADO" action="#{crudBean.gerar}" value="Gerar (G)" accesskey="G"/>
+    </ui:define>
+    
+</ui:composition>
