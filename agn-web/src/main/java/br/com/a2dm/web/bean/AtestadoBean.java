@@ -39,8 +39,6 @@ public class AtestadoBean extends AbstractBean<Paciente, PacienteService>
 	{
 		try
 		{
-			this.validarGerar();
-			
 			Paciente paciente = new Paciente();
 			List<Paciente> lista = new ArrayList<Paciente>();
 			lista.add(paciente);
@@ -57,34 +55,6 @@ public class AtestadoBean extends AbstractBean<Paciente, PacienteService>
 	        else
 	        	FacesContext.getCurrentInstance().addMessage(null, message);
 		}
-	}
-
-	private void validarGerar() throws Exception
-	{
-//		if(this.getAtestado().getNomPaciente() == null
-//				|| this.getAtestado().getNomPaciente().trim().equals(""))
-//		{
-//			throw new Exception("O campo Paciente é obrigatório!");
-//		}
-//		
-//		if(this.getAtestado().getRgPaciente() == null
-//				|| this.getAtestado().getRgPaciente().trim().equals(""))
-//		{
-//			throw new Exception("O campo Rg é obrigatório!");
-//		}
-//		
-//		if(this.getAtestado().getDatAtestado() == null
-//				|| this.getAtestado().getDatAtestado().toString().equals(""))
-//		{
-//			throw new Exception("O campo Data do Atestado é obrigatório!");
-//		}
-//		
-//		if(this.getAtestado().getQtdDias() == null
-//				|| this.getAtestado().getQtdDias().intValue() <= 0)
-//		{
-//			throw new Exception("O campo Dias é obrigatório!");
-//		}
-		
 	}
 	
 	@Override

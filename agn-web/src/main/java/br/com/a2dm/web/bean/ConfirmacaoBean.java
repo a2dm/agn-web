@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -15,6 +16,7 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.functions.MenuControl;
+import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.AgendamentoService;
 
 
@@ -35,6 +37,48 @@ public class ConfirmacaoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.pageTitle = "Confirmações";
 		
 		MenuControl.ativarMenu("flgMenuCfm");
+	}
+	
+	@Override
+	public String preparaPesquisar()
+	{
+		try
+		{
+			if(validarAcesso(Variaveis.ACAO_PREPARA_PESQUISAR))
+			{
+				setSearchObject(getNewEntityInstance());
+				setValoresDefault();
+				setCurrentState(STATE_SEARCH);
+				setListaPesquisa();
+				
+				this.popularResultInicio();
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+		
+		return ACTION_SEARCH;
+	}
+	
+	private void popularResultInicio() throws Exception
+	{
+		Agendamento agendamento = new Agendamento();
+		agendamento.setFiltroMap(new HashMap<String, Object>());
+		agendamento.getFiltroMap().put("datAgendamentoInicio", this.getDataAgendamentoInicio());
+		agendamento.getFiltroMap().put("datAgendamentoFim", this.getDataAgendamentoFim());
+		agendamento.setFlgAtivo("S");
+		agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+		agendamento.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)));
+		
+		List<Agendamento> lista = AgendamentoService.getInstancia().pesquisar(agendamento, getJoinPesquisar());
+		this.setSearchResult(lista);
 	}
 	
 	@Override
@@ -122,6 +166,7 @@ public class ConfirmacaoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.getSearchObject().getFiltroMap().put("datAgendamentoFim", this.getDataAgendamentoFim());
 		this.getSearchObject().setFlgConfirmado( this.getSearchObject().getFlgConfirmado().equals("T") ? null : this.getSearchObject().getFlgConfirmado() );		
 		this.getSearchObject().setFlgAtivo("S");
+		this.getSearchObject().setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 		this.getSearchObject().setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)));
 	}
 	

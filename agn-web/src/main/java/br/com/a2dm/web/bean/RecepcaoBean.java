@@ -49,6 +49,46 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 	}
 	
 	@Override
+	public String preparaPesquisar() 
+	{
+		try
+	      {
+	    	  if(validarAcesso(Variaveis.ACAO_PREPARA_PESQUISAR))
+	    	  {
+	    		  setSearchObject(getNewEntityInstance());
+	    		  setValoresDefault();
+	    		  setCurrentState(STATE_SEARCH);
+	    		  setListaPesquisa();
+	    		  
+	    		  this.popularResultInicio();
+	    	  }
+	      }
+	      catch (Exception e)
+	      {
+	         FacesMessage message = new FacesMessage(e.getMessage());
+	         message.setSeverity(FacesMessage.SEVERITY_ERROR);
+	         if(e.getMessage() == null)
+	        	 FacesContext.getCurrentInstance().addMessage("", message);
+	         else
+	        	 FacesContext.getCurrentInstance().addMessage(null, message);
+	      }
+	      return ACTION_SEARCH;
+	}
+	
+	private void popularResultInicio() throws Exception
+	{
+		Agendamento agendamento = new Agendamento();
+		agendamento.setFiltroMap(new HashMap<String, Object>());
+		agendamento.getFiltroMap().put("datAgendamentoInicio", this.getDataInicio());
+		agendamento.getFiltroMap().put("datAgendamentoFim", this.getDataFim());
+		agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+		agendamento.setFlgAtivo("S");
+		
+		List<Agendamento> lista = AgendamentoService.getInstancia().pesquisar(agendamento, getJoinPesquisar());
+		this.setSearchResult(lista);
+	}
+	
+	@Override
 	protected int getJoinPesquisar() 
 	{
 		return AgendamentoService.JOIN_CONVENIO
