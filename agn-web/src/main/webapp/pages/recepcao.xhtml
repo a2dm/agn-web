@@ -22,6 +22,10 @@
 		<t:saveState value="#{crudBean.presencaOrder}" />
 		<t:saveState value="#{crudBean.mensagem}" />
 		<t:saveState value="#{crudBean.listaPaciente}" />
+		<t:saveState value="#{crudBean.countAgendada}" />
+		<t:saveState value="#{crudBean.countPresente}" />
+		<t:saveState value="#{crudBean.countAtendimento}" />
+		<t:saveState value="#{crudBean.countConcluida}" />
 	</ui:define>
 	
 	<ui:define name="pageIcon"/>
@@ -48,7 +52,24 @@
 						<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 					</a4j:commandButton>
 		          
-		          </div>						          
+		          </div>
+		          
+		          <h:panelGroup id="legend" rendered="#{not empty crudBean.searchResult and crudBean.searching}">
+			      	<div class="col-md-5">
+			        	<a class="btn btn-primary" href="#" id="alert" title="AGENDADA">
+	                      <h:outputText value="#{crudBean.countAgendada}"/>
+	                    </a>
+	                    <a class="btn btn-pres" href="#" id="forever" title="PRESENTE">
+	                      <h:outputText value="#{crudBean.countPresente}"/>
+	                    </a>
+	                    <a class="btn btn-warning" href="#" id="notification" title="EM ATENDIMENTO">
+	                      <h:outputText value="#{crudBean.countAtendimento}"/>
+	                    </a>
+	                    <a class="btn btn-success" href="#" id="success" title="CONCLUÍDA">
+	                      <h:outputText value="#{crudBean.countConcluida}"/>
+	                    </a>
+			      	</div>
+		          </h:panelGroup>						          
 		        </div>
 	       </f:subview>
 		</h:panelGroup>

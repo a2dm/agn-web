@@ -36,6 +36,11 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 	private SortOrder situacaoOrder;	
 	private SortOrder presencaOrder;
 	
+	private Integer countAgendada;
+	private Integer countPresente;
+	private Integer countAtendimento;
+	private Integer countConcluida;
+	
 	private List<Paciente> listaPaciente;
 	private Paciente paciente;
 	
@@ -61,6 +66,7 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 	    		  setListaPesquisa();
 	    		  
 	    		  this.popularResultInicio();
+	    		  this.completarPosPesquisar();	    		  
 	    	  }
 	      }
 	      catch (Exception e)
@@ -158,6 +164,43 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 		this.getSearchObject().setFiltroMap(new HashMap<String, Object>());
 		this.getSearchObject().getFiltroMap().put("datAgendamentoInicio", this.getDataInicio());
 		this.getSearchObject().getFiltroMap().put("datAgendamentoFim", this.getDataFim());
+	}
+	
+	@Override
+	protected void completarPosPesquisar() throws Exception
+	{
+		this.setCountAgendada(0);
+		this.setCountPresente(0);
+		this.setCountAtendimento(0);
+		this.setCountConcluida(0);
+		
+		
+		if(this.getSearchResult() != null
+				&& this.getSearchResult().size() > 0)
+		{
+			for (Agendamento obj : this.getSearchResult())
+			{
+				if(obj.getIdSituacao().intValue() == AgendamentoService.SITUACAO_AGENDADA)
+				{
+					this.setCountAgendada(this.getCountAgendada().intValue() + 1);
+				}
+				
+				if(obj.getIdSituacao().intValue() == AgendamentoService.SITUACAO_PRESENTE)
+				{
+					this.setCountPresente(this.getCountPresente().intValue() + 1);
+				}
+				
+				if(obj.getIdSituacao().intValue() == AgendamentoService.SITUACAO_EM_ATENDIMENTO)
+				{
+					this.setCountAtendimento(this.getCountAtendimento().intValue() + 1);
+				}
+				
+				if(obj.getIdSituacao().intValue() == AgendamentoService.SITUACAO_CONCLUIDA)
+				{
+					this.setCountConcluida(this.getCountConcluida().intValue() + 1);
+				}
+			}
+		}
 	}
 	
 	public void preparaVincularPaciente()
@@ -397,5 +440,37 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 
 	public void setPaciente(Paciente paciente) {
 		this.paciente = paciente;
+	}
+
+	public Integer getCountAgendada() {
+		return countAgendada;
+	}
+
+	public void setCountAgendada(Integer countAgendada) {
+		this.countAgendada = countAgendada;
+	}
+
+	public Integer getCountPresente() {
+		return countPresente;
+	}
+
+	public void setCountPresente(Integer countPresente) {
+		this.countPresente = countPresente;
+	}
+
+	public Integer getCountAtendimento() {
+		return countAtendimento;
+	}
+
+	public void setCountAtendimento(Integer countAtendimento) {
+		this.countAtendimento = countAtendimento;
+	}
+
+	public Integer getCountConcluida() {
+		return countConcluida;
+	}
+
+	public void setCountConcluida(Integer countConcluida) {
+		this.countConcluida = countConcluida;
 	}
 }
