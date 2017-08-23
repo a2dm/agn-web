@@ -3,6 +3,7 @@ package br.com.a2dm.web.bean;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -19,12 +20,14 @@ import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.others.Utilitarios;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.Convenio;
+import br.com.a2dm.ngc.entity.Horario;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.Servico;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.ConvenioService;
+import br.com.a2dm.ngc.service.HorarioService;
 import br.com.a2dm.ngc.service.PacienteService;
 import br.com.a2dm.ngc.service.ServicoService;
 
@@ -47,6 +50,8 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	private String value;
     
     private String mensagem;
+    private Integer ctrMensagem;
+    private Integer ctrAgendamento;
     
     private JSFUtil util = new JSFUtil();
 	
@@ -63,14 +68,39 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	@SuppressWarnings("deprecation")
 	protected void setDefaultInserir() throws Exception 
 	{
-		Date dataInicio = new Date(inicio);		
+		this.setCtrAgendamento(0);
+		
+		Date dataInicio = new Date(inicio);
+		
+		this.virificarDiaAgendamentoDisponivel(dataInicio);
 		
 		this.getEntity().setDatAgendamento(dataInicio);
-		this.getEntity().setHorInicio(new SimpleDateFormat("HH:mm").format(dataInicio));
-		
+		this.getEntity().setHorInicio(new SimpleDateFormat("HH:mm").format(dataInicio));		
 		
 		this.popularServicos();
 		this.popularConvenios();
+		
+		this.setCtrAgendamento(1);
+	}
+	
+	private void virificarDiaAgendamentoDisponivel(Date dataInicio) throws Exception
+	{
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(dataInicio);
+		
+		Integer dia = calendar.get(Calendar.DAY_OF_WEEK);
+		
+		Horario horario = new Horario();
+		horario.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+		horario.setNumHorario(new BigInteger(Integer.toString(dia)));
+		horario.setFlgAtivo(true);
+		
+		horario = HorarioService.getInstancia().get(horario, 0);
+		
+		if(horario == null)
+		{
+			throw new Exception("Não é possível cadastrar agendamentos para este dia. Para alterar suas configurações vá em 'Configurações / Horários'");
+		}		
 	}
 	
 	@Override
@@ -129,17 +159,27 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 				paciente.setIdProfissional(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());			
 				paciente = PacienteService.getInstancia().get(paciente, 0);
 				
-				this.getEntity().setIdPaciente(paciente != null ? paciente.getIdPaciente() : null);
-				this.getEntity().setNomPaciente(paciente != null ? paciente.getNomPaciente() : null);
-				this.getEntity().setTelPaciente(paciente != null ? paciente.getTelPaciente() : null);
-				this.getEntity().setEmlPaciente(paciente != null ? paciente.getEmlPaciente() : null);
+				if(paciente != null)
+				{
+					this.getEntity().setIdPaciente(paciente.getIdPaciente());
+					this.getEntity().setNomPaciente(paciente.getNomPaciente());
+					this.getEntity().setTelPaciente(paciente.getTelPaciente());
+					this.getEntity().setEmlPaciente(paciente.getEmlPaciente());
+				}
+				else
+				{
+					this.getEntity().setIdPaciente(null);
+				}
 			}
 			else
 			{
-				this.getEntity().setIdPaciente(null);
-				this.getEntity().setNomPaciente(null);
-				this.getEntity().setTelPaciente(null);
-				this.getEntity().setEmlPaciente(null);
+				if(this.getEntity().getIdPaciente() != null)
+				{
+					this.getEntity().setIdPaciente(null);
+					this.getEntity().setNomPaciente(null);
+					this.getEntity().setTelPaciente(null);
+					this.getEntity().setEmlPaciente(null);
+				}
 			}
 		}
 		catch (Exception e)
@@ -154,13 +194,15 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	{
 		try
 		{
+			this.setMensagem(null);
+			
 			//VERIFICAR FORMATACAO HORA
 			if(this.getEntity() != null
 					&& this.getEntity().getHorInicio() != null
 					&& !this.getEntity().getHorInicio().equals("")
 					&& this.getEntity().getHorInicio().trim().length() < 5)
 			{
-				throw new Exception("Favor informar a Hora Limite no formato correto. Ex: 09:00.");
+				throw new Exception("Favor informar a Hora Inicial no formato correto. Ex: 09:00.");
 			}
 			
 			//CALCULO DE HORA FIM
@@ -224,13 +266,39 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 				validarInserir();
 				completarInserir();
 				
-				AgendamentoService.getInstancia().inserir(this.getEntity());	    		  
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Registro inserido com sucesso.", null));	    		  
+				AgendamentoService.getInstancia().inserir(this.getEntity());
+				this.setMensagem("Registro inserido com sucesso.");
+				this.setCtrMensagem(1);
 				this.clean(event);
 			}
 		}
 		catch (Exception e)
 		{
+			this.setCtrMensagem(2);
+			this.setMensagem(e.getMessage());
+		}
+	}
+	
+	@Override
+	public void alterar(ActionEvent event)
+	{
+		try
+		{
+			if(validarAcesso(Variaveis.ACAO_ALTERAR))
+			{
+				this.setMensagem(null);
+				validarInserir();
+				completarAlterar();
+				
+				AgendamentoService.getInstancia().alterar(this.getEntity());
+				this.setMensagem("Registro alterado com sucesso.");
+				this.setCtrMensagem(1);
+				this.clean(event);
+			}
+		}
+		catch (Exception e)
+		{
+			this.setCtrMensagem(2);
 			this.setMensagem(e.getMessage());
 		}
 	}
@@ -269,7 +337,6 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	@Override
 	protected void completarAlterar() throws Exception 
 	{
-		this.validarInserir();
 		this.getEntity().setDatAlteracao(new Date());
 		this.getEntity().setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 	}
@@ -286,14 +353,14 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 					
 					AgendamentoService.getInstancia().inativar(this.getEntity());
 					
-					FacesMessage message = new FacesMessage("Agendamento inativado com sucesso!");
-					message.setSeverity(FacesMessage.SEVERITY_INFO);
-					FacesContext.getCurrentInstance().addMessage(null, message);
+					this.setCtrMensagem(1);
+					this.setMensagem("Agendamento inativado com sucesso!");					
 				}
 			}
 		}
 		catch (Exception e) 
 		{
+			this.setCtrMensagem(2);
 			this.setMensagem(e.getMessage());
 		}
 	}
@@ -337,6 +404,13 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 				|| this.getEntity().getNomPaciente().trim().equals(""))
 		{
 			throw new Exception("O campo Nome do Paciente é obrigatório!");
+		}
+		
+		if(this.getEntity() == null
+				|| this.getEntity().getTelPaciente() == null
+				|| this.getEntity().getTelPaciente().trim().equals(""))
+		{
+			throw new Exception("O campo Telefone do Paciente é obrigatório!");
 		}
 		
 		if(this.getEntity() == null
@@ -465,5 +539,21 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 
 	public void setDataCalendario(String dataCalendario) {
 		this.dataCalendario = dataCalendario;
+	}
+
+	public Integer getCtrMensagem() {
+		return ctrMensagem;
+	}
+
+	public void setCtrMensagem(Integer ctrMensagem) {
+		this.ctrMensagem = ctrMensagem;
+	}
+
+	public Integer getCtrAgendamento() {
+		return ctrAgendamento;
+	}
+
+	public void setCtrAgendamento(Integer ctrAgendamento) {
+		this.ctrAgendamento = ctrAgendamento;
 	}
 }

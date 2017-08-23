@@ -246,7 +246,7 @@ public abstract class A2DMHbNgc<Entity> implements Business
 			{
 				valor = null;
 			}
-			if (VerificadorPreenchidos.VRF_PRC_ISGH.isPrenchido(valor))
+			if (VerificadorPreenchidos.VRF_PRC_A2DM.isPrenchido(valor))
 			{
 				RestritorHb restritorHb = (RestritorHb) this.restritores().get(restritorNome);
              

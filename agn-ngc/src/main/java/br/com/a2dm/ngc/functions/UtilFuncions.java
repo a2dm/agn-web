@@ -43,10 +43,10 @@ public class UtilFuncions
 				int hrBd1 = Integer.parseInt(agendamento.getHorInicio().replace(":", ""));
 				int hrBd2 = Integer.parseInt(agendamento.getHorFim().replace(":", ""));
 				
-				if(hrBd1 <= hr1 && hrBd2 >= hr2
-						|| hrBd1 <= hr1 && hrBd2 >= hr1
-						|| hrBd1 >= hr1 && hrBd2 <= hr2
-						|| hrBd1 <= hr2 && hrBd2 >= hr2)
+				if(hrBd1 < hr1 && hrBd2 > hr2
+						|| hrBd1 < hr1 && hrBd2 > hr1
+						|| hrBd1 > hr1 && hrBd2 < hr2
+						|| hrBd1 < hr2 && hrBd2 > hr2)
 				{
 					retorno.setFlgRetorno(true);
 					retorno.setMensagem("Existe agendamento cadastrado neste período. Hora Ínicio: " + agendamento.getHorInicio() + " , Hora Fim: " + agendamento.getHorFim());

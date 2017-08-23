@@ -67,7 +67,7 @@ public class Horario implements Serializable
 	private Usuario usuarioAlt;
 	
 	@Column(name = "flg_ativo")
-	private boolean flgAtivo;
+	private Boolean flgAtivo;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
@@ -152,12 +152,11 @@ public class Horario implements Serializable
 		this.filtroMap = filtroMap;
 	}
 
-	public boolean isFlgAtivo() {
+	public Boolean getFlgAtivo() {
 		return flgAtivo;
 	}
 
-	public void setFlgAtivo(boolean flgAtivo) {
+	public void setFlgAtivo(Boolean flgAtivo) {
 		this.flgAtivo = flgAtivo;
 	}
-
 }

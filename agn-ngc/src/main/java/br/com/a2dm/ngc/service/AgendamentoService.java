@@ -13,6 +13,9 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
@@ -21,6 +24,7 @@ import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.AgendamentoExame;
+import br.com.a2dm.ngc.entity.Dominio;
 import br.com.a2dm.ngc.entity.Exame;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
@@ -171,14 +175,17 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		sessao.merge(agendamento);
 		
 		//INSERINDO OS EXAMES
-		for (Exame exame : lista) 
+		if(lista != null)
 		{
-			AgendamentoExame agendamentoExame = new AgendamentoExame();
-			agendamentoExame.setIdExame(exame.getIdExame());
-			agendamentoExame.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
-			agendamentoExame.setIdAgendamento(agendamento.getIdAgendamento());
-			
-			AgendamentoExameService.getInstancia().inserir(sessao, agendamentoExame);
+			for (Exame exame : lista) 
+			{
+				AgendamentoExame agendamentoExame = new AgendamentoExame();
+				agendamentoExame.setIdExame(exame.getIdExame());
+				agendamentoExame.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+				agendamentoExame.setIdAgendamento(agendamento.getIdAgendamento());
+				
+				AgendamentoExameService.getInstancia().inserir(sessao, agendamentoExame);
+			}
 		}
 		
 		//INSERINDO O LOG
@@ -219,6 +226,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 
 	public Agendamento inativar(Session sessao, Agendamento vo) throws Exception
 	{
+		this.validarInativar(sessao, vo);
+		
 		Agendamento agendamento = new Agendamento();
 		agendamento.setIdAgendamento(vo.getIdAgendamento());
 		agendamento = this.get(sessao, agendamento, 0);
@@ -230,6 +239,20 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		sessao.merge(vo);
 		
 		return vo;
+	}
+	
+	private void validarInativar(Session sessao, Agendamento vo) throws Exception
+	{
+		Agendamento agendamento = new Agendamento();
+		agendamento.setIdAgendamento(vo.getIdAgendamento());		
+		agendamento = this.get(sessao, agendamento, 0);
+		
+		if(agendamento != null
+				
+				&& agendamento.getIdSituacao().intValue() == SITUACAO_CONCLUIDA)
+		{
+			throw new Exception("Não foi possível inativar o agendamento pois o mesmo já foi concluído!");
+		}	
 	}
 	
 	public Agendamento confirmar(Agendamento vo) throws Exception
@@ -441,6 +464,77 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		AgendamentoLogService.getInstancia().inserir(sessao, log);
 		
 		return vo;
+	}
+	
+	public HashMap<BigInteger, Long> countAgendamentoSituacao(Agendamento vo) throws Exception
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		Transaction tx = sessao.beginTransaction();
+		try
+		{
+			HashMap<BigInteger, Long> map = countAgendamentoSituacao(sessao, vo);
+			tx.commit();
+			return map;
+		}
+		catch (Exception e)
+		{
+			tx.rollback();
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public HashMap<BigInteger, Long> countAgendamentoSituacao(Session sessao, Agendamento vo) throws Exception
+	{
+		Dominio dominio = new Dominio();
+		dominio.setRefDominio("SITUACAO_AGENDAMENTO");
+		List<Dominio> listaSituacao = DominioService.getInstancia().pesquisar(sessao, dominio, 0);		
+		
+		HashMap<BigInteger, Long> map = new HashMap<BigInteger, Long>();
+		
+		//SETAR TODAS AS SITUACOES NO MAP
+		if(listaSituacao != null)
+		{
+			for (Dominio objSituacao : listaSituacao)
+			{
+				map.put(objSituacao.getVlrDominio(), new Long(0));
+			}
+		}
+				
+		Criteria criteria = sessao.createCriteria(Agendamento.class);
+		
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idSituacao"));
+		projection.add(Projections.count("idSituacao"));
+		
+		criteria.add(Restrictions.eq("flgAtivo", vo.getFlgAtivo()));
+		criteria.add(Restrictions.eq("idClinicaProfissional", vo.getIdClinicaProfissional()));
+		
+		criteria.addOrder(Order.asc("idSituacao"));
+		
+		criteria.setProjection(projection);
+		List<Object[]> resultado = criteria.list();
+		
+		if (resultado != null && resultado.size() > 0)
+	    {
+	    	int j = 0;
+	    	for (int i = 0; i < resultado.size(); i++)
+	    	{
+	    		j = 0;
+	    		
+	    		BigInteger situacao = (BigInteger) resultado.get(i)[j++];
+	    		Long quantidade = (Long) resultado.get(i)[j++];
+	    		
+	    		map.put(situacao, quantidade);
+	    	}
+	    }
+		
+		return map;
 	}
 	
 	@Override

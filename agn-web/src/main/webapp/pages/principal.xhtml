@@ -237,9 +237,7 @@
 			                <h:panelGroup layout="block" id="comentTela">
 			                <div class="widget-header">
 			                  <div class="title">
-				              	<span class="mini-title">
-			                    	${pageTitle}
-      			        		</span>
+			                    	Dashboard
 			                  </div>
 			                </div>
                 			</h:panelGroup>
@@ -250,9 +248,118 @@
 									</a4j:outputPanel>
 	            				
 				            		<h:panelGroup layout="block" style="padding: 15px" id="pnFrm">
+				                  		
+				                  		<!-- Inicio Dash -->
 				                  	
+				                  		
+          
+									        <h:panelGroup id="dsh1">
+										    	<div class="row">
+										        	<div class="col-lg-3 col-md-3 col-sm-6">
+										            	<div class="mini-widget">
+										                	<div class="mini-widget-heading clearfix">
+										                  		<div class="pull-left">Agendadas</div>
+										                	</div>
+											                <div class="mini-widget-body clearfix">
+											                <div class="pull-center number" style="text-align: center"><h:outputText value="#{sessionScope.countAgendada}"/></div>
+										                </div>
+										            </div>
+												</div>
+												
+									            <div class="col-lg-3 col-md-3 col-sm-6">
+									              <div class="mini-widget">
+									                <div class="mini-widget-heading clearfix" style="background: #d24cff">
+									                  <div class="pull-left">Presentes</div>
+									                </div>
+									                <div class="mini-widget-body clearfix" style="background: #bf00ff">
+									                  <div class="pull-center number" style="text-align: center"><h:outputText value="#{sessionScope.countPresente}"/></div>
+									                </div>
+								
+									              </div>
+									            </div>
+	           
+									            <div class="col-lg-3 col-md-3 col-sm-6">
+									              <div class="mini-widget">
+									                <div class="mini-widget-heading clearfix" style="background: #d6a512">
+									                  <div class="pull-left">Em Atendimento</div>
+									                </div>
+									                <div class="mini-widget-body clearfix" style="background: #dcb234">
+									                  <div class="pull-center number" style="text-align: center"><h:outputText value="#{sessionScope.countAtendimento}"/></div>
+									                </div>
+									
+									              </div>
+									            </div>
+	            
+									            <div class="col-lg-3 col-md-3 col-sm-6">
+									              <div class="mini-widget">
+									                <div class="mini-widget-heading clearfix" style="background: #40900a">
+									                  <div class="pull-left">Concluídas</div>
+									                </div>
+									                <div class="mini-widget-body clearfix" style="background: #378006">
+									                  <div class="pull-center number" style="text-align: center"><h:outputText value="#{sessionScope.countConcluida}"/></div>
+									                </div>
+									
+									              </div>
+									            </div>
+									          </div>
+								          </h:panelGroup>
+								          <!-- Row ends -->
 				                  	
-									<a4j:commandButton render="panelSession, menuUsuarioLogado, panelMenu" id="conf" value="teste" style="display: none;"/>
+				                  		  <div class="row">
+								              <div class="col-lg-12 col-md-4 col-sm-12 col-sx-12">
+								                <div class="panel panel-default">
+								                  <div class="panel-heading">
+								                    <h4 class="panel-title"><i class="icon ion-clock text-success"></i> Última semana</h4>
+								                  </div>
+								                  <div class="panel-body">
+								                  	
+								                  	
+								                  	
+								                  	
+								                  	
+								                  	
+								                  </div>
+								                </div>
+								              </div>
+							              </div>
+							              
+							              
+							              <div class="row">
+								              <div class="col-lg-12 col-md-4 col-sm-12 col-sx-12">
+								                <div class="panel panel-default">
+								                  <div class="panel-heading">
+								                    <h4 class="panel-title"><i class="icon ion-clock text-success"></i> Notícias </h4>
+								                  </div>
+								                  <div class="panel-body">								                  	
+								                  	
+								                  	<div class="row">
+									                    <div class="col-md-12 col-sm-4 col-xs-12">
+									                     
+									                      <ul class="imp-status">
+									                        
+									                        <a4j:repeat value="#{principalBean.listaNoticia}" var="noticia">
+									                        
+										                        <li class="clearfix">                          
+										                          <div class="product-details">
+										                            <h5><b> <h:outputText value="#{noticia.desTitulo}"/> </b></h5>
+										                            <span style="font-size: 12px;"><h:outputText value="#{noticia.desNoticia}"/></span>                            
+										                          </div>
+										                        </li>
+									                        
+									                        </a4j:repeat>                         
+									                      </ul>
+									                    </div>
+                    								</div>
+								                  	
+								                  </div>
+								                </div>
+								              </div>
+							              </div>
+				                  	
+				                  		<!-- Fim Dash -->
+				                  
+				                  		
+										<a4j:commandButton render="panelSession, menuUsuarioLogado, panelMenu, dsh1" id="conf" value="teste" style="display: none;"/>
 										
 										<rich:popupPanel id="panConfiguracao" styleClass="modal-content" domElementAttachment="form" modal="true" show="#{sessionScope.clinicaProfissional== null}" width="800" height="280" moveable="false">
 											<f:facet name="header">

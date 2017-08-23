@@ -17,6 +17,8 @@
 		<t:saveState value="#{crudBean.listaServico}" />
 		<t:saveState value="#{crudBean.listaConvenio}" />
 		<t:saveState value="#{crudBean.mensagem}" />
+		<t:saveState value="#{crudBean.ctrMensagem}" />
+		<t:saveState value="#{crudBean.ctrAgendamento}" />
 		<t:saveState value="#{crudBean.jsonAgendamento}" />
 	</ui:define>
 	
@@ -50,8 +52,16 @@
 			{
 				document.getElementById("formulario:dataCalendario").value = start;				
 			}
+			
+			function completarPreparaInserir(ctr)
+			{
+				if(ctr == 1)
+				{
+					#{rich:component('panAgendamento')}.show();
+				}
+			}
 		</script>
-    
+        	
     	<h:inputHidden value="#{crudBean.inicio}" id="ini"/>
     	<h:inputHidden value="#{crudBean.fim}" id="fim"/>
     	<h:inputHidden value="#{crudBean.dataCalendario}" id="dataCalendario"/>
@@ -59,7 +69,7 @@
     	<h:inputHidden value="#{sessionScope.clinicaProfissional.idClinicaProfissional}" id="idClinicaProfissional"/>
     	<h:inputHidden value="#{crudBean.idAgendamento}" id="idAgendamento"/>
     	    	
-    	<a4j:commandButton id="preparaAgendamento" style="display:none;" actionListener="#{crudBean.preparaInserir}" render="panAgendamento" oncomplete="#{rich:component('panAgendamento')}.show();"/>
+    	<a4j:commandButton id="preparaAgendamento" style="display:none;" actionListener="#{crudBean.preparaInserir}" render="panAgendamento" oncomplete="completarPreparaInserir(#{crudBean.ctrAgendamento});"/>
     	<a4j:commandButton id="preparaAlterarAgendamento" style="display: none;" actionListener="#{crudBean.preparaAlterar}" render="panAgendamento" oncomplete="#{rich:component('panAgendamento')}.show();"/>
     
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
@@ -122,11 +132,11 @@
 	
 	
 	<ui:define name="modal">
-		<rich:popupPanel id="panAgendamento" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="780" resizeable="false" onmaskclick="#{rich:component('panAgendamento')}.hide()">
+		<rich:popupPanel id="panAgendamento" styleClass="modal-content" domElementAttachment="form" modal="true" width="850" height="765" resizeable="false" onmaskclick="#{rich:component('panAgendamento')}.hide()">
 			<ui:include src="panelCadastrarAgendamento.xhtml" />
 		</rich:popupPanel>
 		
-		<rich:popupPanel id="panMensagem" styleClass="modal-content" domElementAttachment="form" modal="true" width="650" height="200" resizeable="false" onmaskclick="#{rich:component('panMensagem')}.hide()">
+		<rich:popupPanel id="panMensagem" styleClass="modal-content" domElementAttachment="form" modal="true" width="650" height="200" resizeable="false" >
 			<ui:include src="panelMensagem.xhtml" />
 		</rich:popupPanel>
 	</ui:define>

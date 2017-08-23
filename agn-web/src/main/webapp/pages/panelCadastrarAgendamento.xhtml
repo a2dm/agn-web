@@ -145,7 +145,7 @@
  					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
                     	<div class="form-group">
                           <label for="saturation-demo">Observações</label>                          
-	               	  		<h:inputTextarea cols="93" rows="4" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" styleClass="form-control"/>
+	               	  		<h:inputTextarea cols="93" rows="3" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" styleClass="form-control"/>
 							<label id="lblObsAgendamento" style="font-size: 12px;">(300 caracteres restantes)</label>	                  		
                         </div>
                     </div>
@@ -163,25 +163,17 @@
 		</div>
 	
 		<div class="modal-footer">
-			<a4j:commandButton id="gravar" styleClass="btn btn-primary pull-left" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');" rendered="#{crudBean.inserting}"/>
-			<a4j:commandButton id="alterar" styleClass="btn btn-primary pull-left" value="Alterar (A)" accesskey="A" actionListener="#{crudBean.alterar}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');" rendered="#{crudBean.editing}"/>
-			<a4j:commandButton id="inativar" styleClass="btn btn-primary pull-left" value="Inativar (I)" accesskey="I" actionListener="#{crudBean.inativar}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}');" rendered="#{crudBean.editing}"/>
+			<a4j:commandButton id="gravar" styleClass="btn btn-primary pull-left" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}', #{crudBean.ctrMensagem});" rendered="#{crudBean.inserting}"/>
+			<a4j:commandButton id="alterar" styleClass="btn btn-primary pull-left" value="Alterar (A)" accesskey="A" actionListener="#{crudBean.alterar}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}', #{crudBean.ctrMensagem});" rendered="#{crudBean.editing}"/>
+			<a4j:commandButton id="inativar" styleClass="btn btn-primary pull-left" value="Inativar (I)" accesskey="I" actionListener="#{crudBean.inativar}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}', #{crudBean.ctrMensagem});" rendered="#{crudBean.editing}"/>
 			<input type="button" onclick="#{rich:component('panAgendamento')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
 			<h:commandLink action="#{agendamentoBean.preparaPesquisar}" style="display:none;" id="btnReset"/>
 		</div>
 		
 		<script>
-			function validarForm(msg)
+			function validarForm(msg, controle)
 			{
-				if(msg != '')
-				{
-					#{rich:component('panMensagem')}.show();
-				}
-				else
-				{
-					#{rich:component('panAgendamento')}.hide();
-					$("#formulario\\:btnReset").click()
-				}
+				#{rich:component('panMensagem')}.show();
 			}
 			
 			function validaHora(msg)

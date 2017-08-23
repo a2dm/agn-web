@@ -44,6 +44,7 @@ public class HorarioService extends A2DMHbNgc<Horario>
 		adicionarFiltro("idClinicaProfissional", RestritorHb.RESTRITOR_EQ,"idClinicaProfissional");	
 		adicionarFiltro("idHorario", RestritorHb.RESTRITOR_EQ,"idHorario");
 		adicionarFiltro("numHorario", RestritorHb.RESTRITOR_EQ,"numHorario");
+		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
 	}
 	
 	public void salvar(List<Horario> lista) throws Exception
@@ -85,7 +86,7 @@ public class HorarioService extends A2DMHbNgc<Horario>
 					objPersist.setHorFim(horario.getHorFim());
 					objPersist.setIdUsuarioAlt(util.getUsuarioLogado().getIdUsuario());
 					objPersist.setDatAlteracao(new Date());
-					objPersist.setFlgAtivo(horario.isFlgAtivo());
+					objPersist.setFlgAtivo(horario.getFlgAtivo());
 					
 					this.alterar(sessao, objPersist);
 				}

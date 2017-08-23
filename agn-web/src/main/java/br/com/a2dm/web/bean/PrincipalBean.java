@@ -5,20 +5,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
 
 import br.com.a2dm.cmn.entity.Usuario;
 import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.service.UsuarioService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.Clinica;
 import br.com.a2dm.ngc.entity.ClinicaProfissional;
 import br.com.a2dm.ngc.entity.ClinicaProfissionalRec;
+import br.com.a2dm.ngc.entity.Noticia;
 import br.com.a2dm.ngc.functions.MenuControl;
+import br.com.a2dm.ngc.functions.UtilFuncions;
+import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.ClinicaProfissionalRecService;
 import br.com.a2dm.ngc.service.ClinicaProfissionalService;
+import br.com.a2dm.ngc.service.NoticiaService;
 
 
 @RequestScoped
@@ -30,6 +37,8 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	private List<Usuario> listaProfissional;
 	private List<Clinica> listaClinica;
 	private List<ClinicaProfissional> listaClinicaProfissional;
+	
+	private List<Noticia> listaNoticia;
 	
 	private Usuario profissional;
 	private Clinica clinica;
@@ -52,6 +61,72 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 			util.getSession().setAttribute("listaProfissional", this.getListaProfissional());
 			util.getSession().setAttribute("listaClinica", this.getListaClinica());
 			util.getSession().setAttribute("listaClinicaProfissional", this.getListaClinicaProfissional());
+		}
+		
+		this.atualizarCountAgendamentos();
+		this.carregarListaNoticias();
+	}
+	
+	private void atualizarCountAgendamentos()
+	{
+		try
+		{
+			Agendamento agendamento = new Agendamento();
+			agendamento.setFlgAtivo("S");
+			agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+			
+			HashMap<BigInteger, Long> map = AgendamentoService.getInstancia().countAgendamentoSituacao(agendamento);
+			
+			for (int i = 0; i < map.size(); i++)
+			{
+				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)))
+				{
+					util.getSession().setAttribute("countAgendada", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA))));
+				}
+				
+				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)))
+				{
+					util.getSession().setAttribute("countPresente", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE))));
+				}
+				
+				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)))
+				{
+					util.getSession().setAttribute("countAtendimento", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO))));
+				}
+				
+				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA)))
+				{
+					util.getSession().setAttribute("countConcluida", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA))));
+				}
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	private void carregarListaNoticias()
+	{
+		try
+		{
+			Noticia noticia = new Noticia();
+			List<Noticia> lista = NoticiaService.getInstancia().pesquisar(noticia, 0);
+			this.setListaNoticia(lista);			
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
 		}
 	}
 	
@@ -299,5 +374,13 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 
 	public void setMsgConfig(String msgConfig) {
 		this.msgConfig = msgConfig;
+	}
+
+	public List<Noticia> getListaNoticia() {
+		return listaNoticia;
+	}
+
+	public void setListaNoticia(List<Noticia> listaNoticia) {
+		this.listaNoticia = listaNoticia;
 	}
 }

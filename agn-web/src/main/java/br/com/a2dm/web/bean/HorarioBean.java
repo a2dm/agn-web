@@ -92,7 +92,7 @@ public class HorarioBean extends AbstractBean<Horario, HorarioService>
 		{
 			for (Horario horario : this.getListaHorarioDefault())
 			{
-				if(!horario.isFlgAtivo())
+				if(!horario.getFlgAtivo().booleanValue())
 				{
 					horario.setHorInicio(null);
 					horario.setHorFim(null);
@@ -107,7 +107,7 @@ public class HorarioBean extends AbstractBean<Horario, HorarioService>
 		{
 			for (Horario horario : this.getListaHorarioDefault())
 			{
-				if(horario.isFlgAtivo())
+				if(horario.getFlgAtivo().booleanValue())
 				{
 					if(horario.getHorInicio() == null || horario.getHorInicio().equals("") 
 							|| horario.getHorFim() == null || horario.getHorFim().equals(""))
@@ -185,31 +185,31 @@ public class HorarioBean extends AbstractBean<Horario, HorarioService>
 		List<Horario> lista = new ArrayList<Horario>();
 		
 		Horario horario0 = new Horario();
-		horario0.setNumHorario(new BigInteger("0"));
+		horario0.setNumHorario(new BigInteger("1"));
 		horario0.setDesHorario("Domingo");
 		
 		Horario horario1 = new Horario();
-		horario1.setNumHorario(new BigInteger("1"));
+		horario1.setNumHorario(new BigInteger("2"));
 		horario1.setDesHorario("Segunda-Feira");
 		
 		Horario horario2 = new Horario();
-		horario2.setNumHorario(new BigInteger("2"));
+		horario2.setNumHorario(new BigInteger("3"));
 		horario2.setDesHorario("Terça-Feira");
 		
 		Horario horario3 = new Horario();
-		horario3.setNumHorario(new BigInteger("3"));
+		horario3.setNumHorario(new BigInteger("4"));
 		horario3.setDesHorario("Quarta-Feira");
 		
 		Horario horario4 = new Horario();
-		horario4.setNumHorario(new BigInteger("4"));
+		horario4.setNumHorario(new BigInteger("5"));
 		horario4.setDesHorario("Quinta-Feira");
 		
 		Horario horario5 = new Horario();
-		horario5.setNumHorario(new BigInteger("5"));
+		horario5.setNumHorario(new BigInteger("6"));
 		horario5.setDesHorario("Sexta-Feira");
 		
 		Horario horario6 = new Horario();
-		horario6.setNumHorario(new BigInteger("6"));
+		horario6.setNumHorario(new BigInteger("7"));
 		horario6.setDesHorario("Sabado");
 		
 		lista.add(horario0);

@@ -20,14 +20,40 @@
 		<div class="modal-body">
 			<div class="widget-body">
             	<div class="row">
-                	<span style="color: red;">
-                		<b><h:outputText value="#{crudBean.mensagem}"/></b> 
-                	</span>
+                	<h:panelGroup rendered="#{crudBean.ctrMensagem.intValue() == 2}">
+	                	<span style="color: red;">
+	                		<b><h:outputText value="#{crudBean.mensagem}"/></b> 
+	                	</span>
+                	</h:panelGroup>
+                	
+                	<h:panelGroup rendered="#{crudBean.ctrMensagem.intValue() == 1}">
+	                	<span style="color: green;">
+	                		<b><h:outputText value="#{crudBean.mensagem}"/></b> 
+	                	</span>
+                	</h:panelGroup>
 	            </div>
             </div>
        </div>
        
        <div class="modal-footer">			
-			<input type="button" onclick="#{rich:component('panMensagem')}.hide();" class="btn btn-default" value="Ok" accesskey="X"/>
+			<input type="button" onclick="confirmaMensagem(#{crudBean.ctrMensagem});" class="btn btn-default" value="Ok" accesskey="X"/>
 		</div>
+		
+		<script>
+		
+			function confirmaMensagem(controle)
+			{
+				if(controle == 1)
+				{
+					#{rich:component('panMensagem')}.hide();
+					$("#formulario\\:btnReset").click();
+				}
+				else
+				{
+					#{rich:component('panMensagem')}.hide();
+				}
+			}
+		
+		</script>
+		
 </ui:composition>
