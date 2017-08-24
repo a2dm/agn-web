@@ -3,7 +3,9 @@ package br.com.a2dm.ngc.service;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +28,7 @@ import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.AgendamentoExame;
 import br.com.a2dm.ngc.entity.Dominio;
 import br.com.a2dm.ngc.entity.Exame;
+import br.com.a2dm.ngc.entity.Horario;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 import br.com.a2dm.ngc.entity.vo.RetornoVo;
@@ -89,13 +92,35 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	@Override
 	protected void validarInserir(Session sessao, Agendamento vo) throws Exception
 	{
-		//LISTA TODOS OS AGENDAMENTOS DO DIA
+		//VERIFICA SE O HORARIO INFORMADO ESTA DENTRO DO INTERVALO PERMITIDO DE AGENDAMENTO - CONFIGURACOES / HORARIO
+		Calendar calendar = new GregorianCalendar();
+		calendar.setTime(vo.getDatAgendamento());
+		Integer diaAgendamento = calendar.get(Calendar.DAY_OF_WEEK);
+		
+		Horario horario = new Horario();
+		horario.setIdClinicaProfissional(vo.getIdClinicaProfissional());
+		horario.setNumHorario(new BigInteger(Integer.toString(diaAgendamento)));
+		horario = HorarioService.getInstancia().get(sessao, horario, 0);
+		
+		int hr1 = Integer.parseInt(vo.getHorInicio().replace(":", ""));
+		int hr2 = Integer.parseInt(vo.getHorFim().replace(":", ""));
+		
+		int hrBd1 = Integer.parseInt(horario.getHorInicio().replace(":", ""));
+		int hrBd2 = Integer.parseInt(horario.getHorFim().replace(":", ""));
+		
+		if(hr1 < hrBd1 || hr2 > hrBd2)
+		{
+			throw new Exception("O agendamento está fora do horário permitido! O horário de agendamento para este dia é: " + horario.getHorInicio() + " a " +horario.getHorFim());
+		}
+		
+		//LISTA OS AGENDAMENTOS ATIVOS DO DIA E VERIFICA SE EXISTE ALGUM AGENDAMENTO CADASTRADO NO INTERVALO DE HORA INFORMADO
 		Agendamento agendamento = new Agendamento();
 		agendamento.setIdClinicaProfissional(vo.getIdClinicaProfissional());
-		agendamento.setDatAgendamento(vo.getDatAgendamento());	
+		agendamento.setDatAgendamento(vo.getDatAgendamento());
+		agendamento.setFlgAtivo("S");
 		
 		List<Agendamento> lista = this.pesquisar(sessao, agendamento, 0);
-		
+				
 		RetornoVo retorno = UtilFuncions.checkHoraAgendamento(lista, vo.getHorInicio(), vo.getHorFim());
 		
 		if(retorno.isFlgRetorno())
