@@ -191,10 +191,11 @@
 				              </h:commandLink>
 				            </li>
 				            <li class='#{sessionScope.flgMenuRlt}'>
-				              <a href="forms.html">
-				                <i class="fa fa-file-text-o"></i>
-				                Relatórios
-				              </a>
+				              <a href="#">
+				                <i class="fa fa-file-text-o"></i>Relatórios</a>
+				                <ul>
+				              	 <li><h:commandLink action="#{atendimentoPlanoBean.preparaPesquisar}">Atendimentos por Plano</h:commandLink></li>
+				              </ul>
 				            </li>
 				            <li class='#{sessionScope.flgMenuCfg}'>
 				              <a href='#'><i class="fa fa-cogs"></i>Configuração</a>
@@ -203,7 +204,8 @@
 				              	 <li><h:commandLink action="#{clinicaBean.preparaPesquisar}">Clínica</h:commandLink></li>
 				              	 <li><h:commandLink action="#{horarioBean.preparaHorario}">Horários</h:commandLink></li>
 				              	 <li><h:commandLink action="#{convenioBean.preparaPesquisar}">Convênio</h:commandLink></li>
-				                 <li><h:commandLink action="#{servicoBean.preparaPesquisar}">Serviço</h:commandLink></li>			                 
+				                 <li><h:commandLink action="#{servicoBean.preparaPesquisar}">Serviço</h:commandLink></li>
+				                 <li><h:commandLink action="#{sugestaoBean.preparaPesquisar}">Envie sua Sugestão</h:commandLink></li>
 				              </ul>
 				            </li>
 				          </ul>

@@ -60,8 +60,8 @@
 	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
 	                    	<div class="form-group">
 	                          <label for="hue-demo">Cpf do Paciente </label>       
-	                          <h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
-	                          	<a4j:ajax event="blur" listener="#{crudBean.verificarPacienteExistente}" render="pnlPaciente"/>
+	                          <h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
+	                          	<a4j:ajax event="blur" listener="#{crudBean.verificarPacienteExistente}" render="pnlPaciente" execute="@form"/>
 	                          </h:inputText>                   
 	                        </div>
 	                    </div>
@@ -72,7 +72,7 @@
 							  <h:inputText value="#{crudBean.entity.nomPaciente}" styleClass="form-control" maxlength="200" id="nome" readonly="#{crudBean.entity.idPaciente != null}"/>
 	                        </div>
 	                    </div>   
-	                      
+	                    
 		            </div>
 	            </div>	            
            			
@@ -96,20 +96,6 @@
 	            </div>	            
             </h:panelGroup>   
                         
-			<div class="widget-body">
-            	<div class="row">
-                	<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="hue-demo">Serviço <span style="color: red">*</span></label>
-		                  <h:selectOneMenu value="#{crudBean.entity.idServico}" styleClass="form-control" converter="simpleIndexConverter">								
-							<t:selectItems var="i" itemValue="#{i.idServico}" itemLabel="#{i.desServico}" value="#{crudBean.listaServico}" />
-							<a4j:ajax event="change" listener="#{crudBean.atualizarHoraFim}" render="pnlTime"/>
-						  </h:selectOneMenu>
-                        </div>
-                    </div>      
-	            </div>
-            </div>
-
   			<h:panelGroup layout="block" id="panTipoAgendamento">
 	  			<div class="widget-body">
 	            	<div class="row">  
@@ -120,7 +106,7 @@
 								<h:selectOneRadio value="#{crudBean.entity.tpAgendamento}" style="width: 100%;" >								
 									<f:selectItem itemValue="P" itemLabel="Particular" />
 									<f:selectItem itemValue="C" itemLabel="Convênio"/>
-									<a4j:ajax event="change" render="panTipoAgendamento" />
+									<a4j:ajax event="change" render="panTipoAgendamento, panServico"/>
 								</h:selectOneRadio>
 							   </div>
 	                        </div>
@@ -132,13 +118,30 @@
 		                          <label for="saturation-demo">Convênio <span style="color: red">*</span></label>
 								  <h:selectOneMenu value="#{crudBean.entity.idConvenio}" styleClass="form-control" converter="simpleIndexConverter">								
 									<t:selectItems var="i" itemValue="#{i.idConvenio}" itemLabel="#{i.desConvenio}" value="#{crudBean.listaConvenio}" />
+									<a4j:ajax event="change" render="panServico" listener="#{crudBean.atualizarServicos}"/>
 								  </h:selectOneMenu>
 		                        </div>
 		                    </div>
 	                    </h:panelGroup>
 	                 </div>
 	             </div>  
-             </h:panelGroup>    
+             </h:panelGroup> 
+             
+             <h:panelGroup layout="block" id="panServico">
+	             <div class="widget-body">
+	            	<div class="row">
+	                	<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
+	                    	<div class="form-group">
+	                          <label for="hue-demo">Serviço <span style="color: red">*</span></label>
+			                  <h:selectOneMenu value="#{crudBean.entity.idServico}" styleClass="form-control" converter="simpleIndexConverter">								
+								<t:selectItems var="i" itemValue="#{i.idServico}" itemLabel="#{i.desServico}" value="#{crudBean.listaServico}" />
+								<a4j:ajax event="change" listener="#{crudBean.atualizarHoraFim}" render="pnlTime"/>
+							  </h:selectOneMenu>
+	                        </div>
+	                    </div>      
+		            </div>
+	            </div>
+            </h:panelGroup>   
   
   			<div class="widget-body">
             	<div class="row">  

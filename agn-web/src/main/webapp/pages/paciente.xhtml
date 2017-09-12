@@ -47,7 +47,7 @@
 		       <div class="form-group">
 		          <label class="col-md-2 control-label">Cpf *</label>
 		          <div class="col-md-2" style="width: 200px;">
-		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" maxlength="14" id="cpf">
+		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" maxlength="14" id="cpf">
 		           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>
 		           	</h:inputText>
 		          </div>
@@ -99,7 +99,7 @@
 				       <div class="form-group">
 				          <label class="col-md-2 control-label">Cpf *</label>
 				          <div class="col-md-2" style="width: 200px;">
-				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf" readonly="#{crudBean.viewing}"/>				           		
+				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeyup="javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf" readonly="#{crudBean.viewing}"/>				           		
 				          </div>
 				       </div>
 				       

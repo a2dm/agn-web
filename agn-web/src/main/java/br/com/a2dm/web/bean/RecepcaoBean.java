@@ -27,6 +27,7 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 	private Date dataInicio;	
 	private Date dataFim;
 	
+	private Integer ctrMensagem;
 	private String mensagem;
 		
 	private SortOrder nomeOrder;	
@@ -245,11 +246,13 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 			paciente.setIdProfissional(UtilFuncions.getClinicaProfissionalSession().getIdUsuario());
 			
 			List<Paciente> lista = PacienteService.getInstancia().pesquisar(paciente, 0);
-			this.setListaPaciente(lista);		
+			this.setListaPaciente(lista);
+			this.setCtrMensagem(1);
 		}
 		catch (Exception e)
 		{
 			this.setMensagem(e.getMessage());
+			this.setCtrMensagem(2);
 		}
 	}
 	
@@ -472,5 +475,13 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 
 	public void setCountConcluida(Integer countConcluida) {
 		this.countConcluida = countConcluida;
+	}
+
+	public Integer getCtrMensagem() {
+		return ctrMensagem;
+	}
+
+	public void setCtrMensagem(Integer ctrMensagem) {
+		this.ctrMensagem = ctrMensagem;
 	}
 }

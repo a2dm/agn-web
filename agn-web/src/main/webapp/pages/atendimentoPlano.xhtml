@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{atendimentoPlanoBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+    	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
+			<f:subview id="viewBusca"> 
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Período *</label>
+		          <div class="col-md-6">
+		          	<rich:calendar value="#{crudBean.dataInicio}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="fc-calendar" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" />
+		          	a 
+		          	<rich:calendar value="#{crudBean.dataFim}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="fc-calendar" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" />
+		          
+		          	<h:outputText value="  "/>
+		          
+		          	<a4j:commandButton image="../img/visualizar.png" id="consultar" style="border:none; width: 40px; height: 23px; vertical-align: middle; padding-left:15px;" title="PESQUISAR" actionListener="#{crudBean.pesquisar}" render="pnFrm, panelTitle, comentTela">
+						<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
+					</a4j:commandButton>
+		          </div>
+		       </div>		       
+	       </f:subview>
+		</h:panelGroup>
+	</ui:define>
+		
+    <ui:define name="list">	
+		<h:panelGrid id="tblResult" layout="block" style="width: 100%; height: 100%;z" >
+			<f:subview id="viewListagem">
+				<div class="box-content">
+					
+				</div>
+				
+			</f:subview>
+		</h:panelGrid>
+	</ui:define>
+	
+	<ui:define name="buttonItens" style="height:100%; width:100%;"/>
+			
+</ui:composition>

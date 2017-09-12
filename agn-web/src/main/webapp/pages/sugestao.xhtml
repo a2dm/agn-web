@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{sugestaoBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">
+		<t:saveState value="#{crudBean.listaTipoSugestao}" />
+	</ui:define>
+	
+	<ui:define name="pageIcon">
+		<h:commandLink actionListener="#{crudBean.preparaInserir}" title="Nova Sugestão" render="formulario" rendered="#{crudBean.searching}"> <i class="fa fa-plus" /></h:commandLink>
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}" rendered="#{crudBean.updating}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}" rendered="#{crudBean.searching}"/>
+	</ui:define>
+    
+    <ui:define name="content">		
+		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;" rendered="#{crudBean.updating || crudBean.viewing}">
+			<f:subview id="viewEdicao">
+				<div class="form-group">
+		          <label class="col-md-2 control-label">Tipo de Sugestão *</label>
+		          <div class="col-md-3">
+		          	<h:selectOneMenu value="#{crudBean.entity.idTipoSugestao}" styleClass="form-control">								
+						<t:selectItems var="o" itemValue="#{o.vlrDominio}" itemLabel="#{o.desDominio}" value="#{crudBean.listaTipoSugestao}" />
+					</h:selectOneMenu>
+		          </div>
+		       	</div>
+		       	
+		       	<div class="form-group">
+		          <label class="col-md-2 control-label">Sugestão *</label>
+		          <div class="col-md-6">
+		          	<h:inputTextarea cols="93" rows="3" id="sugestao" onkeyup="verificaTamanho(this, 4000, 'lblSugestao');" value="#{crudBean.entity.desSugestao}" styleClass="form-control"/>
+					<label id="lblSugestao" style="font-size: 12px;">(4000 caracteres restantes)</label>
+		          </div>
+		       	</div>
+			</f:subview>
+		</h:panelGroup>		
+    </ui:define>
+    
+    <ui:define name="list">	
+		<h:panelGrid id="tblResult" layout="block" style="width: 100%; height: 100%;z" >
+			<f:subview id="viewListagem">
+				<div class="box-content">
+					<rich:dataTable id="tblData" 
+								 value="#{crudBean.searchResult}" 
+							       var="rst" rows="5"
+							styleClass="table table-bordered table-striped dataTable"
+							onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+							onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
+						<f:facet name="header">
+							<rich:columnGroup>
+								<rich:column style="width: 20%; text-align: center;">
+									Tipo de Sugestão
+								</rich:column>
+								<rich:column style="width:50%; text-align: center;">
+									Sugestão
+								</rich:column>
+								<rich:column style="width: 15%; text-align: center;">
+									Data de Cadastro
+								</rich:column>
+								<rich:column style="width: 15%; text-align: center;">
+									Situação
+								</rich:column>
+							</rich:columnGroup>
+						</f:facet>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.desTipoSugestao}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.desSugestao}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.datCadastro}" converter="converterDataHora"/>
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.desSituacaoSugestao}" />
+						</rich:column>
+					</rich:dataTable>
+				</div>
+				<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
+				<h:panelGroup style="color: #333333" rendered="#{empty crudBean.searchResult and crudBean.searching}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
+				<div align="center">
+					<rich:dataScroller for="tblData" maxPages="5" rendered="#{not empty crudBean.searchResult and crudBean.searching}"/>
+				</div>
+			</f:subview>
+		</h:panelGrid>
+	</ui:define>
+    
+    <ui:define name="buttonItens" style="height:100%; width:100%;">
+		<!-- Painel dos botoes de edicao -->
+		<h:panelGroup rendered="#{crudBean.updating || crudBean.viewing}">			
+			<a4j:commandButton id="inserir" styleClass="btn btn-primary" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" rendered="#{crudBean.inserting}" render="pnFrm, panelTitle, comentTela"/>
+			<h:outputText value=" "/>
+			<a4j:commandButton id="cancelar" styleClass="btn btn-primary" value="Cancelar (C)" accesskey="C" actionListener="#{crudBean.cancelar}" render="pnFrm, panelTitle. comentTela" />
+		</h:panelGroup>
+	</ui:define>
+			
+</ui:composition>

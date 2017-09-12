@@ -20,6 +20,7 @@ import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.cmn.util.others.Utilitarios;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.Convenio;
+import br.com.a2dm.ngc.entity.ConvenioServico;
 import br.com.a2dm.ngc.entity.Horario;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.Servico;
@@ -27,6 +28,7 @@ import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.ConvenioService;
+import br.com.a2dm.ngc.service.ConvenioServicoService;
 import br.com.a2dm.ngc.service.HorarioService;
 import br.com.a2dm.ngc.service.PacienteService;
 import br.com.a2dm.ngc.service.ServicoService;
@@ -76,8 +78,9 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		
 		this.getEntity().setDatAgendamento(dataInicio);
 		this.getEntity().setHorInicio(new SimpleDateFormat("HH:mm").format(dataInicio));		
+		this.getEntity().setTpAgendamento("P");
 		
-		this.popularServicos();
+		this.carregarAllServicos();
 		this.popularConvenios();
 		
 		this.setCtrAgendamento(1);
@@ -111,7 +114,33 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		this.setDataCalendario(sdf.format(data));
 	}
 
-	private void popularServicos() throws Exception
+	private void carregarConvenioServicos() throws Exception
+	{
+		List<Servico> listaAll = new ArrayList<Servico>();
+		
+		Servico sIni = new Servico();
+		sIni.setDesServico("-- Selecione um Serviço --");
+		listaAll.add(sIni);
+		
+		ConvenioServico convenioServico = new ConvenioServico();
+		convenioServico.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+		convenioServico.setFlgAtivo("S");
+		convenioServico.setIdConvenio(this.getEntity().getIdConvenio());
+		
+		List<ConvenioServico> listaConvenioServico = ConvenioServicoService.getInstancia().pesquisar(convenioServico, ConvenioServicoService.JOIN_SERVICO);
+		List<Servico> lista = new ArrayList<Servico>();
+		
+		for (ConvenioServico obj : listaConvenioServico)
+		{
+			lista.add(obj.getServico());
+		}
+		
+		listaAll.addAll(lista);
+		
+		this.setListaServico(listaAll);
+	}
+	
+	private void carregarAllServicos() throws Exception
 	{
 		List<Servico> listaAll = new ArrayList<Servico>();
 		
@@ -223,6 +252,27 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	    }
 	}
 	
+	public void atualizarServicos()
+	{
+		try
+		{
+			if(this.getEntity().getTpAgendamento().equals("C"))
+			{
+				this.carregarConvenioServicos();
+			}
+			else
+			{
+				this.carregarAllServicos();
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+		    message.setSeverity(FacesMessage.SEVERITY_ERROR);
+		    FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
 	public void atualizarHoraFim()
 	{
 		try
@@ -313,8 +363,8 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	    		  setCurrentState(STATE_EDIT);
 	    		  setListaAlterar();
 	    		  
-	    		  this.popularServicos();
-	    			this.popularConvenios();
+	    		  this.carregarAllServicos();
+	    		  this.popularConvenios();
 	    		  
 	    		  Agendamento agendamento = new Agendamento();
 	    		  agendamento.setIdAgendamento(this.getIdAgendamento());	    		  

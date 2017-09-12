@@ -2,6 +2,8 @@ package br.com.a2dm.web.bean;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +40,8 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	private List<Clinica> listaClinica;
 	private List<ClinicaProfissional> listaClinicaProfissional;
 	
+	private List<Agendamento> listaAgnUltimaSemana;
+	
 	private List<Noticia> listaNoticia;
 	
 	private Usuario profissional;
@@ -64,6 +68,7 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 		}
 		
 		this.atualizarCountAgendamentos();
+		this.carregarGrafico();
 		this.carregarListaNoticias();
 	}
 	
@@ -99,6 +104,45 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 					util.getSession().setAttribute("countConcluida", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA))));
 				}
 			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	private void carregarGrafico()
+	{
+		try
+		{
+			//DEFININDO INTERVALOS DA SEMANA PARA O GRAFICO
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.setTime(new Date());
+			
+			gc.set(GregorianCalendar.HOUR, 0);
+			gc.set(GregorianCalendar.MINUTE, 0);
+			gc.set(GregorianCalendar.SECOND, 0);
+			gc.set(GregorianCalendar.MILLISECOND, 0);
+			
+			Date dataInicio = gc.getTime();			
+			gc.add(GregorianCalendar.DAY_OF_MONTH, -7);			
+			Date dataFim = gc.getTime();
+			
+			//LISTAR AGENDAMENTOS DA ULTIMA SEMANA
+			Agendamento agendamentosAtivos = new Agendamento();
+			agendamentosAtivos.setFlgAtivo("S");
+			agendamentosAtivos.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+			agendamentosAtivos.setFiltroMap(new HashMap<String, Object>());
+			agendamentosAtivos.getFiltroMap().put("datAgendamentoInicio", dataInicio);
+			agendamentosAtivos.getFiltroMap().put("datAgendamentoFim", dataFim);
+			
+			List<Agendamento> listaAgendados = AgendamentoService.getInstancia().pesquisar(agendamentosAtivos, 0);
+			this.setListaAgnUltimaSemana(listaAgendados);
 		}
 		catch (Exception e)
 		{
@@ -382,5 +426,13 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 
 	public void setListaNoticia(List<Noticia> listaNoticia) {
 		this.listaNoticia = listaNoticia;
+	}
+
+	public List<Agendamento> getListaAgnUltimaSemana() {
+		return listaAgnUltimaSemana;
+	}
+
+	public void setListaAgnUltimaSemana(List<Agendamento> listaAgnUltimaSemana) {
+		this.listaAgnUltimaSemana = listaAgnUltimaSemana;
 	}
 }

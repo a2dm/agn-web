@@ -41,6 +41,7 @@ public class ConvenioServicoService extends A2DMHbNgc<ConvenioServico>
 		adicionarFiltro("idConvenio", RestritorHb.RESTRITOR_EQ, "idConvenio");
 		adicionarFiltro("idServico", RestritorHb.RESTRITOR_EQ, "idServico");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
+		adicionarFiltro("idClinicaProfissional", RestritorHb.RESTRITOR_EQ, "idClinicaProfissional");
 		adicionarFiltro("servico.flgAtivo", RestritorHb.RESTRITOR_EQ, "servico.flgAtivo");
 	}
 	
@@ -71,7 +72,10 @@ public class ConvenioServicoService extends A2DMHbNgc<ConvenioServico>
 	@Override
 	protected void setarOrdenacao(Criteria criteria, ConvenioServico vo, int join)
 	{
-		criteria.addOrder(Order.asc("servico.desServico"));
+		if ((join & JOIN_SERVICO) != 0)
+	    {
+			criteria.addOrder(Order.asc("servico.desServico"));
+	    }
 	}
 	
 	@Override

@@ -45,6 +45,7 @@
 		<mapping class="br.com.a2dm.ngc.entity.AgendamentoExame"/>
 		<mapping class="br.com.a2dm.ngc.entity.Noticia"/>
 		<mapping class="br.com.a2dm.ngc.entity.Dominio"/>
+		<mapping class="br.com.a2dm.ngc.entity.Sugestao"/>
 		
 		<mapping class="br.com.a2dm.ngc.entity.log.AgendamentoLog"/>
 	</session-factory>

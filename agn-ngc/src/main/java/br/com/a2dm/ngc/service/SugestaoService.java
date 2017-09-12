@@ -6,21 +6,22 @@ import java.util.Map;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
-import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.RestritorHb;
-import br.com.a2dm.ngc.entity.Dominio;
+import br.com.a2dm.ngc.entity.Sugestao;
 
-public class DominioService extends A2DMHbNgc<Dominio>
-{	
-	private static DominioService instancia = null;
-	
-	public static final String TIPO_SUGESTAO = "TIPO_SUGESTAO";
+public class SugestaoService extends A2DMHbNgc<Sugestao>
+{
+	private static SugestaoService instancia = null;
 	
 	public static final int JOIN_USUARIO_CAD = 1;
 	
-	public static final int JOIN_USUARIO_ALT = 2;
+	public static final int SITUACAO_ABERTA       		= 1;
+	public static final int SITUACAO_EM_ANALISE       	= 2;
+	public static final int SITUACAO_EM_DESENVOLVIMENTO = 3;
+	public static final int SITUACAO_REJEITADA      	= 4;
+	public static final int SITUACAO_REALIZADA      	= 5;
 	
 	@SuppressWarnings("rawtypes")
 	private static Map filtroPropriedade = new HashMap();
@@ -28,45 +29,38 @@ public class DominioService extends A2DMHbNgc<Dominio>
 	@SuppressWarnings("rawtypes")
 	private static Map restritores = new HashMap();
 	
-	public static DominioService getInstancia()
+	public static SugestaoService getInstancia()
 	{
 		if (instancia == null)
 		{
-			instancia = new DominioService();
+			instancia = new SugestaoService();
 		}
 		return instancia;
 	}
 	
-	public DominioService()
+	public SugestaoService()
 	{
-		adicionarFiltro("idDominio", RestritorHb.RESTRITOR_EQ,"idDominio");
-		adicionarFiltro("desDominio", RestritorHb.RESTRITOR_EQ,"desDominio");
-		adicionarFiltro("refDominio", RestritorHb.RESTRITOR_EQ,"refDominio");
+		adicionarFiltro("idSugestao", RestritorHb.RESTRITOR_EQ,"idSugestao");
+		adicionarFiltro("idClinicaProfissional", RestritorHb.RESTRITOR_EQ,"idClinicaProfissional");
 	}
-	
 	
 	@Override
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
-		Criteria criteria = sessao.createCriteria(Dominio.class);
+		Criteria criteria = sessao.createCriteria(Sugestao.class);
 		
 		if ((join & JOIN_USUARIO_CAD) != 0)
 	    {
 			criteria.createAlias("usuarioCad", "usuarioCad");
 	    }
 		
-		if ((join & JOIN_USUARIO_ALT) != 0)
-	    {
-			criteria.createAlias("usuarioAlt", "usuarioAlt", JoinType.LEFT_OUTER_JOIN);
-	    }		
-		
 		return criteria;
 	}
 	
 	@Override
-	protected void setarOrdenacao(Criteria criteria, Dominio vo, int join)
+	protected void setarOrdenacao(Criteria criteria, Sugestao vo, int join)
 	{
-		criteria.addOrder(Order.asc("vlrDominio"));
+		criteria.addOrder(Order.desc("datCadastro"));
 	}
 	
 	@Override
