@@ -106,7 +106,7 @@
 								<h:selectOneRadio value="#{crudBean.entity.tpAgendamento}" style="width: 100%;" >								
 									<f:selectItem itemValue="P" itemLabel="Particular" />
 									<f:selectItem itemValue="C" itemLabel="Convênio"/>
-									<a4j:ajax event="change" render="panTipoAgendamento, panServico"/>
+									<a4j:ajax event="change" render="panTipoAgendamento, panServico, pnlTime" listener="#{crudBean.resetServicos}"/>
 								</h:selectOneRadio>
 							   </div>
 	                        </div>
@@ -118,7 +118,7 @@
 		                          <label for="saturation-demo">Convênio <span style="color: red">*</span></label>
 								  <h:selectOneMenu value="#{crudBean.entity.idConvenio}" styleClass="form-control" converter="simpleIndexConverter">								
 									<t:selectItems var="i" itemValue="#{i.idConvenio}" itemLabel="#{i.desConvenio}" value="#{crudBean.listaConvenio}" />
-									<a4j:ajax event="change" render="panServico" listener="#{crudBean.atualizarServicos}"/>
+									<a4j:ajax event="change" render="panServico, pnlTime" listener="#{crudBean.atualizarServicos}"/>
 								  </h:selectOneMenu>
 		                        </div>
 		                    </div>

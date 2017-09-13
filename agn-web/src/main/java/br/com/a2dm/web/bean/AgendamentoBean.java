@@ -252,18 +252,66 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	    }
 	}
 	
+	public void resetServicos()
+	{
+		try
+		{
+			this.getEntity().setIdConvenio(null);
+			this.getEntity().setIdServico(null);
+			
+			if(this.getEntity().getTpAgendamento().equals("P"))
+			{
+				this.carregarAllServicos();
+			}
+			else
+			{
+				this.cleanServicos();
+			}
+			
+			this.atualizarHoraFim();
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+		    message.setSeverity(FacesMessage.SEVERITY_ERROR);
+		    FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	private void cleanServicos()
+	{
+		List<Servico> lista = new ArrayList<Servico>();
+		
+		Servico servico = new Servico();
+		servico.setDesServico("-- Selecione um Serviço --");
+		lista.add(servico);
+		
+		this.setListaServico(lista);
+		this.getEntity().setIdServico(null);
+	}
+	
 	public void atualizarServicos()
 	{
 		try
 		{
 			if(this.getEntity().getTpAgendamento().equals("C"))
 			{
-				this.carregarConvenioServicos();
+				if(this.getEntity().getIdConvenio() != null
+						&& this.getEntity().getIdConvenio().intValue() > 0)
+				{
+					this.carregarConvenioServicos();
+				}
+				else
+				{
+					this.cleanServicos();
+				}
 			}
 			else
 			{
 				this.carregarAllServicos();
 			}
+			
+			this.atualizarHoraFim();
 		}
 		catch (Exception e)
 		{
@@ -279,7 +327,9 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		{
 			if(this.getEntity() != null
 					&& this.getEntity().getHorInicio() != null
-					&& !this.getEntity().getHorInicio().equals(""))
+					&& !this.getEntity().getHorInicio().equals("")
+					&& this.getEntity().getIdServico() != null
+					&& this.getEntity().getIdServico().intValue() > 0)
 			{
 				Servico servico = new Servico();
 				servico.setIdServico(this.getEntity().getIdServico());
@@ -363,7 +413,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	    		  setCurrentState(STATE_EDIT);
 	    		  setListaAlterar();
 	    		  
-	    		  this.carregarAllServicos();
+	    		  this.atualizarServicos();
 	    		  this.popularConvenios();
 	    		  
 	    		  Agendamento agendamento = new Agendamento();
