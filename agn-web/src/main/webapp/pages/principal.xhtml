@@ -307,56 +307,59 @@
 								          </h:panelGroup>
 								          <!-- Row ends -->
 				                  	
-				                  		  <div class="row">
-								              <div class="col-lg-12 col-md-4 col-sm-12 col-sx-12">
-								                <div class="panel panel-default">
-								                  <div class="panel-heading">
-								                    <h4 class="panel-title"><i class="icon ion-clock text-success"></i> Última semana</h4>
-								                  </div>
-								                  <div class="panel-body">
-								                  	
-								                  	
-								                  	
-								                  	
-								                  	
-								                  	
-								                  </div>
-								                </div>
+				                  		  <h:panelGroup id="dsh2">
+					                  		  <div class="row">
+									              <div class="col-lg-12 col-md-4 col-sm-12 col-sx-12">
+									                <div class="panel panel-default">
+									                  <div class="panel-heading">
+									                    <h4 class="panel-title"><i class="icon ion-clock text-success"></i> Última semana</h4>
+									                  </div>
+									                  <div class="panel-body">
+									                  	
+									                  	
+									                  	
+									                  	
+									                  	
+									                  	
+									                  </div>
+									                </div>
+									              </div>
 								              </div>
-							              </div>
+							              </h:panelGroup>
 							              
-							              
-							              <div class="row">
-								              <div class="col-lg-12 col-md-4 col-sm-12 col-sx-12">
-								                <div class="panel panel-default">
-								                  <div class="panel-heading">
-								                    <h4 class="panel-title"><i class="icon ion-clock text-success"></i> Notícias </h4>
-								                  </div>
-								                  <div class="panel-body">								                  	
-								                  	
-								                  	<div class="row">
-									                    <div class="col-md-12 col-sm-4 col-xs-12">
-									                     
-									                      <ul class="imp-status">
-									                        
-									                        <a4j:repeat value="#{principalBean.listaNoticia}" var="noticia">
-									                        
-										                        <li class="clearfix">                          
-										                          <div class="product-details">
-										                            <h5><b> <h:outputText value="#{noticia.desTitulo}"/> </b></h5>
-										                            <span style="font-size: 12px;"><h:outputText value="#{noticia.desNoticia}"/></span>                            
-										                          </div>
-										                        </li>
-									                        
-									                        </a4j:repeat>                         
-									                      </ul>
-									                    </div>
-                    								</div>
-								                  	
-								                  </div>
-								                </div>
+							              <h:panelGroup id="dsh3">
+								              <div class="row">
+									              <div class="col-lg-12 col-md-4 col-sm-12 col-sx-12">
+									                <div class="panel panel-default">
+									                  <div class="panel-heading">
+									                    <h4 class="panel-title"><i class="icon ion-clock text-success"></i> Notícias </h4>
+									                  </div>
+									                  <div class="panel-body">								                  	
+									                  	
+									                  	<div class="row">
+										                    <div class="col-md-12 col-sm-4 col-xs-12">
+										                     
+										                      <ul class="imp-status">
+										                        
+										                        <a4j:repeat value="#{principalBean.listaNoticia}" var="noticia">
+										                        
+											                        <li class="clearfix">                          
+											                          <div class="product-details">
+											                            <h5><b> <h:outputText value="#{noticia.desTitulo}"/> </b></h5>
+											                            <span style="font-size: 12px;"><h:outputText value="#{noticia.desNoticia}"/></span>                            
+											                          </div>
+											                        </li>
+										                        
+										                        </a4j:repeat>                         
+										                      </ul>
+										                    </div>
+	                    								</div>
+									                  	
+									                  </div>
+									                </div>
+									              </div>
 								              </div>
-							              </div>
+							              </h:panelGroup>
 				                  	
 				                  		<!-- Fim Dash -->
 				                  
@@ -396,7 +399,7 @@
 													</div>
 													
 													<div class="modal-footer">
-														<a4j:commandButton id="iniciar" styleClass="btn btn-primary" value="Iniciar (I)" accesskey="I" actionListener="#{crudBean.iniciar}" render="panelSession" oncomplete="validaPanel('#{crudBean.msgConfig}');"/>
+														<a4j:commandButton id="iniciar" styleClass="btn btn-primary" value="Iniciar (I)" accesskey="I" actionListener="#{crudBean.iniciar}" render="panelSession, dsh1, dsh2, dsh3" oncomplete="validaPanel('#{crudBean.msgConfig}');"/>
 														<h:commandButton id="fechar" styleClass="btn btn-default" value="Sair (S)" accesskey="S" action="#{crudBean.redirectLogout}"/>			
 													</div>
 												

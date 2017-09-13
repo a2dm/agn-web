@@ -66,42 +66,41 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 			util.getSession().setAttribute("listaClinica", this.getListaClinica());
 			util.getSession().setAttribute("listaClinicaProfissional", this.getListaClinicaProfissional());
 		}
-		
-		this.atualizarCountAgendamentos();
-		this.carregarGrafico();
-		this.carregarListaNoticias();
 	}
 	
 	private void atualizarCountAgendamentos()
 	{
 		try
 		{
-			Agendamento agendamento = new Agendamento();
-			agendamento.setFlgAtivo("S");
-			agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
-			
-			HashMap<BigInteger, Long> map = AgendamentoService.getInstancia().countAgendamentoSituacao(agendamento);
-			
-			for (int i = 0; i < map.size(); i++)
+			if(UtilFuncions.getClinicaProfissionalSession() != null)
 			{
-				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)))
-				{
-					util.getSession().setAttribute("countAgendada", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA))));
-				}
+				Agendamento agendamento = new Agendamento();
+				agendamento.setFlgAtivo("S");
+				agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
 				
-				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)))
-				{
-					util.getSession().setAttribute("countPresente", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE))));
-				}
+				HashMap<BigInteger, Long> map = AgendamentoService.getInstancia().countAgendamentoSituacao(agendamento);
 				
-				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)))
+				for (int i = 0; i < map.size(); i++)
 				{
-					util.getSession().setAttribute("countAtendimento", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO))));
-				}
-				
-				if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA)))
-				{
-					util.getSession().setAttribute("countConcluida", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA))));
+					if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_AGENDADA)))
+					{
+						util.getSession().setAttribute("countAgendada", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_AGENDADA))));
+					}
+					
+					if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)))
+					{
+						util.getSession().setAttribute("countPresente", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE))));
+					}
+					
+					if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)))
+					{
+						util.getSession().setAttribute("countAtendimento", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO))));
+					}
+					
+					if(map.keySet().toArray()[i].toString().equals(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA)))
+					{
+						util.getSession().setAttribute("countConcluida", map.get(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_CONCLUIDA))));
+					}
 				}
 			}
 		}
@@ -120,29 +119,32 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	{
 		try
 		{
-			//DEFININDO INTERVALOS DA SEMANA PARA O GRAFICO
-			GregorianCalendar gc = new GregorianCalendar();
-			gc.setTime(new Date());
-			
-			gc.set(GregorianCalendar.HOUR, 0);
-			gc.set(GregorianCalendar.MINUTE, 0);
-			gc.set(GregorianCalendar.SECOND, 0);
-			gc.set(GregorianCalendar.MILLISECOND, 0);
-			
-			Date dataInicio = gc.getTime();			
-			gc.add(GregorianCalendar.DAY_OF_MONTH, -7);			
-			Date dataFim = gc.getTime();
-			
-			//LISTAR AGENDAMENTOS DA ULTIMA SEMANA
-			Agendamento agendamentosAtivos = new Agendamento();
-			agendamentosAtivos.setFlgAtivo("S");
-			agendamentosAtivos.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
-			agendamentosAtivos.setFiltroMap(new HashMap<String, Object>());
-			agendamentosAtivos.getFiltroMap().put("datAgendamentoInicio", dataInicio);
-			agendamentosAtivos.getFiltroMap().put("datAgendamentoFim", dataFim);
-			
-			List<Agendamento> listaAgendados = AgendamentoService.getInstancia().pesquisar(agendamentosAtivos, 0);
-			this.setListaAgnUltimaSemana(listaAgendados);
+			if(UtilFuncions.getClinicaProfissionalSession() != null)
+			{
+				//DEFININDO INTERVALOS DA SEMANA PARA O GRAFICO
+				GregorianCalendar gc = new GregorianCalendar();
+				gc.setTime(new Date());
+				
+				gc.set(GregorianCalendar.HOUR, 0);
+				gc.set(GregorianCalendar.MINUTE, 0);
+				gc.set(GregorianCalendar.SECOND, 0);
+				gc.set(GregorianCalendar.MILLISECOND, 0);
+				
+				Date dataInicio = gc.getTime();			
+				gc.add(GregorianCalendar.DAY_OF_MONTH, -7);			
+				Date dataFim = gc.getTime();
+				
+				//LISTAR AGENDAMENTOS DA ULTIMA SEMANA
+				Agendamento agendamentosAtivos = new Agendamento();
+				agendamentosAtivos.setFlgAtivo("S");
+				agendamentosAtivos.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+				agendamentosAtivos.setFiltroMap(new HashMap<String, Object>());
+				agendamentosAtivos.getFiltroMap().put("datAgendamentoInicio", dataInicio);
+				agendamentosAtivos.getFiltroMap().put("datAgendamentoFim", dataFim);
+				
+				List<Agendamento> listaAgendados = AgendamentoService.getInstancia().pesquisar(agendamentosAtivos, 0);
+				this.setListaAgnUltimaSemana(listaAgendados);
+			}
 		}
 		catch (Exception e)
 		{
@@ -159,9 +161,12 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 	{
 		try
 		{
-			Noticia noticia = new Noticia();
-			List<Noticia> lista = NoticiaService.getInstancia().pesquisar(noticia, 0);
-			this.setListaNoticia(lista);			
+			if(UtilFuncions.getClinicaProfissionalSession() != null)
+			{
+				Noticia noticia = new Noticia();
+				List<Noticia> lista = NoticiaService.getInstancia().pesquisar(noticia, 0);
+				this.setListaNoticia(lista);
+			}
 		}
 		catch (Exception e)
 		{
@@ -195,7 +200,12 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 				if(lista != null
 						&& lista.size() == 1)
 				{
-					util.getSession().setAttribute("clinicaProfissional", lista.get(0));					
+					//CONFIGURACAO PARA ENTRAR DIRETO NO SISTEMA COM CLINICA PROFISSIONAL SELECIONADA
+					util.getSession().setAttribute("clinicaProfissional", lista.get(0));
+					
+					this.atualizarCountAgendamentos();
+					this.carregarGrafico();
+					this.carregarListaNoticias();
 				}
 				else
 				{
@@ -243,7 +253,12 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 					if(lista != null
 							&& lista.size() == 1)
 					{
+						//CONFIGURACAO PARA ENTRAR DIRETO NO SISTEMA COM CLINICA PROFISSIONAL SELECIONADA						
 						util.getSession().setAttribute("clinicaProfissional", lista.get(0).getClinicaProfissional());
+						
+						this.atualizarCountAgendamentos();
+						this.carregarGrafico();
+						this.carregarListaNoticias();						
 					}
 					else
 					{
@@ -343,7 +358,11 @@ public class PrincipalBean extends AbstractBean<Usuario, UsuarioService>
 			clinicaProfissional = ClinicaProfissionalService.getInstancia().get(clinicaProfissional, ClinicaProfissionalService.JOIN_CLINICA
 																								   | ClinicaProfissionalService.JOIN_PROFISSIONAL);
 			
-			util.getSession().setAttribute("clinicaProfissional", clinicaProfissional);			
+			util.getSession().setAttribute("clinicaProfissional", clinicaProfissional);	
+			
+			this.atualizarCountAgendamentos();
+			this.carregarGrafico();
+			this.carregarListaNoticias();
 		}
 		catch (Exception e)
 	    {
