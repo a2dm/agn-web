@@ -364,6 +364,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
 		log.setDatCadastro(new Date());
 		log.setDesOperacao("MACANDO O AGENDAMENTO COMO PRESENTE");
+		log.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)));
 		
 		AgendamentoLogService.getInstancia().inserir(sessao, log);
 		
@@ -420,7 +421,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 			throw new Exception("Não foi possível colocar o paciente em atendimento pois já existe um atendimento para o profissional!");
 		}		
 		
-		//ALTERAR SITUACAO DO AGENDAMENTO PARA PRESENTE
+		//ALTERAR SITUACAO DO AGENDAMENTO PARA EM ATENDIMENTO
 		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
 		super.alterar(sessao, vo);
 		
@@ -430,6 +431,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		log.setIdUsuario(util.getUsuarioLogado().getIdUsuario());
 		log.setDatCadastro(new Date());
 		log.setDesOperacao("MACANDO O AGENDAMENTO COMO EM ATENDIMENTO");
+		log.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
 		
 		AgendamentoLogService.getInstancia().inserir(sessao, log);
 		

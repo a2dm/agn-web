@@ -44,6 +44,8 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	
 	private String mensagem;
 	
+	private Integer ctrMensagem;
+	
 	private JSFUtil util = new JSFUtil();
 	
 	
@@ -151,10 +153,12 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 			ExameService.getInstancia().inserir(exame);
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Exame cadastrado com sucesso.", null));
 			
+			this.setCtrMensagem(1);
 			this.popularExames();
 		}
 		catch (Exception e)
 		{
+			this.setCtrMensagem(2);
 			this.setMensagem(e.getMessage());
 		}
 	}
@@ -311,5 +315,13 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 
 	public void setListaExamesSelecionados(List<Exame> listaExamesSelecionados) {
 		this.listaExamesSelecionados = listaExamesSelecionados;
+	}
+
+	public Integer getCtrMensagem() {
+		return ctrMensagem;
+	}
+
+	public void setCtrMensagem(Integer ctrMensagem) {
+		this.ctrMensagem = ctrMensagem;
 	}
 }
