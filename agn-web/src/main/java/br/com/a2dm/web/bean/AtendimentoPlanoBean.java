@@ -1,19 +1,27 @@
 package br.com.a2dm.web.bean;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
-import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.cmn.util.jsf.Variaveis;
+import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.functions.MenuControl;
-import br.com.a2dm.ngc.service.AgendamentoService;
+import br.com.a2dm.ngc.functions.UtilFuncions;
+import br.com.a2dm.ngc.service.ConvenioService;
 
 
 @RequestScoped
 @ManagedBean
-public class AtendimentoPlanoBean extends AbstractBean<Agendamento, AgendamentoService>
+public class AtendimentoPlanoBean extends AbstractBean<Convenio, ConvenioService>
 {	
 	private Date dataInicio;
 	
@@ -21,7 +29,7 @@ public class AtendimentoPlanoBean extends AbstractBean<Agendamento, AgendamentoS
 	
 	public AtendimentoPlanoBean()
 	{
-		super(AgendamentoService.getInstancia());
+		super(ConvenioService.getInstancia());
 		this.ACTION_SEARCH = "atendimentoPlano";
 		this.pageTitle = "Atendimentos por Plano";
 		
@@ -44,6 +52,38 @@ public class AtendimentoPlanoBean extends AbstractBean<Agendamento, AgendamentoS
 		}
 	}
 
+	@Override
+	public void pesquisar(ActionEvent event)
+	{
+		try
+        {
+			if(validarAcesso(Variaveis.ACAO_PESQUISAR))
+       	 	{
+				this.validarPesquisar();
+				
+				Convenio convenio = new Convenio();
+				convenio.setFiltroMap(new HashMap<String, Object>());
+				convenio.getFiltroMap().put("datAgendamentoInicio", dataInicio);
+				convenio.getFiltroMap().put("datAgendamentoFim", dataFim);
+				convenio.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+				convenio.setFlgAtivo("S");
+				
+				List<Convenio> lista = ConvenioService.getInstancia().pesquisarAtendimentoPlano(convenio);
+				this.setSearchResult(lista);
+       	 	}
+        }
+		catch (Exception e)
+	    {
+           	FacesMessage message = new FacesMessage(e.getMessage());
+           	message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            if(e.getMessage() == null)
+            	FacesContext.getCurrentInstance().addMessage("", message);
+            else
+            	FacesContext.getCurrentInstance().addMessage(null, message);
+            this.setSearchResult(new ArrayList<Convenio>());
+	    }
+	}
+	
 	public Date getDataInicio() {
 		return dataInicio;
 	}

@@ -254,6 +254,30 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 		return vo;
 	}
 	
+	public List<Convenio> pesquisarAtendimentoPlano(Convenio vo) throws Exception 
+	{
+		Session sessao = HibernateUtil.getSession();
+		sessao.setFlushMode(FlushMode.COMMIT);
+		try
+		{
+			return this.pesquisarAtendimentoPlano(sessao, vo);
+		}
+		catch (Exception e)
+		{
+			throw e;
+		}
+		finally
+		{
+			sessao.close();
+		}
+	}
+	
+	public List<Convenio> pesquisarAtendimentoPlano(Session sessao, Convenio vo) throws Exception
+	{
+		
+		return null;
+	}
+	
 	@Override
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
