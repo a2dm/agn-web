@@ -38,10 +38,10 @@
 	    	<div class="widget-body clearfix">
 	        	<ul id="myTab" class="nav nav-tabs">
 	           		<li class="active"><a href="#paciente" data-toggle="tab">Paciente</a></li>
-	           		<li><a href="#atendimento" data-toggle="tab">Atendimento</a></li>
 	             	<li><a href="#anamnese" data-toggle="tab">Anamnese</a></li>                                           
 	             	<li><a href="#prescricao" data-toggle="tab">Prescrição</a></li>
 	             	<li><a href="#exame" data-toggle="tab">Exame</a></li>                      
+	           		<li><a href="#financeiro" data-toggle="tab">Financeiro</a></li>
 	           	</ul>
 		  	
 			  	<div id="myTabContent" class="tab-content">
@@ -169,7 +169,29 @@
 					    </div>	
 		          	</div>
 		          
-		          	<div class="tab-pane fade" id="atendimento">            
+			        <div class="tab-pane fade" id="anamnese">            
+						<div class="widget">	                  
+		                    <div class="hero-unit">
+		                      <h:inputTextarea id="txtAnamnese" value="#{crudBean.entity.desAnamnese}"/>
+		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                    </div>
+		                </div>	
+		          	</div>
+		          
+		          	<div class="tab-pane fade" id="prescricao">            
+						<div class="widget">	                  
+		                    <div class="hero-unit">
+		                      <h:inputTextarea id="txtPrescricao" value="#{crudBean.entity.desPrescricao}"/>
+		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                    </div>
+		                </div>
+			        </div>
+			        
+			        <div class="tab-pane fade" id="exame">            
+						<ui:include src="panelExame.xhtml" />
+			        </div>
+			        
+			        <div class="tab-pane fade" id="financeiro">            
 						<div class="box-body">
 						
 							<div class="form-group">
@@ -188,7 +210,7 @@
 						    
 						    <div class="form-group">
 						        <label class="col-md-2 control-label">Valor</label>
-						        <div class="col-md-2" style="margin-top: 5px;">
+						        <div class="col-md-2">
 						         	<h:inputText value="#{crudBean.entity.vlrAgendamentoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
 						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
 						           	</h:inputText>
@@ -197,7 +219,7 @@
 						    
 						    <div class="form-group">
 						        <label class="col-md-2 control-label">Desconto</label>
-						        <div class="col-md-2" style="margin-top: 5px;">
+						        <div class="col-md-2">
 						         	<h:inputText value="#{crudBean.entity.vlrDescontoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
 						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
 						           	</h:inputText>
@@ -232,28 +254,6 @@
 					    
 					    	
 					    </div>
-			        </div>
-			        
-			        <div class="tab-pane fade" id="anamnese">            
-						<div class="widget">	                  
-		                    <div class="hero-unit">
-		                      <h:inputTextarea id="txtAnamnese" value="#{crudBean.entity.desAnamnese}"/>
-		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres)</label>                      
-		                    </div>
-		                </div>	
-		          	</div>
-		          
-		          	<div class="tab-pane fade" id="prescricao">            
-						<div class="widget">	                  
-		                    <div class="hero-unit">
-		                      <h:inputTextarea id="txtPrescricao" value="#{crudBean.entity.desPrescricao}"/>
-		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres)</label>                      
-		                    </div>
-		                </div>
-			        </div>
-			        
-			        <div class="tab-pane fade" id="exame">            
-						<ui:include src="panelExame.xhtml" />
 			        </div>
 		          
 		        </div>

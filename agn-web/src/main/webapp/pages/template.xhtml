@@ -98,10 +98,6 @@
 				            </li>
 			              
 			              	<li>
-				            	<p><i class="fa fa-fire text-warning"></i> <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Envie Sua Sugestão"/></p>
-				            </li>
-			              
-			              	<li>
 				                <div class="demo-btn-group clearfix" align="center">
 				                  <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Logout"/>
 				                </div>
@@ -162,6 +158,8 @@
 			                <i class="fa fa-file-text-o"></i>Relatórios</a>
 			                <ul>
 			              	 <li><h:commandLink action="#{atendimentoPlanoBean.preparaPesquisar}">Atendimentos por Plano</h:commandLink></li>
+			              	 <li><h:commandLink action="#{atendimentoServicoBean.preparaPesquisar}">Atendimentos por Serviço</h:commandLink></li>
+			              	 <li><h:commandLink action="#{fichaAtendimentoBean.preparaPesquisar}">Ficha de Atendimento</h:commandLink></li>
 			              </ul>
 			            </li>
 			            <li class='#{sessionScope.flgMenuCfg}'>

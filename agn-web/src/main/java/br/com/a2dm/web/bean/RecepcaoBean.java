@@ -112,6 +112,8 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 				{
 					AgendamentoService.getInstancia().marcarPresenca(this.getEntity());
 					
+					this.completarPosPesquisar();
+					
 					FacesMessage message = new FacesMessage("O agendamento foi marcado como presente!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
 					FacesContext.getCurrentInstance().addMessage(null, message);
@@ -139,7 +141,7 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 				{
 					AgendamentoService.getInstancia().atenderPaciente(this.getEntity());
 					
-					FacesMessage message = new FacesMessage("O agendamento foi marcado como presente!");
+					FacesMessage message = new FacesMessage("O paciente foi colocado em atendimento!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
 					FacesContext.getCurrentInstance().addMessage(null, message);
 				}

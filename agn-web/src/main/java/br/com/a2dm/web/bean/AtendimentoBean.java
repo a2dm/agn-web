@@ -214,6 +214,8 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 			this.validarAtendimento();			
 			AgendamentoService.getInstancia().concluirAtendimento(this.getEntity(), this.getListaExamesSelecionados());
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agendamento concluído com sucesso.", null));
+			
+			this.preparaAtendimento();
 		}
 		catch (Exception e)
 		{

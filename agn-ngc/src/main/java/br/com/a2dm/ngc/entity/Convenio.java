@@ -14,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -72,8 +73,14 @@ public class Convenio implements Serializable
 	@JoinColumn(name = "id_usuario_alt", insertable = false, updatable = false)
 	private Usuario usuarioAlt;
 	
+	@OneToMany(mappedBy = "convenio", fetch = FetchType.LAZY)
+	private List<Agendamento> listaAgendamento;
+	
 	@Transient
 	private List<Servico> listaServico;
+	
+	@Transient
+	private Long countAgendamento;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
@@ -172,5 +179,21 @@ public class Convenio implements Serializable
 
 	public void setFiltroMap(HashMap<String, Object> filtroMap) {
 		this.filtroMap = filtroMap;
+	}
+
+	public List<Agendamento> getListaAgendamento() {
+		return listaAgendamento;
+	}
+
+	public void setListaAgendamento(List<Agendamento> listaAgendamento) {
+		this.listaAgendamento = listaAgendamento;
+	}
+
+	public Long getCountAgendamento() {
+		return countAgendamento;
+	}
+
+	public void setCountAgendamento(Long countAgendamento) {
+		this.countAgendamento = countAgendamento;
 	}
 }

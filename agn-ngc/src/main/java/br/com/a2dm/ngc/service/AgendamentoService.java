@@ -86,7 +86,9 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_DATA_FINAL,"filtroMap.datAgendamentoFim");		
 		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
-		adicionarFiltro("flgConfirmado", RestritorHb.RESTRITOR_EQ, "flgConfirmado");	
+		adicionarFiltro("flgConfirmado", RestritorHb.RESTRITOR_EQ, "flgConfirmado");
+		adicionarFiltro("cpfPaciente", RestritorHb.RESTRITOR_EQ, "cpfPaciente");
+		adicionarFiltro("nomPaciente", RestritorHb.RESTRITOR_LIKE, "nomPaciente");
 	}
 	
 	@Override
@@ -356,7 +358,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)));
 		vo.setHorPresenca(new SimpleDateFormat("HH:mm").format(new Date()));
 		
-		super.alterar(sessao, vo);
+		sessao.merge(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
 		AgendamentoLog log = new AgendamentoLog();
@@ -423,7 +425,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		
 		//ALTERAR SITUACAO DO AGENDAMENTO PARA EM ATENDIMENTO
 		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
-		super.alterar(sessao, vo);
+		sessao.merge(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
 		AgendamentoLog log = new AgendamentoLog();
@@ -479,7 +481,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setCpfPaciente(paciente.getCpfPaciente());
 		vo.setTelPaciente(paciente.getTelPaciente());
 		vo.setEmlPaciente(paciente.getEmlPaciente());
-		super.alterar(vo);
+		sessao.merge(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
 		AgendamentoLog log = new AgendamentoLog();
@@ -607,6 +609,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	{
 		criteria.addOrder(Order.asc("datAgendamento"));
 		criteria.addOrder(Order.asc("horInicio"));
+		criteria.addOrder(Order.asc("nomPaciente"));
 	}
 	
 	@Override

@@ -11,7 +11,7 @@
 				xmlns:t="http://myfaces.apache.org/tomahawk"
 				template="crud_template.xhtml">
 				
-	<ui:param name="crudBean" value="#{atendimentoPlanoBean}" />
+	<ui:param name="crudBean" value="#{fichaAtendimentoBean}" />
 	
 	<ui:define name="saveStateObjectsDefined">
 	</ui:define>
@@ -25,19 +25,22 @@
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca"> 
 		       <div class="form-group">
-		          <label class="col-md-2 control-label">Período *</label>
-		          <div class="col-md-6">
-		          	<rich:calendar value="#{crudBean.dataInicio}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="fc-calendar" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" />
-		          	a 
-		          	<rich:calendar value="#{crudBean.dataFim}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="fc-calendar" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" />
-		          
-		          	<h:outputText value="  "/>
-		          
-		          	<a4j:commandButton image="../img/visualizar.png" id="consultar" style="border:none; width: 40px; height: 23px; vertical-align: middle; padding-left:15px;" title="PESQUISAR" actionListener="#{crudBean.pesquisar}" render="pnFrm, panelTitle, comentTela">
-						<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
-					</a4j:commandButton>
+		          <label class="col-md-2 control-label">Cpf *</label>
+		          <div class="col-md-2" style="width: 200px;">
+		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" maxlength="14" id="cpf">
+		           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>
+		           	</h:inputText>		           		
 		          </div>
-		       </div>		       
+		       </div>
+		       
+		       <div class="form-group">
+		          <label class="col-md-2 control-label">Nome *</label>
+		          <div class="col-md-6">
+		          	<h:inputText value="#{crudBean.searchObject.nomPaciente}" styleClass="form-control" maxlength="200" id="nom">
+		           		<f:passThroughAttribute name="placeholder" value="Nome do Paciente"/>
+		           	</h:inputText>		           		
+		          </div>
+		       </div>
 	       </f:subview>
 		</h:panelGroup>
 	</ui:define>
@@ -55,25 +58,48 @@
 							  rendered="#{not empty crudBean.searchResult and crudBean.searching}">						     
 						<f:facet name="header">
 							<rich:columnGroup>
+								<rich:column style="width: 10%; text-align: center;">
+									Data
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Início
+								</rich:column>
+								<rich:column style="width: 10%; text-align: center;">
+									Fim
+								</rich:column>
 								<rich:column style="text-align: center;">
-									Convênio
+									Nome
 								</rich:column>
 								<rich:column style="width: 12%; text-align: center;">
-									Quantidade
-								</rich:column>								
+									Cpf
+								</rich:column>
+								<rich:column style="width: 28%; text-align: center;">
+									Serviço
+								</rich:column>
+								<rich:column style="width: 3%; text-align: center;"/>									
 							</rich:columnGroup>
 						</f:facet>
-						<rich:column style="text-align: left;">
-							<h:outputText value="#{rst.desConvenio}" />
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.datAgendamento}" />
 						</rich:column>
 						<rich:column style="text-align: center;">
-							<h:outputText value="#{rst.countAgendamento}" />
+							<h:outputText value="#{rst.horInicio}" />
 						</rich:column>
-						
-						<f:facet name="footer">
-							<rich:column>Total</rich:column>
-							<rich:column> <h:outputText value="#{crudBean.total}"/> </rich:column>
-						</f:facet>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.horFim}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.nomPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							<h:outputText value="#{rst.cpfPaciente}" />
+						</rich:column>
+						<rich:column style="text-align: left;">
+							<h:outputText value="#{rst.servico.desServico}" />
+						</rich:column>
+						<rich:column style="text-align: center;">
+							X
+						</rich:column>
 					</rich:dataTable>
 				</div>
 				<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.searchResult and crudBean.searching}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.searchResult.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
@@ -86,6 +112,8 @@
 		</h:panelGrid>
 	</ui:define>
 	
-	<ui:define name="buttonItens" style="height:100%; width:100%;"/>
+	<ui:define name="buttonItens" style="height:100%; width:100%;">
+		<a4j:commandButton id="pesquisar" styleClass="btn btn-primary" value="Pesquisar (P)" accesskey="P" actionListener="#{crudBean.pesquisar}" render="tblResult"/>
+	</ui:define>
 			
 </ui:composition>
