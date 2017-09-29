@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -152,6 +154,9 @@ public class Agendamento implements Serializable
 	
 	@Column(name = "des_anamnese")
 	private String desPrescricao;
+	
+	@OneToMany(mappedBy = "agendamento", fetch = FetchType.LAZY)
+	private List<AgendamentoExame> listaAgendamentoExame;
 	
 	@Transient
 	private String vlrAgendamentoFormatado;
@@ -464,5 +469,13 @@ public class Agendamento implements Serializable
 
 	public void setDesPrescricao(String desPrescricao) {
 		this.desPrescricao = desPrescricao;
+	}
+
+	public List<AgendamentoExame> getListaAgendamentoExame() {
+		return listaAgendamentoExame;
+	}
+
+	public void setListaAgendamentoExame(List<AgendamentoExame> listaAgendamentoExame) {
+		this.listaAgendamentoExame = listaAgendamentoExame;
 	}
 }

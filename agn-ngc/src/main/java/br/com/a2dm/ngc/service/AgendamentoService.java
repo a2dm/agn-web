@@ -51,6 +51,10 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	
 	public static final int JOIN_PACIENTE_ESTADO = 32;
 	
+	public static final int JOIN_AGENDAMENTO_EXAME = 64;
+	
+	public static final int JOIN_EXAME = 128;
+	
 	private JSFUtil util = new JSFUtil();	
 	
 	//SITUACOES DO AGENDAMENTO
@@ -598,6 +602,16 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 			if ((join & JOIN_PACIENTE_ESTADO) != 0)
 		    {
 				criteria.createAlias("paciente.estado", "estado", JoinType.INNER_JOIN);
+		    }
+	    }
+		
+		if ((join & JOIN_AGENDAMENTO_EXAME) != 0)
+	    {
+			criteria.createAlias("listaAgendamentoExame", "listaAgendamentoExame", JoinType.LEFT_OUTER_JOIN);
+			
+			if ((join & JOIN_EXAME) != 0)
+		    {
+				criteria.createAlias("listaAgendamentoExame.exame", "exame", JoinType.LEFT_OUTER_JOIN);
 		    }
 	    }
 		

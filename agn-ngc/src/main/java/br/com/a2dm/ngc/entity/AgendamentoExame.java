@@ -5,9 +5,12 @@ import java.math.BigInteger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -35,9 +38,17 @@ public class AgendamentoExame implements Serializable
 	
 	@Column(name = "id_exame")
 	private BigInteger idExame;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_exame", insertable = false, updatable = false)
+	private Exame exame;
 
 	@Column(name = "id_agendamento")
 	private BigInteger idAgendamento;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_agendamento", insertable = false, updatable = false)
+	private Agendamento agendamento;
 	
 	
 	public BigInteger getIdAgendamentoExame() {
@@ -70,5 +81,21 @@ public class AgendamentoExame implements Serializable
 
 	public void setIdAgendamento(BigInteger idAgendamento) {
 		this.idAgendamento = idAgendamento;
+	}
+
+	public Exame getExame() {
+		return exame;
+	}
+
+	public void setExame(Exame exame) {
+		this.exame = exame;
+	}
+
+	public Agendamento getAgendamento() {
+		return agendamento;
+	}
+
+	public void setAgendamento(Agendamento agendamento) {
+		this.agendamento = agendamento;
 	}
 }

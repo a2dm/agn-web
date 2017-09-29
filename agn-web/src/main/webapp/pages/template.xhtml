@@ -50,7 +50,7 @@
 		
 		<a4j:status id="loading" onstart="#{rich:component('panel_loading')}.show();" onstop="#{rich:component('panel_loading')}.hide();" />
 	
-		<h:form class="form-horizontal no-margin" id="formulario">
+		<h:form class="form-horizontal no-margin" id="formulario" onkeypress="return event.keyCode != 13">
 			<header>
 		      <h:commandLink action="principal" styleClass="logo">
 		        <img src="../img/logo.png" width="220px" height="40px" alt="Logo"/>
