@@ -45,7 +45,7 @@
 		       </div>
 		       		       
 		       <div class="form-group">
-		          <label class="col-md-2 control-label">Cpf *</label>
+		          <label class="col-md-2 control-label">CPF *</label>
 		          <div class="col-md-2" style="width: 200px;">
 		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" maxlength="14" id="cpf">
 		           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>
@@ -66,9 +66,10 @@
                       <li><a href="#endereco" data-toggle="tab">Endereço</a></li>                      
                       <li>
                       	<h:panelGroup layout="block" rendered="#{crudBean.viewing}">
-                      	<a href="#auditoria" data-toggle="tab">Auditoria</a>
+                      		<a href="#auditoria" data-toggle="tab">Auditoria</a>
                       	</h:panelGroup>
-                      </li>                                           
+                      </li>
+                      <li><a href="#atendimento" data-toggle="tab">Atendimentos</a></li>                                        
                     </ul>
                     
                     <div id="myTabContent" class="tab-content">
@@ -97,7 +98,7 @@
 				       </div>
 				       
 				       <div class="form-group">
-				          <label class="col-md-2 control-label">Cpf *</label>
+				          <label class="col-md-2 control-label">CPF *</label>
 				          <div class="col-md-2" style="width: 200px;">
 				          	<h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeyup="javascript: mascara(this, cpf_mask);" maxlength="14" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf" readonly="#{crudBean.viewing}"/>				           		
 				          </div>
@@ -149,6 +150,10 @@
                       
                       <div class="tab-pane fade" id="auditoria">
                       	<ui:include src="panelAuditoria.xhtml" />
+                      </div>
+                       
+                      <div class="tab-pane fade" id="atendimento">
+                      	<ui:include src="panelPacienteAtendimento.xhtml" />
                       </div>
                                    
                     </div>

@@ -196,8 +196,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		agendamento.setIdAgendamento(vo.getIdAgendamento());
 		agendamento = this.get(agendamento, 0);
 		
-		agendamento.setVlrAgendamento(vo.getVlrAgendamento());
-		agendamento.setVlrDesconto(vo.getVlrDesconto());
+		agendamento.setVlrAgendamento(new Double(vo.getVlrAgendamentoFormatado().replace(".", "").replace(",", ".")));
+		agendamento.setVlrDesconto(new Double(vo.getVlrDescontoFormatado().replace(".", "").replace(",", ".")));
 		agendamento.setDesAnamnese(vo.getDesAnamnese());
 		agendamento.setDesPrescricao(vo.getDesPrescricao());
 		

@@ -210,20 +210,37 @@
 						    
 						    <div class="form-group">
 						        <label class="col-md-2 control-label">Valor</label>
-						        <div class="col-md-2">
-						         	<h:inputText value="#{crudBean.entity.vlrAgendamentoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
-						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
-						           	</h:inputText>
-						        </div>
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'P'}">
+							        <div class="col-md-2">
+							         	<h:inputText value="#{crudBean.entity.vlrAgendamentoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
+							           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+							           	</h:inputText>
+							        </div>
+						        </h:panelGroup>
+						        
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'C'}">
+							        <div class="col-md-6" style="margin-top: 5px;">
+							        	<h:outputText value="#{crudBean.entity.vlrAgendamentoFormatado}"/>
+							        </div>
+						        </h:panelGroup>
 						    </div>
 						    
 						    <div class="form-group">
 						        <label class="col-md-2 control-label">Desconto</label>
-						        <div class="col-md-2">
-						         	<h:inputText value="#{crudBean.entity.vlrDescontoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
-						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
-						           	</h:inputText>
-						        </div>
+						        
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'P'}">
+							        <div class="col-md-2">
+							         	<h:inputText value="#{crudBean.entity.vlrDescontoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);" rendered="#{crudBean.entity.tpAgendamento == 'P'}">
+							           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+							           	</h:inputText>
+							        </div>
+						        </h:panelGroup>
+						        
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'C'}">
+							        <div class="col-md-6" style="margin-top: 5px;">
+							           	<h:outputText value="#{crudBean.entity.vlrDescontoFormatado}" rendered="#{crudBean.entity.tpAgendamento == 'C'}"/>
+						           	</div>
+					           	</h:panelGroup>
 						    </div>
 						    
 						    <div class="form-group">

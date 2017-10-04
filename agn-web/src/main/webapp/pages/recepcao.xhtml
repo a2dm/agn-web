@@ -183,7 +183,7 @@
 					</rich:column>
 					
 					<rich:column style="width: 3%;text-align: center;">												
-						<a4j:commandButton image="../img/vincular.png" style="border:none; width: 20px; height: 20px;" title="VINCULAR PACIENTE" render="panVincularPaciente" action="#{crudBean.preparaVincularPaciente}" oncomplete="#{rich:component('panVincularPaciente')}.show();" rendered="#{rst.idSituacao == 2 and rst.idPaciente == null}">
+						<a4j:commandButton image="../img/vincular.png" style="border:none; width: 20px; height: 20px;" title="PRIMEIRO ATENDIMENTO" render="panVincularPaciente" action="#{crudBean.preparaVincularPaciente}" oncomplete="#{rich:component('panVincularPaciente')}.show();" rendered="#{rst.idSituacao == 2 and rst.idPaciente == null}">
 							<f:setPropertyActionListener target="#{crudBean.entity}" value="#{rst}" />
 						</a4j:commandButton>
 					</rich:column>

@@ -230,14 +230,16 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	
 	private void validarAtendimento() throws Exception
 	{
-		if(this.getEntity().getVlrAgendamentoFormatado() == null
-				|| this.getEntity().getVlrAgendamentoFormatado().trim().equals(""))
+		if(this.getEntity().getTpAgendamento().equals("P") 
+				&& (this.getEntity().getVlrAgendamentoFormatado() == null
+					|| this.getEntity().getVlrAgendamentoFormatado().trim().equals("")))
 		{
 			throw new Exception("O campo Valor é obrigatório!");
 		}
 		
-		if(this.getEntity().getVlrDescontoFormatado() == null
-				|| this.getEntity().getVlrDescontoFormatado().trim().equals(""))
+		if(this.getEntity().getTpAgendamento().equals("P") 
+				&& (this.getEntity().getVlrDescontoFormatado() == null
+					|| this.getEntity().getVlrDescontoFormatado().trim().equals("")))
 		{
 			throw new Exception("O campo Desconto é obrigatório!");
 		}
