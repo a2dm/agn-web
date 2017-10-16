@@ -15,6 +15,9 @@
 	
 	<ui:define name="saveStateObjectsDefined">		
 		<t:saveState value="#{crudBean.listaEstado}" />
+		<t:saveState value="#{crudBean.listaPacienteAtendimento}" />
+		<t:saveState value="#{crudBean.datInicioAtendimento}" />
+		<t:saveState value="#{crudBean.listaExamesPaciente}" />
 	</ui:define>
 	
 	<ui:define name="comentTela">
@@ -230,6 +233,12 @@
 				</div>
 			</f:subview>
 		</h:panelGrid>
+	</ui:define>
+	
+	<ui:define name="modal">
+		<rich:popupPanel id="panVisualizarAtendimento" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="480" resizeable="false" onmaskclick="#{rich:component('panVisualizarAtendimento')}.hide()">
+			<ui:include src="panelVisualizarAtendimento.xhtml" />
+		</rich:popupPanel>
 	</ui:define>
 			
 </ui:composition>

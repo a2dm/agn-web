@@ -621,9 +621,19 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	@Override
 	protected void setarOrdenacao(Criteria criteria, Agendamento vo, int join)
 	{
-		criteria.addOrder(Order.asc("datAgendamento"));
-		criteria.addOrder(Order.asc("horInicio"));
-		criteria.addOrder(Order.asc("nomPaciente"));
+		if(vo.getFiltroMap() != null
+				&& vo.getFiltroMap().get("orderHistorico") != null
+				&& ((Boolean) vo.getFiltroMap().get("orderHistorico")).booleanValue())
+		{
+			criteria.addOrder(Order.desc("datAgendamento"));
+			criteria.addOrder(Order.desc("horInicio"));
+		}
+		else
+		{
+			criteria.addOrder(Order.asc("datAgendamento"));
+			criteria.addOrder(Order.asc("horInicio"));
+			criteria.addOrder(Order.asc("nomPaciente"));
+		}
 	}
 	
 	@Override
