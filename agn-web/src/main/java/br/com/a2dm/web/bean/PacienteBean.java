@@ -1,6 +1,5 @@
 package br.com.a2dm.web.bean;
 
-import java.io.IOException;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -12,14 +11,12 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Estado;
 import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
-import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.AgendamentoExame;
 import br.com.a2dm.ngc.entity.Exame;
@@ -258,27 +255,27 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 			 | PacienteService.JOIN_ESTADO;
 	}
 	
-	@Override
-	protected boolean validarAcesso(String acao)
-	{
-		boolean temAcesso = true;
-
-		if (!ValidaPermissao.getInstancia().verificaPermissao("paciente", acao))
-		{
-			temAcesso = false;
-			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-			try
-			{
-				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		return temAcesso;
-	}
+//	@Override
+//	protected boolean validarAcesso(String acao)
+//	{
+//		boolean temAcesso = true;
+//
+//		if (!ValidaPermissao.getInstancia().verificaPermissao("paciente", acao))
+//		{
+//			temAcesso = false;
+//			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//			try
+//			{
+//				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return temAcesso;
+//	}
 	
 	@Override
 	protected void validarInserir() throws Exception {

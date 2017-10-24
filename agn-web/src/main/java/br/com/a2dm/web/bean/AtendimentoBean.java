@@ -337,6 +337,28 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 			throw new Exception("É necessário informar a Prescrição do paciente para concluir o atendimento!");
 		}
 	}
+	
+//	@Override
+//	protected boolean validarAcesso(String acao)
+//	{
+//		boolean temAcesso = true;
+//
+//		if (!ValidaPermissao.getInstancia().verificaPermissao("atendimento", acao))
+//		{
+//			temAcesso = false;
+//			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//			try
+//			{
+//				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return temAcesso;
+//	}
 
 	public String getActiveTab() {
 		return activeTab;

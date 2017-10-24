@@ -359,6 +359,28 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 		this.setPresencaOrder(presencaOrder.equals(SortOrder.ascending) ? SortOrder.descending : SortOrder.ascending);
 	}
 	
+//	@Override
+//	protected boolean validarAcesso(String acao)
+//	{
+//		boolean temAcesso = true;
+//
+//		if (!ValidaPermissao.getInstancia().verificaPermissao("recepcao", acao))
+//		{
+//			temAcesso = false;
+//			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//			try
+//			{
+//				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return temAcesso;
+//	}
+	
 	public Date getDataInicio() {
 		return dataInicio;
 	}

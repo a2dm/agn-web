@@ -1,5 +1,6 @@
 package br.com.a2dm.web.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,10 +10,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.ibm.icu.text.SimpleDateFormat;
 
+import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
+import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.vo.AtestadoVo;
 import br.com.a2dm.ngc.functions.MenuControl;
@@ -26,13 +30,15 @@ public class AtestadoBean extends AbstractBean<Paciente, PacienteService>
 {
 	private AtestadoVo atestado;
 	
+	private JSFUtil util = new JSFUtil();
+	
 	public AtestadoBean()
 	{
 		super(PacienteService.getInstancia());
 		this.ACTION_SEARCH = "atestado";
 		this.pageTitle = "Atestado";
 		
-		MenuControl.ativarMenu("flgMenuAts");		
+		MenuControl.ativarMenu("flgMenuAts");	
 	}
 	
 	public void gerar()
@@ -68,6 +74,32 @@ public class AtestadoBean extends AbstractBean<Paciente, PacienteService>
 		parameters.put("DATA_ATESTADO", this.getAtestado().getDatAtestado() == null ? "" : new SimpleDateFormat("dd/MM/yyyy").format(this.getAtestado().getDatAtestado()));
 		parameters.put("DIAS", this.getAtestado().getQtdDias());
 		parameters.put("PROFISSIONAL", "Dr. " + UtilFuncions.getClinicaProfissionalSession().getUsuario().getNome());
+	}
+	
+	@Override
+	protected boolean validarAcesso(String acao)
+	{
+		boolean temAcesso = true;
+
+		try
+		{
+			if (util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
+					&& util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
+			{
+				temAcesso = false;
+				HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();				
+				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");				
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return temAcesso;
 	}
 	
 	@Override

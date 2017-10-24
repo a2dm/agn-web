@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Usuario;
+import br.com.a2dm.cmn.service.GrupoService;
 
 /**
  * @author Carlos Diego
@@ -34,11 +35,21 @@ public class AutorizacaoFilter implements Filter
 	        		&& ( !(req).getRequestURI().contains(".ecss.jsf"))
 	        		&& ( !(req).getRequestURI().contains(".png.jsf"))
 	        		&&( !(req).getRequestURI().equals("/agn-seg/"))  )
-	        {	        		        	
+	        {
 	        	((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/pages/login.jsf");
 	        }
 	        else
 	        {
+	        	if (usuario != null
+	        			&& usuario.getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
+						&& usuario.getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
+				{
+	        		if((req).getRequestURI().contains("/atestado.jsf")
+	        				|| (req).getRequestURI().contains("/atendimento.jsf"))
+	        		{
+	        			((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/pages/acessoNegado.jsf");
+	        		}
+				}
 	            chain.doFilter(request, response);	              
 	        }
 	}
