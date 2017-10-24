@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
@@ -15,10 +16,12 @@ import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
 import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.ngc.entity.AgendamentoExame;
 import br.com.a2dm.ngc.entity.Exame;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
+import br.com.a2dm.ngc.service.AgendamentoExameService;
 import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.ExameService;
 import br.com.a2dm.ngc.service.log.AgendamentoLogService;
@@ -45,6 +48,12 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	private String mensagem;
 	
 	private Integer ctrMensagem;
+	
+	private List<Agendamento> listaHistoricoAtendimento;
+	
+	private Agendamento agendamento;
+	
+	private List<Exame> listaExamesPaciente;
 	
 	private JSFUtil util = new JSFUtil();
 	
@@ -91,6 +100,7 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 					
 					this.setListaExamesSelecionados(new ArrayList<Exame>());
 					this.popularExames();
+					this.popularHistoricoAtendimento();
 					
 					setCurrentState(STATE_INSERT);
 				}
@@ -129,6 +139,22 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		listaAll.addAll(lista);
 		
 		this.setListaExames(listaAll);
+	}
+	
+	private void popularHistoricoAtendimento() throws Exception
+	{
+		Agendamento agendamento = new Agendamento();
+		agendamento.setFiltroMap(new HashMap<String, Object>());
+		agendamento.getFiltroMap().put("orderHistorico", true);
+		agendamento.setFlgAtivo("S");
+		agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+		agendamento.setIdPaciente(this.getEntity().getIdPaciente());
+		
+		List<Agendamento> lista = AgendamentoService.getInstancia().pesquisar(agendamento, AgendamentoService.JOIN_SERVICO
+																						 | AgendamentoService.JOIN_CONVENIO
+																						 | AgendamentoService.JOIN_PACIENTE);
+		
+		this.setListaHistoricoAtendimento(lista);
 	}
 	
 	public void preparaInserirExame()
@@ -216,6 +242,61 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agendamento concluído com sucesso.", null));
 			
 			this.preparaAtendimento();
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
+	public void visualizarAtendimento()
+	{
+		try
+		{
+			if(this.getAgendamento() != null)
+			{
+				this.getAgendamento().setVlrAgendamentoFormatado(new DecimalFormat("#,##0.00").format(this.getAgendamento().getVlrAgendamento() == null ? this.getAgendamento().getServico().getVlrServico() : this.getAgendamento().getVlrAgendamento()));
+				this.getAgendamento().setVlrDescontoFormatado(new DecimalFormat("#,##0.00").format(this.getAgendamento().getVlrDesconto() == null ? 0 : this.getAgendamento().getVlrDesconto()));
+				
+				AgendamentoLog agendamentoLog = new AgendamentoLog();
+				agendamentoLog.setIdAgendamento(this.getAgendamento().getIdAgendamento());
+				agendamentoLog.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
+				
+				agendamentoLog = AgendamentoLogService.getInstancia().get(agendamentoLog, 0);
+				
+				if(agendamentoLog != null)
+				{
+					this.setDatInicioAtendimento(agendamentoLog.getDatCadastro());
+				}
+				
+				//POPULANDO LISTA DE EXAMES
+				AgendamentoExame agendamentoExame = new AgendamentoExame();
+				agendamentoExame.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+				agendamentoExame.setIdAgendamento(this.getAgendamento().getIdAgendamento());
+				
+				List<AgendamentoExame> lista = AgendamentoExameService.getInstancia().pesquisar(agendamentoExame, AgendamentoExameService.JOIN_EXAME);
+				List<Exame> listaExamesPaciente = null;
+				
+				if(lista != null
+						&& lista.size() > 0)
+				{
+					listaExamesPaciente = new ArrayList<Exame>();
+					
+					for (AgendamentoExame obj : lista)
+					{
+						Exame exame = new Exame();
+						JSFUtil.copiarPropriedades(obj.getExame(), exame);
+						listaExamesPaciente.add(exame);
+					}
+				}
+				
+				this.setListaExamesPaciente(listaExamesPaciente);
+			}
 		}
 		catch (Exception e)
 		{
@@ -327,5 +408,29 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 
 	public void setCtrMensagem(Integer ctrMensagem) {
 		this.ctrMensagem = ctrMensagem;
+	}
+
+	public List<Agendamento> getListaHistoricoAtendimento() {
+		return listaHistoricoAtendimento;
+	}
+
+	public void setListaHistoricoAtendimento(List<Agendamento> listaHistoricoAtendimento) {
+		this.listaHistoricoAtendimento = listaHistoricoAtendimento;
+	}
+
+	public Agendamento getAgendamento() {
+		return agendamento;
+	}
+
+	public void setAgendamento(Agendamento agendamento) {
+		this.agendamento = agendamento;
+	}
+
+	public List<Exame> getListaExamesPaciente() {
+		return listaExamesPaciente;
+	}
+
+	public void setListaExamesPaciente(List<Exame> listaExamesPaciente) {
+		this.listaExamesPaciente = listaExamesPaciente;
 	}
 }

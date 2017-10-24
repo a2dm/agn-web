@@ -59,8 +59,11 @@
 						<h:outputText value="Convênio" rendered="#{rst.tpAgendamento == 'C'}"/>
 						<h:outputText value="Particular" rendered="#{rst.tpAgendamento == 'P'}"/>
 					</rich:column>
-					<rich:column style="text-align: left;">
-						<h:outputText value="#{rst.convenio.desConvenio}" />
+					<rich:column style="text-align: left;"  rendered="#{rst.convenio.desConvenio != null}">
+						<h:outputText value="#{rst.convenio.desConvenio}"/>
+					</rich:column>
+					<rich:column style="text-align: center;"  rendered="#{rst.convenio.desConvenio == null}">
+						<h:outputText value="-"/>
 					</rich:column>
 					<rich:column style="text-align: center;">												
 						<a4j:commandButton image="../img/report.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR ATENDIMENTO" render="panVisualizarAtendimento" action="#{crudBean.visualizarAtendimento}" oncomplete="#{rich:component('panVisualizarAtendimento')}.show();">
