@@ -44,8 +44,15 @@ public class AutorizacaoFilter implements Filter
 	        			&& usuario.getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
 						&& usuario.getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
 				{
+	        		//URLS BLOQUEADAS PARA O PERFIL DE RECEPCIONISTA
 	        		if((req).getRequestURI().contains("/atestado.jsf")
-	        				|| (req).getRequestURI().contains("/atendimento.jsf"))
+	        				|| (req).getRequestURI().contains("/atendimento.jsf")
+	        				|| (req).getRequestURI().contains("/recepcionista.jsf")
+	        				|| (req).getRequestURI().contains("/clinica.jsf")
+	        				|| (req).getRequestURI().contains("/horario.jsf")
+	        				|| (req).getRequestURI().contains("/convenio.jsf")
+	        				|| (req).getRequestURI().contains("/servico.jsf")
+	        				|| (req).getRequestURI().contains("/sugestao.jsf"))
 	        		{
 	        			((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/pages/acessoNegado.jsf");
 	        		}
