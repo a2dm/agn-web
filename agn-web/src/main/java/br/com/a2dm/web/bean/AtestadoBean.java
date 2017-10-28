@@ -77,6 +77,12 @@ public class AtestadoBean extends AbstractBean<Paciente, PacienteService>
 	}
 	
 	@Override
+	public String getFullTitle()
+	{
+		return this.pageTitle;
+	}
+	
+	@Override
 	protected boolean validarAcesso(String acao)
 	{
 		boolean temAcesso = true;

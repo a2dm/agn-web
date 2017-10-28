@@ -6,11 +6,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+
+import com.ibm.icu.text.SimpleDateFormat;
 
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
@@ -37,6 +41,8 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	
 	private String desPrescricao;
 	
+	private String strExame;
+	
 	private List<Exame> listaExames;
 	
 	private List<Exame> listaExamesSelecionados;
@@ -53,7 +59,7 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	
 	private Agendamento agendamento;
 	
-	private List<Exame> listaExamesPaciente;
+	private List<Exame> listaExamesPaciente;	
 	
 	private JSFUtil util = new JSFUtil();
 	
@@ -237,14 +243,19 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	{
 		try
 		{
+			this.setMensagem(null);
 			this.validarAtendimento();			
 			AgendamentoService.getInstancia().concluirAtendimento(this.getEntity(), this.getListaExamesSelecionados());
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Agendamento concluído com sucesso.", null));
+			this.setMensagem("Agendamento concluído com sucesso.");
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, mensagem, null));			
 			
+			this.setAgendamento(this.getEntity());
+			this.montarStringExame();
 			this.preparaAtendimento();
 		}
 		catch (Exception e)
 		{
+			this.setMensagem(null);
 			FacesMessage message = new FacesMessage(e.getMessage());
 			message.setSeverity(FacesMessage.SEVERITY_ERROR);
 			if(e.getMessage() == null)
@@ -252,6 +263,21 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 			else
 				FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+	
+	private void montarStringExame()
+	{
+		String strExame = "";
+		
+		if(this.getListaExamesSelecionados() != null)
+		{
+			for (Exame exame : this.getListaExamesSelecionados())
+			{
+				strExame += exame.getDesExame() + " ; ";
+			}
+		}
+		
+		this.setStrExame(strExame);
 	}
 	
 	public void visualizarAtendimento()
@@ -309,6 +335,21 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		}
 	}
 	
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void configuraRelatorio(Map parameters, HttpServletRequest request) throws Exception
+	{
+		this.REPORT_NAME = "fichaAtendimentoReport";
+		
+		parameters.put("NOME_PACIENTE", this.getAgendamento().getPaciente().getNomPaciente() == null ? "" : this.getAgendamento().getPaciente().getNomPaciente());
+		parameters.put("CPF_PACIENTE", this.getAgendamento().getPaciente().getCpfPaciente() == null ? "" : this.getAgendamento().getPaciente().getCpfPaciente());
+		parameters.put("DATA_NASCIMENTO", this.getAgendamento().getPaciente().getDatNascimento() == null ? "" : new SimpleDateFormat("dd/MM/yyyy").format(this.getAgendamento().getPaciente().getDatNascimento()));
+		parameters.put("SEX_PACIENTE", this.getAgendamento().getPaciente().getSexPaciente() == "M" ? "Masculino" : "Feminino");
+		parameters.put("ANAMNESE", this.getAgendamento().getDesAnamnese() == null ? "" : this.getAgendamento().getDesAnamnese());
+		parameters.put("PRESCRICAO", this.getAgendamento().getDesPrescricao() == null ? "" : this.getAgendamento().getDesPrescricao());
+		parameters.put("EXAME", this.getStrExame());
+	}
+	
 	private void validarAtendimento() throws Exception
 	{
 		if(this.getEntity().getTpAgendamento().equals("P") 
@@ -336,6 +377,23 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		{
 			throw new Exception("É necessário informar a Prescrição do paciente para concluir o atendimento!");
 		}
+	}
+	
+	@Override
+	@SuppressWarnings("rawtypes")
+	public List getListaReport()
+	{
+		//RETORNANDO UM ARRAYLIST PARA A LISTA NAO RETORNAR VAZIA
+		List<Agendamento> lista = new ArrayList<Agendamento>();
+		lista.add(this.getEntity());
+		
+		return lista;
+	}
+	
+	@Override
+	public String getFullTitle()
+	{
+		return this.pageTitle;
 	}
 	
 //	@Override
@@ -454,5 +512,13 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 
 	public void setListaExamesPaciente(List<Exame> listaExamesPaciente) {
 		this.listaExamesPaciente = listaExamesPaciente;
+	}
+
+	public String getStrExame() {
+		return strExame;
+	}
+
+	public void setStrExame(String strExame) {
+		this.strExame = strExame;
 	}
 }

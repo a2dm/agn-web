@@ -110,9 +110,12 @@ public class FichaAtendimentoBean extends AbstractBean<Agendamento, AgendamentoS
 		
 		String strExame = "";
 		
-		for (AgendamentoExame agendamentoExame : this.getEntity().getListaAgendamentoExame())
+		if(this.getEntity().getListaAgendamentoExame() != null)
 		{
-			strExame += agendamentoExame.getExame().getDesExame() + " ; ";
+			for (AgendamentoExame agendamentoExame : this.getEntity().getListaAgendamentoExame())
+			{
+				strExame += agendamentoExame.getExame().getDesExame() + " ; ";
+			}
 		}
 		
 		parameters.put("EXAME", strExame);

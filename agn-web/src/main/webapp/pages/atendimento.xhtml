@@ -14,6 +14,7 @@
 	<ui:param name="crudBean" value="#{atendimentoBean}" />
 	
 	<ui:define name="saveStateObjectsDefined">
+		<t:saveState value="#{crudBean.strExame}" />
 		<t:saveState value="#{crudBean.exame}" />
 		<t:saveState value="#{crudBean.agendamento}" />
 		<t:saveState value="#{crudBean.listaExames}" />
@@ -352,12 +353,26 @@
 		        </div>
 	        </div>
         </h:panelGroup>
+        
+        <script>
+        	function abrirFichaAtendimento(msg, idAgendamento)
+        	{
+        		//SE CONCLUIDO COM SUCESSO, DISPARAR O EVENTO DE ABRIR RELATORIO
+        		if(msg != '')
+        		{
+        			document.getElementById('formulario:btnImprimirFicha').click();
+        		}
+        	}
+        </script>
+        
     </ui:define>
     
     <ui:define name="buttonItens">
     	<h:panelGroup rendered="#{crudBean.entity.idAgendamento != null}">
-    		<a4j:commandButton id="inserir" styleClass="btn btn-primary" value="Concluir Atendimento (C)" accesskey="C" actionListener="#{crudBean.concluirAtendimento}" render="pnFrm, panelTitle, comentTela"/>
+    		<a4j:commandButton id="inserir" styleClass="btn btn-primary" value="Concluir Atendimento (C)" accesskey="C" actionListener="#{crudBean.concluirAtendimento}" oncomplete="abrirFichaAtendimento('#{crudBean.mensagem}', #{crudBean.entity.idAgendamento});" render="pnFrm, panelTitle, comentTela"/>    		
     	</h:panelGroup>
+    	
+    	<t:commandLink target="_blank" id="btnImprimirFicha" style="display: none;" action="#{crudBean.imprimir}" />
     </ui:define>
 	
 	<ui:define name="modal">

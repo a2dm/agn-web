@@ -359,6 +359,12 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 		this.setPresencaOrder(presencaOrder.equals(SortOrder.ascending) ? SortOrder.descending : SortOrder.ascending);
 	}
 	
+	@Override
+	public String getFullTitle()
+	{
+		return this.pageTitle;
+	}
+	
 //	@Override
 //	protected boolean validarAcesso(String acao)
 //	{
