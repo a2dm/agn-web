@@ -291,14 +291,14 @@ public class UsuarioService extends A2DMHbNgc<Usuario>
 		return vo;
 	}
 	
-	public Usuario alterarSenha(Usuario vo, String novaSenha) throws Exception
+	public Usuario alterarSenha(Usuario vo, String senhaAtual, String novaSenha) throws Exception
 	{
 		Session sessao = HibernateUtil.getSession();
 		sessao.setFlushMode(FlushMode.COMMIT);
 		Transaction tx = sessao.beginTransaction();
 		try
 		{
-			vo = alterarSenha(sessao, vo, novaSenha);
+			vo = alterarSenha(sessao, vo, senhaAtual, novaSenha);
 			tx.commit();
 			return vo;
 		}
@@ -314,12 +314,12 @@ public class UsuarioService extends A2DMHbNgc<Usuario>
 		}
 	}
 	
-	public Usuario alterarSenha(Session sessao, Usuario vo, String novaSenha) throws Exception
+	public Usuario alterarSenha(Session sessao, Usuario vo, String senhaAtual, String novaSenha) throws Exception
 	{
 		Usuario usuario = new Usuario();
-		usuario.setIdUsuario(vo.getIdUsuarioAlt());
-		usuario.setNome(vo.getNome());
-		usuario.setSenha(CriptoMD5.stringHexa(vo.getSenha().toUpperCase()));
+		usuario.setIdUsuario(vo.getIdUsuario());
+		usuario.setLogin(vo.getLogin().toUpperCase().trim());
+		usuario.setSenha(CriptoMD5.stringHexa(senhaAtual.toUpperCase()));
 		
 		usuario = this.get(sessao, usuario, 0);
 		

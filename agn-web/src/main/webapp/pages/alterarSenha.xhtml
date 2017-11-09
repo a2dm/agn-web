@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition	xmlns="http://www.w3.org/1999/xhtml"
+			    xmlns:ui="http://java.sun.com/jsf/facelets"
+			    xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				template="crud_template.xhtml">
+				
+	<ui:param name="crudBean" value="#{alterarSenhaBean}" />
+	
+	<ui:define name="saveStateObjectsDefined">		
+		<t:saveState value="#{crudBean.senhaAtual}" />
+		<t:saveState value="#{crudBean.novaSenha}" />
+		<t:saveState value="#{crudBean.confirmaNovaSenha}" />
+	</ui:define>
+	
+	<ui:define name="comentTela">
+		<h:outputText value="#{bundle.todosCamposObrigatorios}"/>
+		<h:outputText value="#{bundle.peloMenosUmCamposObrigatorio}"/>
+	</ui:define>
+    
+    <ui:define name="content">
+		<h:panelGroup id="panelGroupDeEdicao" style="height:100%;width:100%;">
+			<f:subview id="viewEdicao">
+				<div class="form-group">
+		          <label class="col-md-2 control-label">Senha Atual *</label>
+		          <div class="col-md-4">
+		          	<h:inputSecret value="#{crudBean.senhaAtual}" styleClass="form-control" maxlength="100">
+		           		<f:passThroughAttribute name="placeholder" value="Senha Atual"/>
+		           	</h:inputSecret>
+		          </div>
+		       	</div>
+		       	
+		       	<div class="form-group">
+		          <label class="col-md-2 control-label">Nova Senha *</label>
+		          <div class="col-md-4">
+		          	<h:inputSecret value="#{crudBean.novaSenha}" styleClass="form-control" maxlength="100">
+		           		<f:passThroughAttribute name="placeholder" value="Nova Senha"/>
+		           	</h:inputSecret>
+		          </div>
+		       	</div>
+		       	
+		       	<div class="form-group">
+		          <label class="col-md-2 control-label">Confirme Nova Senha *</label>
+		          <div class="col-md-4">
+		          	<h:inputSecret value="#{crudBean.confirmaNovaSenha}" styleClass="form-control" maxlength="100">
+		           		<f:passThroughAttribute name="placeholder" value="Confirma Nova Senha"/>
+		           	</h:inputSecret>
+		          </div>
+		       	</div>
+			</f:subview>
+		</h:panelGroup>		
+    </ui:define>
+    
+    
+    <ui:define name="buttonItens" style="height:100%; width:100%;">		
+		<a4j:commandButton id="btnAltSnh" styleClass="btn btn-primary" value="Alterar (A)" accesskey="A" actionListener="#{crudBean.salvar}" render="pnFrm"/>
+	</ui:define>
+			
+</ui:composition>

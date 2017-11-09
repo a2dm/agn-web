@@ -85,7 +85,7 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			}
 			else
 			{
-				FacesMessage message = new FacesMessage("Os dados inseridos não corresponde a um usuário do sistema. Verifique seu Login e Senha e tente novamente.");
+				FacesMessage message = new FacesMessage("Os dados informados não corresponde a um usuário do sistema. Verifique seu Login e Senha e tente novamente.");
 		        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 		        FacesContext.getCurrentInstance().addMessage(null, message);
 				return null;

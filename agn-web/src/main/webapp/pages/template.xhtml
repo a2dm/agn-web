@@ -57,27 +57,6 @@
 		      </h:commandLink>
 		      <div class="pull-right">
 		        <ul id="mini-nav" class="clearfix">
-		          <li class="list-box hidden-xs">
-		            
-		            <!-- Modal -->
-		            <div class="modal fade" id="modalMd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel5" aria-hidden="true">
-		              <div class="modal-dialog">
-		                <div class="modal-content">
-		                  <div class="modal-header">
-		                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-		                    <h4 class="modal-title text-danger" id="myModalLabel5">Coding Style </h4>
-		                  </div>
-		                  <div class="modal-body">
-		                    <img src="../img/documentation.png" alt="Esquare Admin"/>
-		                  </div>
-		                  <div class="modal-footer">
-		                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
-		                  </div>
-		                </div>
-		              </div>
-		            </div>
-		          </li>
-		          
 		          <h:panelGroup id="menuUsuarioLogado">
 			          <li class="list-box user-profile">			          
 			            <a id="drop7" href="#" role="button" style="text-align: right; font-size: 13px;"  data-toggle="dropdown">
@@ -94,7 +73,12 @@
 				            </h:panelGroup>
 				            
 				            <li>
-				            	<p><i class="fa fa-fire text-warning"></i> Alterar Senha</p>
+				            	<p onclick="document.getElementById('formulario:dadosCadastrais').click();"><i class="fa fa-cog text-info"></i> Dados Cadastrais</p>
+				            	<h:commandButton id="dadosCadastrais" action="#{dadosCadastraisBean.preparaPesquisar}" style="display: none;"/>
+				            </li>
+				            <li>
+				            	<p onclick="document.getElementById('formulario:alterarSenha').click();"><i class="fa fa-fire text-warning"></i> Alterar Senha</p>
+				            	<h:commandButton id="alterarSenha" action="#{alterarSenhaBean.preparaPesquisar}" style="display: none;"/>
 				            </li>
 			              
 			              	<li>
