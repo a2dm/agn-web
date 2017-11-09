@@ -52,7 +52,7 @@
 		
 		<a4j:status id="loading" onstart="#{rich:component('panel_loading')}.show();" onstop="#{rich:component('panel_loading')}.hide();" />
 	
-		<h:form class="form-horizontal no-margin" id="formulario">
+		<h:form class="form-horizontal no-margin" id="formulario" onkeypress="if (event.keyCode == 13) {return false;}">
 			<header>
 		      <h:commandLink action="principal" styleClass="logo">
 		        <img src="../img/logo.png" width="220px" height="40px" alt="Logo"/>
@@ -100,10 +100,6 @@
 				            </li>
 			              
 			              	<li>
-				            	<p><i class="fa fa-fire text-warning"></i> <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Envie Sua Sugestão"/></p>
-				            </li>
-			              
-			              	<li>
 				                <div class="demo-btn-group clearfix" align="center">
 				                  <h:commandButton action="#{loginBean.logout}"  styleClass="btn btn-primary" value="Logout"/>
 				                </div>
@@ -141,18 +137,25 @@
 			                Recepção
 			              </h:commandLink>
 			            </li>
-			            <li class='#{sessionScope.flgMenuAtn}'>			              
-			              <h:commandLink action="#{atendimentoBean.preparaAtendimento}">
-			                <i class="fa fa-stethoscope"></i>
-			                Atendimento
-			              </h:commandLink>
-			            </li>
-			            <li class='#{sessionScope.flgMenuAts}'>			              
-			              <h:commandLink action="#{atestadoBean.preparaPesquisar}">
-			                <i class="fa fa-pencil-square-o"></i>
-			                Atestado
-			              </h:commandLink>
-			            </li>
+			            
+			            <h:panelGroup rendered="#{sessionScope.loginUsuario.idGrupo != 3}">
+				            <li class='#{sessionScope.flgMenuAtn}'>			              
+				              <h:commandLink action="#{atendimentoBean.preparaAtendimento}">
+				                <i class="fa fa-stethoscope"></i>
+				                Atendimento
+				              </h:commandLink>
+				            </li>
+			            </h:panelGroup>
+			            
+			            <h:panelGroup rendered="#{sessionScope.loginUsuario.idGrupo != 3}">
+				            <li class='#{sessionScope.flgMenuAts}'>			              
+				              <h:commandLink action="#{atestadoBean.preparaPesquisar}">
+				                <i class="fa fa-pencil-square-o"></i>
+				                Atestado
+				              </h:commandLink>
+				            </li>
+			            </h:panelGroup>
+			            
 			            <li class='#{sessionScope.flgMenuPct}'>
 			              <h:commandLink action="#{pacienteBean.preparaPesquisar}">
 			                <i class="fa fa-user"></i>
@@ -160,23 +163,29 @@
 			              </h:commandLink>
 			            </li>
 			            <li class='#{sessionScope.flgMenuRlt}'>
-			              <a href="forms.html">
+			              <a href="#">
 			                <i class="fa fa-file-text-o"></i>Relatórios</a>
 			                <ul>
 			              	 <li><h:commandLink action="#{atendimentoPlanoBean.preparaPesquisar}">Atendimentos por Plano</h:commandLink></li>
+			              	 <li><h:commandLink action="#{atendimentoServicoBean.preparaPesquisar}">Atendimentos por Serviço</h:commandLink></li>
+			              	 <li><h:commandLink action="#{fichaAtendimentoBean.preparaPesquisar}">Ficha de Atendimento</h:commandLink></li>
 			              </ul>
 			            </li>
-			            <li class='#{sessionScope.flgMenuCfg}'>
-			              <a href='#'><i class="fa fa-cogs"></i>Configuração</a>
-			              <ul>
-			              	 <li><h:commandLink action="#{recepcionistaBean.preparaPesquisar}">Recepcionista</h:commandLink></li>
-			              	 <li><h:commandLink action="#{clinicaBean.preparaPesquisar}">Clínica</h:commandLink></li>
-			              	 <li><h:commandLink action="#{horarioBean.preparaHorario}">Horários</h:commandLink></li>
-			              	 <li><h:commandLink action="#{convenioBean.preparaPesquisar}">Convênio</h:commandLink></li>
-			                 <li><h:commandLink action="#{servicoBean.preparaPesquisar}">Serviço</h:commandLink></li>
-			                 <li><h:commandLink action="#{sugestaoBean.preparaPesquisar}">Envie sua Sugestão</h:commandLink></li>		  			                 
-			              </ul>
-			            </li>
+			            
+			            <h:panelGroup rendered="#{sessionScope.loginUsuario.idGrupo != 3}">
+				            <li class='#{sessionScope.flgMenuCfg}'>
+				              <a href='#'><i class="fa fa-cogs"></i>Configuração</a>
+				              <ul>
+				              	 <li><h:commandLink action="#{recepcionistaBean.preparaPesquisar}">Recepcionista</h:commandLink></li>
+				              	 <li><h:commandLink action="#{clinicaBean.preparaPesquisar}">Clínica</h:commandLink></li>
+				              	 <li><h:commandLink action="#{horarioBean.preparaHorario}">Horários</h:commandLink></li>
+				              	 <li><h:commandLink action="#{convenioBean.preparaPesquisar}">Convênio</h:commandLink></li>
+				                 <li><h:commandLink action="#{servicoBean.preparaPesquisar}">Serviço</h:commandLink></li>
+				                 <li><h:commandLink action="#{sugestaoBean.preparaPesquisar}">Envie sua Sugestão</h:commandLink></li>		  			                 
+				              </ul>
+				            </li>
+			            </h:panelGroup>
+			            
 			          </ul>
 	        		</div>
 	        

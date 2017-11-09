@@ -1314,7 +1314,7 @@ public abstract class AbstractBean<Entity, Business extends A2DMHbNgc<Entity>>
 			String pathPdf = "/temp/" + request.getRequestedSessionId() + String.valueOf(Math.random() * 10000) + this.REPORT_NAME + ".pdf";
 			
 						
-			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(getSearchResult());			
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(getListaReport());			
 			
 			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, ds);
 	 

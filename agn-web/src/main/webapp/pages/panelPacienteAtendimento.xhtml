@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	<h:panelGroup id="panelPacienteAtendimento">
+		<div class="box-body">
+        	<div class="box-content">
+				<rich:dataTable id="tblData" 
+							 value="#{crudBean.listaPacienteAtendimento}" 
+						       var="rst" rows="10"
+						styleClass="table table-bordered table-striped dataTable"
+						onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+						onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+						  rendered="#{not empty crudBean.listaPacienteAtendimento}">						     
+					<f:facet name="header">
+						<rich:columnGroup>
+							<rich:column style="width:8%; text-align: center;">
+								Data
+							</rich:column>
+							<rich:column style="width: 6%; text-align: center;">
+								Início
+							</rich:column>
+							<rich:column style="width: 6%; text-align: center;">
+								Fim
+							</rich:column>
+							<rich:column style="text-align: center;">
+								Serviço
+							</rich:column>
+							<rich:column style="width: 8%; text-align: center;">
+								Tipo
+							</rich:column>
+							<rich:column style="width: 20%; text-align: center;">
+								Convênio
+							</rich:column>
+							<rich:column style="width: 3%; text-align: center;"/>
+						</rich:columnGroup>
+					</f:facet>					
+					<rich:column style="text-align: center;">
+						<h:outputText value="#{rst.datAgendamento}" />
+					</rich:column>
+					<rich:column style="text-align: center;">
+						<h:outputText value="#{rst.horInicio}" />
+					</rich:column>
+					<rich:column style="text-align: center;">
+						<h:outputText value="#{rst.horFim}" />
+					</rich:column>
+					<rich:column style="text-align: left;">
+						<h:outputText value="#{rst.servico.desServico}" />
+					</rich:column>
+					<rich:column style="text-align: center;">
+						<h:outputText value="Convênio" rendered="#{rst.tpAgendamento == 'C'}"/>
+						<h:outputText value="Particular" rendered="#{rst.tpAgendamento == 'P'}"/>
+					</rich:column>
+					<rich:column style="text-align: left;"  rendered="#{rst.convenio.desConvenio != null}">
+						<h:outputText value="#{rst.convenio.desConvenio}"/>
+					</rich:column>
+					<rich:column style="text-align: center;"  rendered="#{rst.convenio.desConvenio == null}">
+						<h:outputText value="-"/>
+					</rich:column>
+					<rich:column style="text-align: center;">												
+						<a4j:commandButton image="../img/report.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR ATENDIMENTO" render="panVisualizarAtendimento" action="#{crudBean.visualizarAtendimento}" oncomplete="#{rich:component('panVisualizarAtendimento')}.show();">
+							<f:setPropertyActionListener target="#{crudBean.agendamento}" value="#{rst}" />
+						</a4j:commandButton>
+					</rich:column>
+				</rich:dataTable>
+			</div>
+			<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.listaPacienteAtendimento}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.listaPacienteAtendimento.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
+			<h:panelGroup style="color: #333333" rendered="#{empty crudBean.listaPacienteAtendimento}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
+			<div align="center">
+				<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.listaPacienteAtendimento}"/>
+			</div>
+		</div>
+	</h:panelGroup>
+
+</ui:composition>

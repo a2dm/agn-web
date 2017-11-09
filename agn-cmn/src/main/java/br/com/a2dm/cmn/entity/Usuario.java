@@ -144,6 +144,7 @@ public class Usuario implements Serializable
 	@Transient
 	private String novaSenha;
 	
+	
 	public BigInteger getIdUsuario() {
 		return idUsuario;
 	}

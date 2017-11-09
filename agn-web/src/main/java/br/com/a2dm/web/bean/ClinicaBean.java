@@ -1,5 +1,6 @@
 package br.com.a2dm.web.bean;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -9,9 +10,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Estado;
 import br.com.a2dm.cmn.service.EstadoService;
+import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.ws.WebServiceCep;
@@ -181,6 +184,32 @@ public class ClinicaBean extends AbstractBean<Clinica, ClinicaService>
 	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 	        FacesContext.getCurrentInstance().addMessage(null, message);
 		}
+	}
+	
+	@Override
+	protected boolean validarAcesso(String acao)
+	{
+		boolean temAcesso = true;
+
+		try
+		{
+			if (util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
+					&& util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
+			{
+				temAcesso = false;
+				HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();				
+				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");				
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return temAcesso;
 	}
 	
 	@Override

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Usuario;
+import br.com.a2dm.cmn.service.GrupoService;
 
 /**
  * @author Carlos Diego
@@ -34,11 +35,28 @@ public class AutorizacaoFilter implements Filter
 	        		&& ( !(req).getRequestURI().contains(".ecss.jsf"))
 	        		&& ( !(req).getRequestURI().contains(".png.jsf"))
 	        		&&( !(req).getRequestURI().equals("/agn-seg/"))  )
-	        {	        		        	
+	        {
 	        	((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/pages/login.jsf");
 	        }
 	        else
 	        {
+	        	if (usuario != null
+	        			&& usuario.getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
+						&& usuario.getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
+				{
+	        		//URLS BLOQUEADAS PARA O PERFIL DE RECEPCIONISTA
+	        		if((req).getRequestURI().contains("/atestado.jsf")
+	        				|| (req).getRequestURI().contains("/atendimento.jsf")
+	        				|| (req).getRequestURI().contains("/recepcionista.jsf")
+	        				|| (req).getRequestURI().contains("/clinica.jsf")
+	        				|| (req).getRequestURI().contains("/horario.jsf")
+	        				|| (req).getRequestURI().contains("/convenio.jsf")
+	        				|| (req).getRequestURI().contains("/servico.jsf")
+	        				|| (req).getRequestURI().contains("/sugestao.jsf"))
+	        		{
+	        			((HttpServletResponse) response).sendRedirect(req.getContextPath() + "/pages/acessoNegado.jsf");
+	        		}
+				}
 	            chain.doFilter(request, response);	              
 	        }
 	}

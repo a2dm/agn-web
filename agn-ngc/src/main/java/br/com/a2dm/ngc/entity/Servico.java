@@ -85,8 +85,14 @@ public class Servico implements Serializable
     @Cascade(CascadeType.ALL)
 	private List<ConvenioServico> listaConvenioServico;
 	
+	@OneToMany(mappedBy = "servico", fetch = FetchType.LAZY)
+	private List<Agendamento> listaAgendamento;
+	
 	@Transient
 	private String vlrServicoFormatado;
+	
+	@Transient
+	private Long countAgendamento;
 	
 	@Transient
 	private HashMap<String, Object> filtroMap;
@@ -210,5 +216,21 @@ public class Servico implements Serializable
 
 	public void setListaConvenioServico(List<ConvenioServico> listaConvenioServico) {
 		this.listaConvenioServico = listaConvenioServico;
+	}
+
+	public List<Agendamento> getListaAgendamento() {
+		return listaAgendamento;
+	}
+
+	public void setListaAgendamento(List<Agendamento> listaAgendamento) {
+		this.listaAgendamento = listaAgendamento;
+	}
+
+	public Long getCountAgendamento() {
+		return countAgendamento;
+	}
+
+	public void setCountAgendamento(Long countAgendamento) {
+		this.countAgendamento = countAgendamento;
 	}
 }

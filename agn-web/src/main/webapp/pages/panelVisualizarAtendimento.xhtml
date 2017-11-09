@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	
+		<f:facet name="header">
+			<h:panelGroup>
+				<h:outputText value="Atendimento - Visualizar" />
+			</h:panelGroup>
+		</f:facet>
+		
+		<f:facet name="controls">
+			<h:outputLink value="#" onclick="#{rich:component('panVisualizarAtendimento')}.hide(); return false;">
+		    	<h:graphicImage value="../img/closeModal.png" id="fechaPanelVisualizarAtendimento" style="width: 16px; height: 16px; vertical-align:middle;"/>
+	       	</h:outputLink>
+		</f:facet>
+
+		<div class="modal-body">
+			
+			<div class="box-body">
+				<fieldset>
+					<legend>Dados do Agendamento</legend>
+					
+					
+					<div class="box-body">
+						
+							<div class="form-group">
+						        <label class="col-md-2 control-label">Data Início</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						        	<h:outputText value="#{crudBean.datInicioAtendimento}" converter="converterDataHora"/>
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Serviço</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="#{crudBean.agendamento.servico.desServico}" />
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Valor</label>
+						      					        
+						        <div class="col-md-6" style="margin-top: 5px;">
+						        	<h:outputText value="#{crudBean.agendamento.vlrAgendamentoFormatado}"/>
+						        </div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Desconto</label>
+						        
+						        <div class="col-md-6" style="margin-top: 5px;">
+						           	<h:outputText value="#{crudBean.agendamento.vlrDescontoFormatado}"/>
+					           	</div>
+						    </div>
+						    
+						    <div class="form-group">
+						        <label class="col-md-2 control-label">Tipo</label>
+						        <div class="col-md-6" style="margin-top: 5px;">
+						         	<h:outputText value="Particular" rendered="#{crudBean.agendamento.tpAgendamento == 'P'}" />
+						         	<h:outputText value="Convênio" rendered="#{crudBean.agendamento.tpAgendamento == 'C'}" />
+						        </div>
+						    </div>
+						    
+						    <h:panelGroup layout="block" rendered="#{crudBean.agendamento.tpAgendamento == 'C'}">
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Convênio</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.agendamento.convenio.desConvenio}" />
+							        </div>
+							    </div>
+						    </h:panelGroup>
+						    
+						    <h:panelGroup layout="block">
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Situação</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.agendamento.desSituacao}" />
+							        </div>
+							    </div>
+						    </h:panelGroup>
+						    
+						    <h:panelGroup layout="block" rendered="#{crudBean.agendamento.obsAgendamento != null}">
+							    <div class="form-group">
+							        <label class="col-md-2 control-label">Observações</label>
+							        <div class="col-md-6" style="margin-top: 5px;">
+							         	<h:outputText value="#{crudBean.agendamento.obsAgendamento}" />
+							        </div>
+							    </div>
+						    </h:panelGroup>
+					    
+					    	
+					    </div>
+				</fieldset>
+				
+				<h:panelGroup rendered="#{crudBean.agendamento.desAnamnese != null}">
+					<fieldset>
+						<legend>Anamnese</legend>					
+						
+						<div class="box-body">
+							<h:outputText value="#{crudBean.agendamento.desAnamnese}"/>					
+						</div>
+					</fieldset>
+				</h:panelGroup>
+				
+				<br/>
+				
+				<h:panelGroup rendered="#{crudBean.agendamento.desPrescricao != null}">
+					<fieldset>
+						<legend>Prescrição</legend>					
+						
+						<div class="box-body">
+							<h:outputText value="#{crudBean.agendamento.desPrescricao}"/>					
+						</div>					
+					</fieldset>
+				</h:panelGroup>
+				
+				<br/>
+				
+				<h:panelGroup rendered="#{crudBean.listaExamesPaciente != null}">
+					<fieldset>
+						<legend>Exames</legend>					
+						
+						<h:panelGroup id="panListaExamesPaciente">
+							<f:subview id="viewListagemExame">
+								<div class="box-content">
+									<rich:dataTable id="tblExamesSelecionados" 
+											 value="#{crudBean.listaExamesPaciente}" 
+										       var="rst" rows="5"
+										styleClass="table table-bordered table-striped dataTable"
+										onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+										onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										  rendered="#{not empty crudBean.listaExamesPaciente}">						     
+										<f:facet name="header">
+											<rich:columnGroup>
+												<rich:column style="width: 5%; text-align: center;">
+													Código
+												</rich:column>
+												<rich:column style="width:50%; text-align: center;">
+													Nome
+												</rich:column>									
+											</rich:columnGroup>
+										</f:facet>
+										<rich:column style="text-align: right;">
+											<h:outputText value="#{rst.idExame}" />
+										</rich:column>
+										<rich:column style="text-align: left;">
+											<h:outputText value="#{rst.desExame}" />
+										</rich:column>
+									</rich:dataTable>
+								</div>				
+								<h:panelGroup style="color: #333333" rendered="#{empty crudBean.listaExamesPaciente}"><div align="right">Não existem exames adicionados. &nbsp;&nbsp; </div></h:panelGroup>
+								<div align="center">
+									<rich:dataScroller for="tblExamesSelecionados" maxPages="5" rendered="#{not empty crudBean.listaExamesPaciente}"/>
+								</div>
+							</f:subview>
+						</h:panelGroup>				
+					</fieldset>
+				</h:panelGroup>
+			</div>
+						
+						
+		</div>
+	
+		<div class="modal-footer">			
+			<input type="button" onclick="#{rich:component('panVisualizarAtendimento')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+		</div>
+		
+</ui:composition>

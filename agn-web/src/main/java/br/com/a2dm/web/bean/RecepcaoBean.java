@@ -112,6 +112,8 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 				{
 					AgendamentoService.getInstancia().marcarPresenca(this.getEntity());
 					
+					this.completarPosPesquisar();
+					
 					FacesMessage message = new FacesMessage("O agendamento foi marcado como presente!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
 					FacesContext.getCurrentInstance().addMessage(null, message);
@@ -139,7 +141,7 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 				{
 					AgendamentoService.getInstancia().atenderPaciente(this.getEntity());
 					
-					FacesMessage message = new FacesMessage("O agendamento foi marcado como presente!");
+					FacesMessage message = new FacesMessage("O paciente foi colocado em atendimento!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
 					FacesContext.getCurrentInstance().addMessage(null, message);
 				}
@@ -356,6 +358,34 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 		setSituacaoOrder(SortOrder.unsorted);
 		this.setPresencaOrder(presencaOrder.equals(SortOrder.ascending) ? SortOrder.descending : SortOrder.ascending);
 	}
+	
+	@Override
+	public String getFullTitle()
+	{
+		return this.pageTitle;
+	}
+	
+//	@Override
+//	protected boolean validarAcesso(String acao)
+//	{
+//		boolean temAcesso = true;
+//
+//		if (!ValidaPermissao.getInstancia().verificaPermissao("recepcao", acao))
+//		{
+//			temAcesso = false;
+//			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//			try
+//			{
+//				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return temAcesso;
+//	}
 	
 	public Date getDataInicio() {
 		return dataInicio;

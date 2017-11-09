@@ -14,10 +14,10 @@ import javax.faces.event.ActionEvent;
 import javax.faces.model.SelectItem;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
-import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.entity.Servico;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
@@ -202,18 +202,22 @@ public class ServicoBean extends AbstractBean<Servico, ServicoService>
 	{
 		boolean temAcesso = true;
 
-		if (!ValidaPermissao.getInstancia().verificaPermissao("servico", acao))
+		try
 		{
-			temAcesso = false;
-			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-			try
+			if (util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
+					&& util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
 			{
-				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+				temAcesso = false;
+				HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();				
+				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");				
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return temAcesso;

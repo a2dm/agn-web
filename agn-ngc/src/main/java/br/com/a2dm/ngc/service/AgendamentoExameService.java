@@ -14,6 +14,8 @@ import br.com.a2dm.ngc.entity.AgendamentoExame;
 public class AgendamentoExameService extends A2DMHbNgc<AgendamentoExame>
 {
 	private static AgendamentoExameService instancia = null;
+	
+	public static final int JOIN_EXAME = 1;
 
 	@SuppressWarnings("rawtypes")
 	private static Map filtroPropriedade = new HashMap();
@@ -41,13 +43,19 @@ public class AgendamentoExameService extends A2DMHbNgc<AgendamentoExame>
 	protected Criteria montaCriteria(Session sessao, int join)
 	{
 		Criteria criteria = sessao.createCriteria(AgendamentoExame.class);
+		
+		if ((join & JOIN_EXAME) != 0)
+	    {
+			criteria.createAlias("exame", "exame");
+	    }
+		
 		return criteria;
 	}
 	
 	@Override
 	protected void setarOrdenacao(Criteria criteria, AgendamentoExame vo, int join)
 	{
-		criteria.addOrder(Order.asc("desClinica"));
+		criteria.addOrder(Order.asc("idExame"));
 	}
 	
 	@Override

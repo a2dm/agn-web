@@ -1,5 +1,6 @@
 package br.com.a2dm.ngc.service;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -11,12 +12,16 @@ import org.hibernate.FlushMode;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.sql.JoinType;
 
 import br.com.a2dm.cmn.util.A2DMHbNgc;
 import br.com.a2dm.cmn.util.HibernateUtil;
 import br.com.a2dm.cmn.util.RestritorHb;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
+import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.entity.ConvenioServico;
 import br.com.a2dm.ngc.entity.Servico;
@@ -272,10 +277,90 @@ public class ConvenioService extends A2DMHbNgc<Convenio>
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Convenio> pesquisarAtendimentoPlano(Session sessao, Convenio vo) throws Exception
-	{
+	{		
+		Criteria  criteria = sessao.createCriteria(Convenio.class);
 		
-		return null;
+		//AGRUPAMENTOS
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.groupProperty("idConvenio"));
+		projection.add(Projections.groupProperty("desConvenio"));
+		projection.add(Projections.count("idConvenio"));
+		
+		//JOINS
+		criteria.createAlias("listaAgendamento", "listaAgendamento", JoinType.INNER_JOIN);
+		
+		//WHERES
+		criteria.add(Restrictions.eq("idClinicaProfissional", UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional()));
+		criteria.add(Restrictions.eq("listaAgendamento.idClinicaProfissional", UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional()));
+		criteria.add(Restrictions.eq("flgAtivo", "S"));
+		criteria.add(Restrictions.eq("listaAgendamento.flgAtivo", "S"));
+		criteria.add(Restrictions.ge("listaAgendamento.datAgendamento", vo.getFiltroMap().get("datAgendamentoInicio")));
+		criteria.add(Restrictions.lt("listaAgendamento.datAgendamento", vo.getFiltroMap().get("datAgendamentoFim")));
+		
+		criteria.setProjection(projection);
+		criteria.addOrder(Order.asc("desConvenio"));
+		
+		List<Object[]> resultado = criteria.list();
+		List<Convenio> retorno = new ArrayList<Convenio>(3);
+		
+		if (resultado != null && resultado.size() > 0)
+		{
+			int j = 0;
+			for (int i = 0; i < resultado.size(); i++)
+			{
+				j = 0;
+				Convenio convenio = new Convenio();				
+				convenio.setIdConvenio((BigInteger) resultado.get(i)[j++]);
+				convenio.setDesConvenio((String) resultado.get(i)[j++]);
+				convenio.setCountAgendamento((Long) resultado.get(i)[j++]);
+				retorno.add(convenio);
+			}
+		}
+		
+		//QUANTIDADE DE ATENDIMENTOS PARTICULARES
+		Convenio objParticular = this.getAtendimentoParticular(sessao, vo);
+		retorno.add(objParticular);
+		
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Convenio getAtendimentoParticular(Session sessao, Convenio vo) throws Exception
+	{
+		Criteria  criteria = sessao.createCriteria(Agendamento.class);
+		
+		//AGRUPAMENTOS
+		ProjectionList projection = Projections.projectionList();
+		projection.add(Projections.count("idAgendamento"));
+		projection.add(Projections.groupProperty("tpAgendamento"));
+		
+		//WHERES
+		criteria.add(Restrictions.eq("flgAtivo", "S"));
+		criteria.add(Restrictions.eq("tpAgendamento", "P"));
+		criteria.add(Restrictions.eq("idClinicaProfissional",  UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional()));
+		criteria.add(Restrictions.ge("datAgendamento", vo.getFiltroMap().get("datAgendamentoInicio")));
+		criteria.add(Restrictions.lt("datAgendamento", vo.getFiltroMap().get("datAgendamentoFim")));
+		
+		criteria.setProjection(projection);
+		
+		List<Object[]> resultado = criteria.list();
+		
+		Convenio convenio = new Convenio();				
+		
+		if (resultado != null && resultado.size() > 0)
+		{
+			int j = 0;
+			for (int i = 0; i < resultado.size(); i++)
+			{
+				j = 0;
+				convenio.setDesConvenio("Particular");
+				convenio.setCountAgendamento((Long) resultado.get(i)[j++]);			
+			}
+		}
+				
+		return convenio;
 	}
 	
 	@Override

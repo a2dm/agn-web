@@ -13,10 +13,10 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
-import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.entity.Convenio;
 import br.com.a2dm.ngc.entity.ConvenioServico;
 import br.com.a2dm.ngc.entity.Servico;
@@ -286,18 +286,22 @@ public class ConvenioBean extends AbstractBean<Convenio, ConvenioService>
 	{
 		boolean temAcesso = true;
 
-		if (!ValidaPermissao.getInstancia().verificaPermissao("convenio", acao))
+		try
 		{
-			temAcesso = false;
-			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-			try
+			if (util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_ADMINISTRADOR
+					&& util.getUsuarioLogado().getIdGrupo().intValue() != GrupoService.GRUPO_PROFISSIONAL)
 			{
-				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+				temAcesso = false;
+				HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();				
+				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");				
 			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 		
 		return temAcesso;

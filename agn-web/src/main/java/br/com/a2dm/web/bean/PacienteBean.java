@@ -1,36 +1,45 @@
 package br.com.a2dm.web.bean;
 
-import java.io.IOException;
+import java.math.BigInteger;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
 
 import br.com.a2dm.cmn.entity.Estado;
 import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
-import br.com.a2dm.cmn.util.validators.ValidaPermissao;
 import br.com.a2dm.ngc.entity.Agendamento;
+import br.com.a2dm.ngc.entity.AgendamentoExame;
+import br.com.a2dm.ngc.entity.Exame;
 import br.com.a2dm.ngc.entity.Paciente;
+import br.com.a2dm.ngc.entity.log.AgendamentoLog;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
+import br.com.a2dm.ngc.service.AgendamentoExameService;
+import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.PacienteService;
+import br.com.a2dm.ngc.service.log.AgendamentoLogService;
 
 
 @RequestScoped
 @ManagedBean
 public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 {
+	private List<Agendamento> listaPacienteAtendimento;
 	private List<Estado> listaEstado;
 	private String siglaEstado;
 	private String activeTab;
+	private Date datInicioAtendimento;
+	private List<Exame> listaExamesPaciente;
 	
 	private Agendamento agendamento;
 	
@@ -118,7 +127,7 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 	public void preparaVisualizar()
 	{
 		try
-		{			
+		{
 			super.preparaVisualizar();
 			
 			Estado estado = new Estado();
@@ -126,6 +135,19 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 			estado = EstadoService.getInstancia().get(estado, 0);
 			
 			this.setSiglaEstado(estado.getSigla());
+			
+			//HISTORICO DE ATENDIMENTOS
+			Agendamento agendamento = new Agendamento();
+			agendamento.setFiltroMap(new HashMap<String, Object>());
+			agendamento.getFiltroMap().put("orderHistorico", true);
+			agendamento.setFlgAtivo("S");
+			agendamento.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+			agendamento.setIdPaciente(this.getEntity().getIdPaciente());
+			
+			List<Agendamento> lista = AgendamentoService.getInstancia().pesquisar(agendamento, AgendamentoService.JOIN_SERVICO
+																							 | AgendamentoService.JOIN_CONVENIO
+																							 | AgendamentoService.JOIN_PACIENTE);
+			this.setListaPacienteAtendimento(lista);
 		}
 		catch (Exception e) 
 		{	
@@ -135,6 +157,61 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 		}
 	}	
 
+	public void visualizarAtendimento()
+	{
+		try
+		{
+			if(this.getAgendamento() != null)
+			{
+				this.getAgendamento().setVlrAgendamentoFormatado(new DecimalFormat("#,##0.00").format(this.getAgendamento().getVlrAgendamento() == null ? this.getAgendamento().getServico().getVlrServico() : this.getAgendamento().getVlrAgendamento()));
+				this.getAgendamento().setVlrDescontoFormatado(new DecimalFormat("#,##0.00").format(this.getAgendamento().getVlrDesconto() == null ? 0 : this.getAgendamento().getVlrDesconto()));
+				
+				AgendamentoLog agendamentoLog = new AgendamentoLog();
+				agendamentoLog.setIdAgendamento(this.getAgendamento().getIdAgendamento());
+				agendamentoLog.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
+				
+				agendamentoLog = AgendamentoLogService.getInstancia().get(agendamentoLog, 0);
+				
+				if(agendamentoLog != null)
+				{
+					this.setDatInicioAtendimento(agendamentoLog.getDatCadastro());
+				}
+				
+				//POPULANDO LISTA DE EXAMES
+				AgendamentoExame agendamentoExame = new AgendamentoExame();
+				agendamentoExame.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+				agendamentoExame.setIdAgendamento(this.getAgendamento().getIdAgendamento());
+				
+				List<AgendamentoExame> lista = AgendamentoExameService.getInstancia().pesquisar(agendamentoExame, AgendamentoExameService.JOIN_EXAME);
+				List<Exame> listaExamesPaciente = null;
+				
+				if(lista != null
+						&& lista.size() > 0)
+				{
+					listaExamesPaciente = new ArrayList<Exame>();
+					
+					for (AgendamentoExame obj : lista)
+					{
+						Exame exame = new Exame();
+						JSFUtil.copiarPropriedades(obj.getExame(), exame);
+						listaExamesPaciente.add(exame);
+					}
+				}
+				
+				this.setListaExamesPaciente(listaExamesPaciente);
+			}
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+			message.setSeverity(FacesMessage.SEVERITY_ERROR);
+			if(e.getMessage() == null)
+				FacesContext.getCurrentInstance().addMessage("", message);
+			else
+				FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
 	@Override
 	protected void completarInserir() throws Exception
 	{
@@ -178,27 +255,27 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 			 | PacienteService.JOIN_ESTADO;
 	}
 	
-	@Override
-	protected boolean validarAcesso(String acao)
-	{
-		boolean temAcesso = true;
-
-		if (!ValidaPermissao.getInstancia().verificaPermissao("paciente", acao))
-		{
-			temAcesso = false;
-			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
-			try
-			{
-				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
-			}
-			catch (IOException e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		return temAcesso;
-	}
+//	@Override
+//	protected boolean validarAcesso(String acao)
+//	{
+//		boolean temAcesso = true;
+//
+//		if (!ValidaPermissao.getInstancia().verificaPermissao("paciente", acao))
+//		{
+//			temAcesso = false;
+//			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+//			try
+//			{
+//				rp.sendRedirect("/agn-web/pages/acessoNegado.jsf");
+//			}
+//			catch (IOException e)
+//			{
+//				e.printStackTrace();
+//			}
+//		}
+//		
+//		return temAcesso;
+//	}
 	
 	@Override
 	protected void validarInserir() throws Exception {
@@ -295,5 +372,29 @@ public class PacienteBean extends AbstractBean<Paciente, PacienteService>
 
 	public void setAgendamento(Agendamento agendamento) {
 		this.agendamento = agendamento;
+	}
+
+	public List<Agendamento> getListaPacienteAtendimento() {
+		return listaPacienteAtendimento;
+	}
+
+	public void setListaPacienteAtendimento(List<Agendamento> listaPacienteAtendimento) {
+		this.listaPacienteAtendimento = listaPacienteAtendimento;
+	}
+
+	public Date getDatInicioAtendimento() {
+		return datInicioAtendimento;
+	}
+
+	public void setDatInicioAtendimento(Date datInicioAtendimento) {
+		this.datInicioAtendimento = datInicioAtendimento;
+	}
+
+	public List<Exame> getListaExamesPaciente() {
+		return listaExamesPaciente;
+	}
+
+	public void setListaExamesPaciente(List<Exame> listaExamesPaciente) {
+		this.listaExamesPaciente = listaExamesPaciente;
 	}
 }

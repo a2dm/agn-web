@@ -13,15 +13,15 @@ import javax.faces.event.ActionEvent;
 
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
-import br.com.a2dm.ngc.entity.Convenio;
+import br.com.a2dm.ngc.entity.Servico;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
-import br.com.a2dm.ngc.service.ConvenioService;
+import br.com.a2dm.ngc.service.ServicoService;
 
 
 @RequestScoped
 @ManagedBean
-public class AtendimentoPlanoBean extends AbstractBean<Convenio, ConvenioService>
+public class AtendimentoServicoBean extends AbstractBean<Servico, ServicoService>
 {	
 	private Date dataInicio;
 	
@@ -29,11 +29,11 @@ public class AtendimentoPlanoBean extends AbstractBean<Convenio, ConvenioService
 	
 	private Long total;
 	
-	public AtendimentoPlanoBean()
+	public AtendimentoServicoBean()
 	{
-		super(ConvenioService.getInstancia());
-		this.ACTION_SEARCH = "atendimentoPlano";
-		this.pageTitle = "Atendimentos por Plano";
+		super(ServicoService.getInstancia());
+		this.ACTION_SEARCH = "atendimentoServico";
+		this.pageTitle = "Atendimentos por Serviço";
 		
 		MenuControl.ativarMenu("flgMenuRlt");
 	}
@@ -63,18 +63,18 @@ public class AtendimentoPlanoBean extends AbstractBean<Convenio, ConvenioService
        	 	{
 				this.validarPesquisar();
 				
-				Convenio convenio = new Convenio();
-				convenio.setFiltroMap(new HashMap<String, Object>());
-				convenio.getFiltroMap().put("datAgendamentoInicio", dataInicio);
-				convenio.getFiltroMap().put("datAgendamentoFim", dataFim);
-				convenio.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
-				convenio.setFlgAtivo("S");
+				Servico servico = new Servico();
+				servico.setFiltroMap(new HashMap<String, Object>());
+				servico.getFiltroMap().put("datAgendamentoInicio", dataInicio);
+				servico.getFiltroMap().put("datAgendamentoFim", dataFim);
+				servico.setIdClinicaProfissional(UtilFuncions.getClinicaProfissionalSession().getIdClinicaProfissional());
+				servico.setFlgAtivo("S");
 				
-				List<Convenio> lista = ConvenioService.getInstancia().pesquisarAtendimentoPlano(convenio);
+				List<Servico> lista = ServicoService.getInstancia().pesquisarAtendimentoServico(servico);
 				
 				this.setTotal(new Long(0));
 				
-				for (Convenio obj : lista)
+				for (Servico obj : lista)
 				{
 					this.total += obj.getCountAgendamento().longValue();
 				}
@@ -90,7 +90,7 @@ public class AtendimentoPlanoBean extends AbstractBean<Convenio, ConvenioService
             	FacesContext.getCurrentInstance().addMessage("", message);
             else
             	FacesContext.getCurrentInstance().addMessage(null, message);
-            this.setSearchResult(new ArrayList<Convenio>());
+            this.setSearchResult(new ArrayList<Servico>());
 	    }
 	}
 	
@@ -99,7 +99,7 @@ public class AtendimentoPlanoBean extends AbstractBean<Convenio, ConvenioService
 //	{
 //		boolean temAcesso = true;
 //
-//		if (!ValidaPermissao.getInstancia().verificaPermissao("atendimentoPlano", acao))
+//		if (!ValidaPermissao.getInstancia().verificaPermissao("atendimentoServico", acao))
 //		{
 //			temAcesso = false;
 //			HttpServletResponse rp = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();

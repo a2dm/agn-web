@@ -51,6 +51,10 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 	
 	public static final int JOIN_PACIENTE_ESTADO = 32;
 	
+	public static final int JOIN_AGENDAMENTO_EXAME = 64;
+	
+	public static final int JOIN_EXAME = 128;
+	
 	private JSFUtil util = new JSFUtil();	
 	
 	//SITUACOES DO AGENDAMENTO
@@ -86,7 +90,9 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		adicionarFiltro("datAgendamento", RestritorHb.RESTRITOR_DATA_FINAL,"filtroMap.datAgendamentoFim");		
 		adicionarFiltro("idPaciente", RestritorHb.RESTRITOR_EQ,"idPaciente");
 		adicionarFiltro("flgAtivo", RestritorHb.RESTRITOR_EQ, "flgAtivo");
-		adicionarFiltro("flgConfirmado", RestritorHb.RESTRITOR_EQ, "flgConfirmado");	
+		adicionarFiltro("flgConfirmado", RestritorHb.RESTRITOR_EQ, "flgConfirmado");
+		adicionarFiltro("cpfPaciente", RestritorHb.RESTRITOR_EQ, "cpfPaciente");
+		adicionarFiltro("nomPaciente", RestritorHb.RESTRITOR_LIKE, "nomPaciente");
 	}
 	
 	@Override
@@ -190,8 +196,8 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		agendamento.setIdAgendamento(vo.getIdAgendamento());
 		agendamento = this.get(agendamento, 0);
 		
-		agendamento.setVlrAgendamento(vo.getVlrAgendamento());
-		agendamento.setVlrDesconto(vo.getVlrDesconto());
+		agendamento.setVlrAgendamento(new Double(vo.getVlrAgendamentoFormatado().replace(".", "").replace(",", ".")));
+		agendamento.setVlrDesconto(new Double(vo.getVlrDescontoFormatado().replace(".", "").replace(",", ".")));
 		agendamento.setDesAnamnese(vo.getDesAnamnese());
 		agendamento.setDesPrescricao(vo.getDesPrescricao());
 		
@@ -356,7 +362,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_PRESENTE)));
 		vo.setHorPresenca(new SimpleDateFormat("HH:mm").format(new Date()));
 		
-		super.alterar(sessao, vo);
+		sessao.merge(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
 		AgendamentoLog log = new AgendamentoLog();
@@ -423,7 +429,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		
 		//ALTERAR SITUACAO DO AGENDAMENTO PARA EM ATENDIMENTO
 		vo.setIdSituacao(new BigInteger(Integer.toString(AgendamentoService.SITUACAO_EM_ATENDIMENTO)));
-		super.alterar(sessao, vo);
+		sessao.merge(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
 		AgendamentoLog log = new AgendamentoLog();
@@ -479,7 +485,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setCpfPaciente(paciente.getCpfPaciente());
 		vo.setTelPaciente(paciente.getTelPaciente());
 		vo.setEmlPaciente(paciente.getEmlPaciente());
-		super.alterar(vo);
+		sessao.merge(vo);
 		
 		//INSERIR REGISTRO DE LOG DO AGENDAMENTO
 		AgendamentoLog log = new AgendamentoLog();
@@ -599,14 +605,35 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		    }
 	    }
 		
+		if ((join & JOIN_AGENDAMENTO_EXAME) != 0)
+	    {
+			criteria.createAlias("listaAgendamentoExame", "listaAgendamentoExame", JoinType.LEFT_OUTER_JOIN);
+			
+			if ((join & JOIN_EXAME) != 0)
+		    {
+				criteria.createAlias("listaAgendamentoExame.exame", "exame", JoinType.LEFT_OUTER_JOIN);
+		    }
+	    }
+		
 		return criteria;
 	}
 	
 	@Override
 	protected void setarOrdenacao(Criteria criteria, Agendamento vo, int join)
 	{
-		criteria.addOrder(Order.asc("datAgendamento"));
-		criteria.addOrder(Order.asc("horInicio"));
+		if(vo.getFiltroMap() != null
+				&& vo.getFiltroMap().get("orderHistorico") != null
+				&& ((Boolean) vo.getFiltroMap().get("orderHistorico")).booleanValue())
+		{
+			criteria.addOrder(Order.desc("datAgendamento"));
+			criteria.addOrder(Order.desc("horInicio"));
+		}
+		else
+		{
+			criteria.addOrder(Order.asc("datAgendamento"));
+			criteria.addOrder(Order.asc("horInicio"));
+			criteria.addOrder(Order.asc("nomPaciente"));
+		}
 	}
 	
 	@Override

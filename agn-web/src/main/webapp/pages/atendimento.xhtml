@@ -14,9 +14,12 @@
 	<ui:param name="crudBean" value="#{atendimentoBean}" />
 	
 	<ui:define name="saveStateObjectsDefined">
+		<t:saveState value="#{crudBean.strExame}" />
 		<t:saveState value="#{crudBean.exame}" />
+		<t:saveState value="#{crudBean.agendamento}" />
 		<t:saveState value="#{crudBean.listaExames}" />
 		<t:saveState value="#{crudBean.listaExamesSelecionados}" />
+		<t:saveState value="#{crudBean.listaHistoricoAtendimento}" />
 		<t:saveState value="#{crudBean.mensagem}" />
 	</ui:define>
 	
@@ -38,10 +41,11 @@
 	    	<div class="widget-body clearfix">
 	        	<ul id="myTab" class="nav nav-tabs">
 	           		<li class="active"><a href="#paciente" data-toggle="tab">Paciente</a></li>
-	           		<li><a href="#atendimento" data-toggle="tab">Atendimento</a></li>
 	             	<li><a href="#anamnese" data-toggle="tab">Anamnese</a></li>                                           
 	             	<li><a href="#prescricao" data-toggle="tab">Prescrição</a></li>
 	             	<li><a href="#exame" data-toggle="tab">Exame</a></li>                      
+	           		<li><a href="#financeiro" data-toggle="tab">Financeiro</a></li>
+	           		<li><a href="#historico" data-toggle="tab">Histórico</a></li>
 	           	</ul>
 		  	
 			  	<div id="myTabContent" class="tab-content">
@@ -169,7 +173,29 @@
 					    </div>	
 		          	</div>
 		          
-		          	<div class="tab-pane fade" id="atendimento">            
+			        <div class="tab-pane fade" id="anamnese">            
+						<div class="form-group">	                  
+		                    <div class="col-md-6" style="width: 100%">
+		                      <h:inputTextarea id="txtAnamnese" value="#{crudBean.entity.desAnamnese}" style="width: 100%; height: 300px;" onkeyup="verificaTamanho(this, 5000, 'lblAnamnese');"/>
+		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                    </div>
+		                </div>	
+		          	</div>
+		          
+		          	<div class="tab-pane fade" id="prescricao">            
+						<div class="form-group">	                  
+		                    <div class="col-md-6" style="width: 100%">
+		                      <h:inputTextarea id="txtPrescricao" value="#{crudBean.entity.desPrescricao}" style="width: 100%; height: 300px;" onkeyup="verificaTamanho(this, 5000, 'lblPrescricao');"/>
+		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                    </div>
+		                </div>
+			        </div>
+			        
+			        <div class="tab-pane fade" id="exame">            
+						<ui:include src="panelExame.xhtml" />
+			        </div>
+			        
+			        <div class="tab-pane fade" id="financeiro">            
 						<div class="box-body">
 						
 							<div class="form-group">
@@ -188,20 +214,37 @@
 						    
 						    <div class="form-group">
 						        <label class="col-md-2 control-label">Valor</label>
-						        <div class="col-md-2" style="margin-top: 5px;">
-						         	<h:inputText value="#{crudBean.entity.vlrAgendamentoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
-						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
-						           	</h:inputText>
-						        </div>
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'P'}">
+							        <div class="col-md-2">
+							         	<h:inputText value="#{crudBean.entity.vlrAgendamentoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
+							           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+							           	</h:inputText>
+							        </div>
+						        </h:panelGroup>
+						        
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'C'}">
+							        <div class="col-md-6" style="margin-top: 5px;">
+							        	<h:outputText value="#{crudBean.entity.vlrAgendamentoFormatado}"/>
+							        </div>
+						        </h:panelGroup>
 						    </div>
 						    
 						    <div class="form-group">
 						        <label class="col-md-2 control-label">Desconto</label>
-						        <div class="col-md-2" style="margin-top: 5px;">
-						         	<h:inputText value="#{crudBean.entity.vlrDescontoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);">
-						           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
-						           	</h:inputText>
-						        </div>
+						        
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'P'}">
+							        <div class="col-md-2">
+							         	<h:inputText value="#{crudBean.entity.vlrDescontoFormatado}" styleClass="form-control" maxlength="12" onblur="formataMoeda(this);" rendered="#{crudBean.entity.tpAgendamento == 'P'}">
+							           		<f:passThroughAttribute name="placeholder" value="R$ 00,00"/>
+							           	</h:inputText>
+							        </div>
+						        </h:panelGroup>
+						        
+						        <h:panelGroup rendered="#{crudBean.entity.tpAgendamento == 'C'}">
+							        <div class="col-md-6" style="margin-top: 5px;">
+							           	<h:outputText value="#{crudBean.entity.vlrDescontoFormatado}" rendered="#{crudBean.entity.tpAgendamento == 'C'}"/>
+						           	</div>
+					           	</h:panelGroup>
 						    </div>
 						    
 						    <div class="form-group">
@@ -234,79 +277,102 @@
 					    </div>
 			        </div>
 			        
-			        <div class="tab-pane fade" id="anamnese">            
-						<div class="widget">	                  
-		                    <div class="hero-unit">
-		                      <h:inputTextarea id="txtAnamnese" value="#{crudBean.entity.desAnamnese}"/>
-		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres)</label>                      
-		                    </div>
-		                </div>	
-		          	</div>
-		          
-		          	<div class="tab-pane fade" id="prescricao">            
-						<div class="widget">	                  
-		                    <div class="hero-unit">
-		                      <h:inputTextarea id="txtPrescricao" value="#{crudBean.entity.desPrescricao}"/>
-		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres)</label>                      
-		                    </div>
-		                </div>
-			        </div>
 			        
-			        <div class="tab-pane fade" id="exame">            
-						<ui:include src="panelExame.xhtml" />
-			        </div>
+			        <div class="tab-pane fade" id="historico">            
+						<div class="box-body">
+				        	<div class="box-content">
+								<rich:dataTable id="tblData" 
+											 value="#{crudBean.listaHistoricoAtendimento}" 
+										       var="rst" rows="10"
+										styleClass="table table-bordered table-striped dataTable"
+										onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
+										onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
+										  rendered="#{not empty crudBean.listaHistoricoAtendimento}">						     
+									<f:facet name="header">
+										<rich:columnGroup>
+											<rich:column style="width:8%; text-align: center;">
+												Data
+											</rich:column>
+											<rich:column style="width: 6%; text-align: center;">
+												Início
+											</rich:column>
+											<rich:column style="width: 6%; text-align: center;">
+												Fim
+											</rich:column>
+											<rich:column style="text-align: center;">
+												Serviço
+											</rich:column>
+											<rich:column style="width: 8%; text-align: center;">
+												Tipo
+											</rich:column>
+											<rich:column style="width: 20%; text-align: center;">
+												Convênio
+											</rich:column>
+											<rich:column style="width: 3%; text-align: center;"/>
+										</rich:columnGroup>
+									</f:facet>					
+									<rich:column style="text-align: center;">
+										<h:outputText value="#{rst.datAgendamento}" />
+									</rich:column>
+									<rich:column style="text-align: center;">
+										<h:outputText value="#{rst.horInicio}" />
+									</rich:column>
+									<rich:column style="text-align: center;">
+										<h:outputText value="#{rst.horFim}" />
+									</rich:column>
+									<rich:column style="text-align: left;">
+										<h:outputText value="#{rst.servico.desServico}" />
+									</rich:column>
+									<rich:column style="text-align: center;">
+										<h:outputText value="Convênio" rendered="#{rst.tpAgendamento == 'C'}"/>
+										<h:outputText value="Particular" rendered="#{rst.tpAgendamento == 'P'}"/>
+									</rich:column>
+									<rich:column style="text-align: left;"  rendered="#{rst.convenio.desConvenio != null}">
+										<h:outputText value="#{rst.convenio.desConvenio}"/>
+									</rich:column>
+									<rich:column style="text-align: center;"  rendered="#{rst.convenio.desConvenio == null}">
+										<h:outputText value="-"/>
+									</rich:column>
+																		
+									<rich:column style="text-align: center;">												
+										<a4j:commandButton image="../img/report.png" style="border:none; width: 20px; height: 20px;" title="VISUALIZAR ATENDIMENTO" render="panVisualizarAtendimento" action="#{crudBean.visualizarAtendimento}" oncomplete="#{rich:component('panVisualizarAtendimento')}.show();">
+											<f:setPropertyActionListener target="#{crudBean.agendamento}" value="#{rst}" />
+										</a4j:commandButton>
+									</rich:column>
+									
+								</rich:dataTable>
+							</div>
+							<h:panelGroup style="color: #333333" rendered="#{not empty crudBean.listaHistoricoAtendimento}"><div align="right">Foi(ram) encontrado(s) <h:outputText value="#{crudBean.listaHistoricoAtendimento.size()}"/> registro(s). &nbsp;&nbsp; </div></h:panelGroup>
+							<h:panelGroup style="color: #333333" rendered="#{empty crudBean.listaHistoricoAtendimento}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
+							<div align="center">
+								<rich:dataScroller for="tblData" maxPages="10" rendered="#{not empty crudBean.listaHistoricoAtendimento}"/>
+							</div>
+						</div>
+				    </div>
 		          
 		        </div>
 	        </div>
         </h:panelGroup>
-	  	
-	  	<script src="../tinymce/js/tinymce/tinymce.min.js"></script>
-	  	<script>
-	  		//<![CDATA[
-	  		tinymce.init({ selector:'textarea', height: 400, menubar: false, plugins: [
-	  		    'advlist autolink lists link image charmap print preview anchor',
-	  		    'searchreplace visualblocks code fullscreen',
-	  		    'insertdatetime media table contextmenu paste code'
-	  		  ],
-	  		  toolbar: 'undo redo | insert | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent ',
-
-	  		  setup : function(ed) {
-
-	             var limit = 5000;
-
-	             ed.on('keyup', function(e) {
-	            	 
-	 			 	 var chars = (tinyMCE.activeEditor.getContent()).replace(/(&lt;([^&gt;]+)&gt;)/ig,"").length;
-	 			 	 	 			 	 
-	 			 	 if(this.id == 'formulario:txtPrescricao'){	 			 	 
-	                 	var charcount = document.getElementById('lblPrescricao');
-	                 	document.getElementById('formulario:txtPrescricao').value = tinyMCE.activeEditor.getContent();
-	 			 	 }
-	 			 	 
-	 			 	 if(this.id == 'formulario:txtAnamnese'){
-	 			 		var charcount = document.getElementById('lblAnamnese');
-	 			 		document.getElementById('formulario:txtAnamnese').value = tinyMCE.activeEditor.getContent();
-	 			 	 }
-	 			 	 
-					 charcount.innerHTML =  '( ' + (limit-chars) + ' caracteres )';
-	                 
-					 if((limit - chars) <= 0){
-						 charcount.style = 'color: red; font-size: 12px;'
-					 }else{
-						 charcount.style = 'color: black; font-size: 12px;'
-					 }						 
-	                  
-	             });	           
-	           }
-	  		});
-	  	//]]>
-	  	</script>
+        
+        <script>
+        	function abrirFichaAtendimento(msg, idAgendamento)
+        	{
+        		//SE CONCLUIDO COM SUCESSO, DISPARAR O EVENTO DE ABRIR RELATORIO
+        		if(msg != '')
+        		{
+        			document.getElementById('formulario:btnImprimirFicha').click();
+        		}
+        	}
+        </script>
+        
     </ui:define>
     
     <ui:define name="buttonItens">
     	<h:panelGroup rendered="#{crudBean.entity.idAgendamento != null}">
-    		<a4j:commandButton id="inserir" styleClass="btn btn-primary" value="Concluir Atendimento (C)" accesskey="C" actionListener="#{crudBean.concluirAtendimento}" render="pnFrm, panelTitle, comentTela"/>
+    		<a4j:commandButton id="inserir" styleClass="btn btn-primary" value="Concluir Atendimento (C)" accesskey="C" actionListener="#{crudBean.concluirAtendimento}" oncomplete="abrirFichaAtendimento('#{crudBean.mensagem}', #{crudBean.entity.idAgendamento});" render="pnFrm, panelTitle, comentTela"/>    		
     	</h:panelGroup>
+    	
+    	<t:commandLink target="_blank" id="btnImprimirFicha" style="display: none;" action="#{crudBean.imprimir}" />
     </ui:define>
 	
 	<ui:define name="modal">
@@ -316,6 +382,10 @@
 		
 		<rich:popupPanel id="panMensagem" styleClass="modal-content" domElementAttachment="form" modal="true" width="650" height="200" resizeable="false" onmaskclick="#{rich:component('panMensagem')}.hide()">
 			<ui:include src="panelMensagem.xhtml" />
+		</rich:popupPanel>
+		
+		<rich:popupPanel id="panVisualizarAtendimento" styleClass="modal-content" domElementAttachment="form" modal="true" width="1110" height="480" resizeable="false" onmaskclick="#{rich:component('panVisualizarAtendimento')}.hide()">
+			<ui:include src="panelVisualizarAtendimento.xhtml" />
 		</rich:popupPanel>
 	</ui:define>
 	
