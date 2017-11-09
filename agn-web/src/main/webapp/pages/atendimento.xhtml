@@ -16,6 +16,7 @@
 	<ui:define name="saveStateObjectsDefined">
 		<t:saveState value="#{crudBean.strExame}" />
 		<t:saveState value="#{crudBean.exame}" />
+		<t:saveState value="#{crudBean.atestado}" />
 		<t:saveState value="#{crudBean.agendamento}" />
 		<t:saveState value="#{crudBean.listaExames}" />
 		<t:saveState value="#{crudBean.listaExamesSelecionados}" />
@@ -43,7 +44,8 @@
 	           		<li class="active"><a href="#paciente" data-toggle="tab">Paciente</a></li>
 	             	<li><a href="#anamnese" data-toggle="tab">Anamnese</a></li>                                           
 	             	<li><a href="#prescricao" data-toggle="tab">Prescrição</a></li>
-	             	<li><a href="#exame" data-toggle="tab">Exame</a></li>                      
+	             	<li><a href="#exame" data-toggle="tab">Exame</a></li>
+	             	<li><a href="#atestado" data-toggle="tab">Atestado</a></li>
 	           		<li><a href="#financeiro" data-toggle="tab">Financeiro</a></li>
 	           		<li><a href="#historico" data-toggle="tab">Histórico</a></li>
 	           	</ul>
@@ -177,7 +179,7 @@
 						<div class="form-group">	                  
 		                    <div class="col-md-6" style="width: 100%">
 		                      <h:inputTextarea id="txtAnamnese" value="#{crudBean.entity.desAnamnese}" style="width: 100%; height: 300px;" onkeyup="verificaTamanho(this, 5000, 'lblAnamnese');"/>
-		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                      <label id="lblAnamnese" style="font-size: 12px;">(5000 caracteres restantes)</label>                      
 		                    </div>
 		                </div>	
 		          	</div>
@@ -186,13 +188,17 @@
 						<div class="form-group">	                  
 		                    <div class="col-md-6" style="width: 100%">
 		                      <h:inputTextarea id="txtPrescricao" value="#{crudBean.entity.desPrescricao}" style="width: 100%; height: 300px;" onkeyup="verificaTamanho(this, 5000, 'lblPrescricao');"/>
-		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres)</label>                      
+		                      <label id="lblPrescricao" style="font-size: 12px;">(5000 caracteres restantes)</label>                      
 		                    </div>
 		                </div>
 			        </div>
 			        
 			        <div class="tab-pane fade" id="exame">            
 						<ui:include src="panelExame.xhtml" />
+			        </div>
+			        
+			        <div class="tab-pane fade" id="atestado">            
+						<ui:include src="panelAtestado.xhtml" />
 			        </div>
 			        
 			        <div class="tab-pane fade" id="financeiro">            

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">
+	
+	<div class="box-body">					
+		<div class="form-group">
+			<label class="col-md-2 control-label">Data do Atestado</label>
+        	  	<div class="col-md-2" style="width: 200px;">
+	        	<rich:calendar value="#{crudBean.atestado.datAtestado}" buttonClass="glyphicon glyphicon-calendar" inputSize="9"  datePattern="dd/MM/yyyy" inputClass="form-control" showWeeksBar="false" enableManualInput="true" oninputkeypress="return formataData(event,this);" maxlength="10" readonly="#{crudBean.viewing}"/>
+	        </div>
+       	</div>
+       	
+       	<div class="form-group">
+        	<label class="col-md-2 control-label">Dias</label>
+        	<div class="col-md-1">
+          		<h:inputText value="#{crudBean.atestado.qtdDias}" onkeypress="return soNumero(event, this);" styleClass="form-control" maxlength="2" id="qtdDias"/>
+          	</div>
+       	</div>
+       	
+       	<div class="form-group">
+        	<div class="col-sm-offset-2 col-sm-10">
+       			<t:commandLink target="_blank" title="GERAR ATESTADO" action="#{crudBean.gerarAtestado}" accesskey="G">
+       				<h:graphicImage url="../img/print.png" style="border:none; width: 30px; height: 30px;" />
+       			</t:commandLink>
+			</div>
+		</div>
+    </div>
+		
+</ui:composition>

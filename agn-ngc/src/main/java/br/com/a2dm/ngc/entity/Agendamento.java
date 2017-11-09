@@ -143,8 +143,8 @@ public class Agendamento implements Serializable
 	@Column(name = "obs_agendamento")
 	private String obsAgendamento;
 	
-	@Column(name = "tel_paciente")
-	private String telPaciente;
+	@Column(name = "cel_paciente")
+	private String celPaciente;
 	
 	@Column(name = "eml_paciente")
 	private String emlPaciente;
@@ -399,12 +399,12 @@ public class Agendamento implements Serializable
 		this.usuarioConfirm = usuarioConfirm;
 	}
 
-	public String getTelPaciente() {
-		return telPaciente;
+	public String getCelPaciente() {
+		return celPaciente;
 	}
 
-	public void setTelPaciente(String telPaciente) {
-		this.telPaciente = telPaciente;
+	public void setCelPaciente(String celPaciente) {
+		this.celPaciente = celPaciente;
 	}
 
 	public String getEmlPaciente() {

@@ -141,6 +141,8 @@ public class RecepcaoBean extends AbstractBean<Agendamento, AgendamentoService>
 				{
 					AgendamentoService.getInstancia().atenderPaciente(this.getEntity());
 					
+					this.completarPosPesquisar();
+					
 					FacesMessage message = new FacesMessage("O paciente foi colocado em atendimento!");
 					message.setSeverity(FacesMessage.SEVERITY_INFO);
 					FacesContext.getCurrentInstance().addMessage(null, message);

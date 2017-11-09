@@ -23,147 +23,162 @@
 	       	</h:outputLink>
 		</f:facet>
 
-		<div class="modal-body">
+		<div class="widget-body clearfix">
+	        <ul id="myTab" class="nav nav-tabs">
+	          <li class="active"><a href="#dadosPaciente" data-toggle="tab">Dados do Paciente</a></li>
+	          <li><a href="#servico" data-toggle="tab">Serviço</a></li>
+	        </ul>   
 			
-           	<h:panelGroup id="pnlTime" layout="block" width="100%">
-				<div class="widget-body">
-	            	<div class="row">
-	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="hue-demo">Data do Agendamento <span style="color: red">*</span></label>       
-	                          <h:inputText value="#{crudBean.entity.datAgendamento}" readonly="true" styleClass="form-control" size="12"/>                   
-	                        </div>
-	                    </div>
-	                    
-	                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="saturation-demo">Hora Inicial <span style="color: red">*</span></label>
-	                          <h:inputText value="#{crudBean.entity.horInicio}" styleClass="form-control" size="12" maxlength="5" onkeypress="javascript: mascara(this, mhor);" id="hrIni">
-	                          	<a4j:ajax event="blur" listener="#{crudBean.selecionarHoraInicio}" render="pnlTime, pnlPaciente" oncomplete="validaHora('#{crudBean.mensagem}')"/>
-	                          </h:inputText>
-	                        </div>
-	                    </div>
-	                    
-	                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="saturation-demo">Hora Final <span style="color: red">*</span></label>
-	                          <h:inputText value="#{crudBean.entity.horFim}" readonly="true" styleClass="form-control" size="12"/>
-	                        </div>
-	                    </div>
-		            </div>
-	            </div>
-            </h:panelGroup>
-            
-            <h:panelGroup id="pnlPaciente" layout="block" width="100%">				
-	            <div class="widget-body">
-	            	<div class="row">
-	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="hue-demo">CPF do Paciente </label>       
-	                          <h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
-	                          	<a4j:ajax event="blur" listener="#{crudBean.verificarPacienteExistente}" render="pnlPaciente" execute="@form"/>
-	                          </h:inputText>                   
-	                        </div>
-	                    </div>
-	                    
-	                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="saturation-demo">Nome do Paciente <span style="color: red">*</span></label>
-							  <h:inputText value="#{crudBean.entity.nomPaciente}" styleClass="form-control" maxlength="200" id="nome" readonly="#{crudBean.entity.idPaciente != null}"/>
-	                        </div>
-	                    </div>   
-	                    
-		            </div>
-	            </div>	            
-           			
-	            <div class="widget-body">
-	            	<div class="row">
-	                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="hue-demo">Telefone <span style="color: red">*</span></label>       
-	                          <h:inputText value="#{crudBean.entity.telPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="14" id="tel" readonly="#{crudBean.entity.idPaciente != null}"/>                   
-	                        </div>
-	                    </div>
-	                    
-	                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="saturation-demo">E-mail </label>
-							  <h:inputText value="#{crudBean.entity.emlPaciente}" styleClass="form-control" onblur="validarEmail(this);" maxlength="200" id="eml" readonly="#{crudBean.entity.idPaciente != null}"/>
-	                        </div>
-	                    </div>   
-	                      
-		            </div>
-	            </div>	            
-            </h:panelGroup>   
-                        
-  			<h:panelGroup layout="block" id="panTipoAgendamento">
-	  			<div class="widget-body">
-	            	<div class="row">  
-	 					<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="saturation-demo">Tipo do Agendamento <span style="color: red">*</span></label>
-	                          <div style="width: 200px;" class="checkbox">
-								<h:selectOneRadio value="#{crudBean.entity.tpAgendamento}" style="width: 100%;" >								
-									<f:selectItem itemValue="P" itemLabel="Particular" />
-									<f:selectItem itemValue="C" itemLabel="Convênio"/>
-									<a4j:ajax event="change" render="panTipoAgendamento, panServico, pnlTime" listener="#{crudBean.resetServicos}"/>
-								</h:selectOneRadio>
-							   </div>
-	                        </div>
-	                    </div>
-	                    
-	                    <h:panelGroup layout="block" rendered="#{crudBean.entity.tpAgendamento == 'C'}" >
-		                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+			<div id="myTabContent" class="tab-content">
+            	<div class="tab-pane fade in active" id="dadosPaciente">
+           	
+		           	<h:panelGroup id="pnlTime" layout="block" width="100%">
+						<div class="widget-body">
+			            	<div class="row">
+			                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="hue-demo">Data do Agendamento <span style="color: red">*</span></label>       
+			                          <h:inputText value="#{crudBean.entity.datAgendamento}" readonly="true" styleClass="form-control" size="12"/>                   
+			                        </div>
+			                    </div>
+			                    
+			                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="saturation-demo">Hora Inicial <span style="color: red">*</span></label>
+			                          <h:inputText value="#{crudBean.entity.horInicio}" styleClass="form-control" size="12" maxlength="5" onkeypress="javascript: mascara(this, mhor);" id="hrIni">
+			                          	<a4j:ajax event="blur" listener="#{crudBean.selecionarHoraInicio}" render="pnlTime, pnlPaciente" oncomplete="validaHora('#{crudBean.mensagem}')"/>
+			                          </h:inputText>
+			                        </div>
+			                    </div>
+			                    
+			                    <div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="saturation-demo">Hora Final <span style="color: red">*</span></label>
+			                          <h:inputText value="#{crudBean.entity.horFim}" readonly="true" styleClass="form-control" size="12"/>
+			                        </div>
+			                    </div>
+				            </div>
+			            </div>
+		            </h:panelGroup>
+		            
+		            <h:panelGroup id="pnlPaciente" layout="block" width="100%">				
+			            <div class="widget-body">
+			            	<div class="row">
+			                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="hue-demo">CPF do Paciente </label>       
+			                          <h:inputText value="#{crudBean.entity.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" maxlength="14" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" id="cpf">
+			                          	<a4j:ajax event="blur" listener="#{crudBean.verificarPacienteExistente}" render="pnlPaciente" execute="@form"/>
+			                          </h:inputText>                   
+			                        </div>
+			                    </div>
+			                    
+			                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="saturation-demo">Nome do Paciente <span style="color: red">*</span></label>
+									  <h:inputText value="#{crudBean.entity.nomPaciente}" styleClass="form-control" maxlength="200" id="nome" readonly="#{crudBean.entity.idPaciente != null}"/>
+			                        </div>
+			                    </div>   
+			                    
+				            </div>
+			            </div>	            
+		           			
+			            <div class="widget-body">
+			            	<div class="row">
+			                	<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="hue-demo">Celular <span style="color: red">*</span></label>       
+			                          <h:inputText value="#{crudBean.entity.celPaciente}" onkeypress="javascript: mascara(this, mtel);" styleClass="form-control" maxlength="14" id="tel" readonly="#{crudBean.entity.idPaciente != null}"/>                   
+			                        </div>
+			                    </div>
+			                    
+			                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="saturation-demo">E-mail </label>
+									  <h:inputText value="#{crudBean.entity.emlPaciente}" styleClass="form-control" onblur="validarEmail(this);" maxlength="200" id="eml" readonly="#{crudBean.entity.idPaciente != null}"/>
+			                        </div>
+			                    </div>   
+			                      
+				            </div>
+			            </div>		            	            
+            		</h:panelGroup>
+           		</div>
+             
+                <div class="tab-pane fade" id="servico">       
+		  			<h:panelGroup layout="block" id="panTipoAgendamento">
+			  			<div class="widget-body">
+			            	<div class="row">  
+			 					<div class="col-lg-4 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="saturation-demo">Tipo do Agendamento <span style="color: red">*</span></label>
+			                          <div style="width: 200px;" class="checkbox">
+										<h:selectOneRadio value="#{crudBean.entity.tpAgendamento}" style="width: 100%;" >								
+											<f:selectItem itemValue="P" itemLabel="Particular" />
+											<f:selectItem itemValue="C" itemLabel="Convênio"/>
+											<a4j:ajax event="change" render="panTipoAgendamento, panServico, pnlTime" listener="#{crudBean.resetServicos}"/>
+										</h:selectOneRadio>
+									   </div>
+			                        </div>
+			                    </div>
+			                    
+			                    <h:panelGroup layout="block" rendered="#{crudBean.entity.tpAgendamento == 'C'}" >
+				                    <div class="col-lg-8 col-md-3 col-sm-6 col-sx-12">
+				                    	<div class="form-group">
+				                          <label for="saturation-demo">Convênio <span style="color: red">*</span></label>
+										  <h:selectOneMenu value="#{crudBean.entity.idConvenio}" styleClass="form-control" converter="simpleIndexConverter">								
+											<t:selectItems var="i" itemValue="#{i.idConvenio}" itemLabel="#{i.desConvenio}" value="#{crudBean.listaConvenio}" />
+											<a4j:ajax event="change" render="panServico, pnlTime" listener="#{crudBean.atualizarServicos}"/>
+										  </h:selectOneMenu>
+				                        </div>
+				                    </div>
+			                    </h:panelGroup>
+			                 </div>
+			             </div>  
+		             </h:panelGroup> 
+		             
+		             <h:panelGroup layout="block" id="panServico">
+			             <div class="widget-body">
+			            	<div class="row">
+			                	<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
+			                    	<div class="form-group">
+			                          <label for="hue-demo">Serviço <span style="color: red">*</span></label>
+					                  <h:selectOneMenu value="#{crudBean.entity.idServico}" styleClass="form-control" converter="simpleIndexConverter">								
+										<t:selectItems var="i" itemValue="#{i.idServico}" itemLabel="#{i.desServico}" value="#{crudBean.listaServico}" />
+										<a4j:ajax event="change" listener="#{crudBean.atualizarHoraFim}" render="pnlTime"/>
+									  </h:selectOneMenu>
+			                        </div>
+			                    </div>      
+				            </div>
+			            </div>
+		            </h:panelGroup>   
+		  
+		  			<div class="widget-body">
+		            	<div class="row">  
+		 					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
 		                    	<div class="form-group">
-		                          <label for="saturation-demo">Convênio <span style="color: red">*</span></label>
-								  <h:selectOneMenu value="#{crudBean.entity.idConvenio}" styleClass="form-control" converter="simpleIndexConverter">								
-									<t:selectItems var="i" itemValue="#{i.idConvenio}" itemLabel="#{i.desConvenio}" value="#{crudBean.listaConvenio}" />
-									<a4j:ajax event="change" render="panServico, pnlTime" listener="#{crudBean.atualizarServicos}"/>
-								  </h:selectOneMenu>
+		                          <label for="saturation-demo">Observações</label>                          
+			               	  		<h:inputTextarea cols="93" rows="3" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" styleClass="form-control"/>
+									<label id="lblObsAgendamento" style="font-size: 12px;">(300 caracteres restantes)</label>	                  		
 		                        </div>
 		                    </div>
-	                    </h:panelGroup>
-	                 </div>
-	             </div>  
-             </h:panelGroup> 
-             
-             <h:panelGroup layout="block" id="panServico">
+		                 </div>
+		             </div>
+	             </div>
+	             
 	             <div class="widget-body">
-	            	<div class="row">
-	                	<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
-	                    	<div class="form-group">
-	                          <label for="hue-demo">Serviço <span style="color: red">*</span></label>
-			                  <h:selectOneMenu value="#{crudBean.entity.idServico}" styleClass="form-control" converter="simpleIndexConverter">								
-								<t:selectItems var="i" itemValue="#{i.idServico}" itemLabel="#{i.desServico}" value="#{crudBean.listaServico}" />
-								<a4j:ajax event="change" listener="#{crudBean.atualizarHoraFim}" render="pnlTime"/>
-							  </h:selectOneMenu>
-	                        </div>
-	                    </div>      
-		            </div>
-	            </div>
-            </h:panelGroup>   
+	            	<div class="row" style="padding-left: 5px;">  
+	 					
+	  						<span style="font-size: 12px;">Todos os campos com <span style="color: red">*</span> são obrigatórios.</span>
+	  					
+	  				</div>
+	  			</div>
+	        </div> 
+  		</div>
   
-  			<div class="widget-body">
-            	<div class="row">  
- 					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
-                    	<div class="form-group">
-                          <label for="saturation-demo">Observações</label>                          
-	               	  		<h:inputTextarea cols="93" rows="3" id="obsAgendamento" onkeyup="verificaTamanho(this, 300, 'lblObsAgendamento');" value="#{crudBean.entity.obsAgendamento}" styleClass="form-control"/>
-							<label id="lblObsAgendamento" style="font-size: 12px;">(300 caracteres restantes)</label>	                  		
-                        </div>
-                    </div>
-                 </div>
-             </div> 
   
-  			<div class="widget-body">
-            	<div class="row">  
- 					<div class="col-lg-12 col-md-3 col-sm-6 col-sx-12">
-  						<span style="font-size: 12px;">Todos os campos com <span style="color: red">*</span> são obrigatórios.</span>
-  					</div>
-  				</div>
-  			</div>
+  			
   
-		</div>
+		
 	
 		<div class="modal-footer">
 			<a4j:commandButton id="gravar" styleClass="btn btn-primary pull-left" value="Gravar (G)" accesskey="G" actionListener="#{crudBean.inserir}" render="panMensagem" oncomplete="validarForm('#{crudBean.mensagem}', #{crudBean.ctrMensagem});" rendered="#{crudBean.inserting}"/>
