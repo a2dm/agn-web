@@ -192,7 +192,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 				{
 					this.getEntity().setIdPaciente(paciente.getIdPaciente());
 					this.getEntity().setNomPaciente(paciente.getNomPaciente());
-					this.getEntity().setTelPaciente(paciente.getTelPaciente());
+					this.getEntity().setCelPaciente(paciente.getCelPaciente());
 					this.getEntity().setEmlPaciente(paciente.getEmlPaciente());
 				}
 				else
@@ -206,7 +206,7 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 				{
 					this.getEntity().setIdPaciente(null);
 					this.getEntity().setNomPaciente(null);
-					this.getEntity().setTelPaciente(null);
+					this.getEntity().setCelPaciente(null);
 					this.getEntity().setEmlPaciente(null);
 				}
 			}
@@ -507,10 +507,10 @@ public class AgendamentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		}
 		
 		if(this.getEntity() == null
-				|| this.getEntity().getTelPaciente() == null
-				|| this.getEntity().getTelPaciente().trim().equals(""))
+				|| this.getEntity().getCelPaciente() == null
+				|| this.getEntity().getCelPaciente().trim().equals(""))
 		{
-			throw new Exception("O campo Telefone do Paciente é obrigatório!");
+			throw new Exception("O campo Celular do Paciente é obrigatório!");
 		}
 		
 		if(this.getEntity() == null

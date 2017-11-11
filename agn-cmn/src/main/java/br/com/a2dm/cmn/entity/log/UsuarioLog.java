@@ -24,14 +24,14 @@ import org.hibernate.annotations.Proxy;
  */
 
 @Entity
-@Table(name = "tb_usuario_log", schema="ped")
-@SequenceGenerator(name = "SQ_USUARIO_LOG", sequenceName = "SQ_USUARIO_LOG", allocationSize = 1)
+@Table(name = "tb_usuario_log", schema="seg")
 @Proxy(lazy = true)
 public class UsuarioLog implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
+	@SequenceGenerator(name = "SQ_USUARIO_LOG", sequenceName = "seg.SQ_USUARIO_LOG", allocationSize = 1)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "SQ_USUARIO_LOG")
 	@Column(name = "id_usuario_log")
 	private BigInteger idUsuarioLog;

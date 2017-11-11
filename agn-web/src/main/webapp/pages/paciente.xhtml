@@ -30,7 +30,7 @@
     	<h:panelGroup id="panelGroupDePesquisa" style="height:100%;width:100%;" rendered="#{crudBean.searching}">
 			<f:subview id="viewBusca"> 
 		       <div class="form-group">
-		          <label class="col-md-2 control-label">Código *</label>
+		          <label class="col-md-2 control-label">Código </label>
 		          <div class="col-md-2" style="width: 200px;">
 		          	<h:inputText value="#{crudBean.searchObject.idPaciente}" styleClass="form-control" onkeypress="return soNumero(event, this);" maxlength="6" id="id">
 		          		<f:passThroughAttribute name="placeholder" value="Código do Paciente"/>
@@ -39,7 +39,7 @@
 		       </div>
 		       
 		       <div class="form-group">
-		          <label class="col-md-2 control-label">Nome *</label>
+		          <label class="col-md-2 control-label">Nome </label>
 		          <div class="col-md-6">
 		          	<h:inputText value="#{crudBean.searchObject.nomPaciente}" styleClass="form-control" maxlength="200" id="nom">
 		           		<f:passThroughAttribute name="placeholder" value="Nome do Paciente"/>
@@ -48,7 +48,7 @@
 		       </div>
 		       		       
 		       <div class="form-group">
-		          <label class="col-md-2 control-label">CPF *</label>
+		          <label class="col-md-2 control-label">CPF </label>
 		          <div class="col-md-2" style="width: 200px;">
 		          	<h:inputText value="#{crudBean.searchObject.cpfPaciente}" styleClass="form-control" onblur="validarCPF(this); javascript: mascara(this, cpf_mask);" onkeyup="javascript: mascara(this, cpf_mask);" onkeypress="javascript: mascara(this, cpf_mask);" maxlength="14" id="cpf">
 		           		<f:passThroughAttribute name="placeholder" value="Cpf do Paciente"/>

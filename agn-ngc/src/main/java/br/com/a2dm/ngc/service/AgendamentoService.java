@@ -483,7 +483,7 @@ public class AgendamentoService extends A2DMHbNgc<Agendamento>
 		vo.setIdPaciente(paciente.getIdPaciente());
 		vo.setNomPaciente(paciente.getNomPaciente());
 		vo.setCpfPaciente(paciente.getCpfPaciente());
-		vo.setTelPaciente(paciente.getTelPaciente());
+		vo.setCelPaciente(paciente.getCelPaciente());
 		vo.setEmlPaciente(paciente.getEmlPaciente());
 		sessao.merge(vo);
 		

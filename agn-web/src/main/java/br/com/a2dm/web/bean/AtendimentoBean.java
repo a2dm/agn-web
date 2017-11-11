@@ -1,5 +1,6 @@
 package br.com.a2dm.web.bean;
 
+import java.io.File;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -13,22 +14,32 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.ibm.icu.text.SimpleDateFormat;
 
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.cmn.util.jsf.Variaveis;
+import br.com.a2dm.cmn.util.others.Utilitarios;
 import br.com.a2dm.ngc.entity.Agendamento;
 import br.com.a2dm.ngc.entity.AgendamentoExame;
 import br.com.a2dm.ngc.entity.Exame;
+import br.com.a2dm.ngc.entity.Paciente;
 import br.com.a2dm.ngc.entity.log.AgendamentoLog;
+import br.com.a2dm.ngc.entity.vo.AtestadoVo;
 import br.com.a2dm.ngc.functions.MenuControl;
 import br.com.a2dm.ngc.functions.UtilFuncions;
 import br.com.a2dm.ngc.service.AgendamentoExameService;
 import br.com.a2dm.ngc.service.AgendamentoService;
 import br.com.a2dm.ngc.service.ExameService;
 import br.com.a2dm.ngc.service.log.AgendamentoLogService;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.util.JRLoader;
 
 
 @RequestScoped
@@ -59,7 +70,13 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 	
 	private Agendamento agendamento;
 	
-	private List<Exame> listaExamesPaciente;	
+	private List<Exame> listaExamesPaciente;
+	
+	private List<Paciente> listaAtestado;
+	
+	private AtestadoVo atestado;
+	
+	private String REPORT_NAME_ATESTADO = "atestadoReport";
 	
 	private JSFUtil util = new JSFUtil();
 	
@@ -107,6 +124,7 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 					this.setListaExamesSelecionados(new ArrayList<Exame>());
 					this.popularExames();
 					this.popularHistoricoAtendimento();
+					this.setAtestado(new AtestadoVo());
 					
 					setCurrentState(STATE_INSERT);
 				}
@@ -335,6 +353,73 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 		}
 	}
 	
+	@SuppressWarnings({ "deprecation", "rawtypes", "unchecked" })
+	public void gerarAtestado()
+	{
+		try
+		{
+			Paciente paciente = new Paciente();
+			List<Paciente> lista = new ArrayList<Paciente>();
+			lista.add(paciente);
+			
+			this.setListaAtestado(lista);
+						
+			HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
+			Utilitarios.removerArquivos(request.getRealPath("") + "/temp");
+				
+			if (getListaAtestado() == null 
+					|| getListaAtestado().size() <= 0) 
+			{
+				FacesMessage message = new FacesMessage("Não existem dados para a impressão do relatório!");
+				message.setSeverity(FacesMessage.SEVERITY_ERROR);
+				FacesContext.getCurrentInstance().addMessage(null, message);				
+			}
+				
+			String pathJasper = request.getRealPath("WEB-INF/reports");
+				
+			String os = System.getProperty("os.name");
+			File pasta = new File((os.toLowerCase().indexOf("linux") > -1 ? "/" : "\\"));
+			pathJasper += pasta;
+				
+			Map parameters = new HashMap();
+			parameters.put("SUBREPORT_DIR", pathJasper);				
+			
+			parameters.put("NOME_PACIENTE", this.getEntity().getPaciente().getNomPaciente() == null ? "" : this.getEntity().getPaciente().getNomPaciente());
+			parameters.put("RG_PACIENTE", this.getEntity().getPaciente().getRgPaciente() == null ? "" : this.getEntity().getPaciente().getRgPaciente());		
+			parameters.put("DATA_ATESTADO", this.getAtestado().getDatAtestado() == null ? "" : new SimpleDateFormat("dd/MM/yyyy").format(this.getAtestado().getDatAtestado()));
+			parameters.put("DIAS", this.getAtestado().getQtdDias());
+			parameters.put("PROFISSIONAL", "Dr. " + UtilFuncions.getClinicaProfissionalSession().getUsuario().getNome());		
+				
+			JasperReport jasperReport = (JasperReport) JRLoader.loadObjectFromFile(pathJasper + "/" + this.REPORT_NAME_ATESTADO + ".jasper");
+			
+			if (jasperReport == null) 
+			{
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Nenhum relatório selecionado.", null));
+			}
+			
+			String pathPdf = "/temp/" + request.getRequestedSessionId() + String.valueOf(Math.random() * 10000) + this.REPORT_NAME + ".pdf";
+			
+						
+			JRBeanCollectionDataSource ds = new JRBeanCollectionDataSource(getListaAtestado());			
+			
+			JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, ds);
+	 
+			JasperExportManager.exportReportToPdfFile(print, request.getRealPath("") + pathPdf);
+			
+			HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
+			response.sendRedirect(request.getContextPath() + pathPdf);
+		}
+		catch (Exception e)
+		{
+			FacesMessage message = new FacesMessage(e.getMessage());
+	        message.setSeverity(FacesMessage.SEVERITY_ERROR);	        
+	        if(e.getMessage() == null)
+	        	FacesContext.getCurrentInstance().addMessage("", message);
+	        else
+	        	FacesContext.getCurrentInstance().addMessage(null, message);
+		}
+	}
+	
 	@Override
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void configuraRelatorio(Map parameters, HttpServletRequest request) throws Exception
@@ -520,5 +605,21 @@ public class AtendimentoBean extends AbstractBean<Agendamento, AgendamentoServic
 
 	public void setStrExame(String strExame) {
 		this.strExame = strExame;
+	}
+
+	public AtestadoVo getAtestado() {
+		return atestado;
+	}
+
+	public void setAtestado(AtestadoVo atestado) {
+		this.atestado = atestado;
+	}
+
+	public List<Paciente> getListaAtestado() {
+		return listaAtestado;
+	}
+
+	public void setListaAtestado(List<Paciente> listaAtestado) {
+		this.listaAtestado = listaAtestado;
 	}
 }

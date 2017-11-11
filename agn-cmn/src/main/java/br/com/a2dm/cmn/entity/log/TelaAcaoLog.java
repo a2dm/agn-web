@@ -29,7 +29,7 @@ import br.com.a2dm.cmn.entity.Usuario;
  */
 
 @Entity
-@Table(name = "tb_tela_acao_log", schema="ped")
+@Table(name = "tb_tela_acao_log", schema="seg")
 @SequenceGenerator(name = "SQ_TELA_ACAO_LOG", sequenceName = "SQ_TELA_ACAO_LOG", allocationSize = 1)
 @Proxy(lazy = true)
 public class TelaAcaoLog implements Serializable
