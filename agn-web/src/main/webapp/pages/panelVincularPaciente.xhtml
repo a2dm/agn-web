@@ -52,7 +52,7 @@
 			<div class="box-content">
 				<rich:dataTable id="tblPaciente" 
 							 value="#{crudBean.listaPaciente}" 
-						       var="rst" rows="10"
+						       var="rst" rows="5"
 						styleClass="table table-bordered table-striped dataTable"
 						onrowmouseover="this.style.cursor='default';this.style.backgroundColor='#FFF8DC';" 
 						onrowmouseout="this.style.backgroundColor='#{a4jSkin.tableBackgroundColor}'"
@@ -98,7 +98,7 @@
 			<h:panelGroup style="color: #333333" rendered="#{empty crudBean.listaPaciente}"><div align="right">Sua consulta não gerou resultados. &nbsp;&nbsp; </div></h:panelGroup>
 			<h:panelGroup>
 				<div align="center">
-					<rich:dataScroller for="tblPaciente" maxPages="10" rendered="#{not empty crudBean.listaPaciente}"/>
+					<rich:dataScroller for="tblPaciente" maxPages="5" rendered="#{not empty crudBean.listaPaciente}"/>
 				</div>
 			</h:panelGroup>
 		</h:panelGrid>

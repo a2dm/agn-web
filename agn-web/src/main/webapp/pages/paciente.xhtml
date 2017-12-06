@@ -72,7 +72,11 @@
                       		<a href="#auditoria" data-toggle="tab">Auditoria</a>
                       	</h:panelGroup>
                       </li>
-                      <li><a href="#atendimento" data-toggle="tab">Atendimentos</a></li>                                        
+                      <li>
+                      	<h:panelGroup layout="block" rendered="#{crudBean.viewing}">
+                      		<a href="#atendimento" data-toggle="tab">Atendimentos</a>
+                      	</h:panelGroup>
+                      </li>                                        
                     </ul>
                     
                     <div id="myTabContent" class="tab-content">
