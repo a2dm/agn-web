@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+					  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:a4j="http://richfaces.org/a4j"
+				xmlns:rich="http://richfaces.org/rich"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:t="http://myfaces.apache.org/tomahawk"
+				xmlns:mj="http://mojarra.dev.java.net/mojarra_ext">	
+	
+	<f:facet name="header">
+		<h:panelGroup>
+			<h:outputText value="Autenticação" />
+		</h:panelGroup>
+	</f:facet>
+	
+	<f:facet name="controls">
+		<h:outputLink value="#" onclick="#{rich:component('panAutenticacao')}.hide(); return false;">
+	    	<h:graphicImage value="../img/closeModal.png" id="fechaPanelVisualizar" style="width: 16px; height: 16px; vertical-align:middle;"/>
+       	</h:outputLink>
+	</f:facet>
+    
+    <h:panelGroup id="panelAuditoria">
+		<div class="modal-body">
+			<div class="box-body">
+	            <div class="form-group">
+		        	<label class="col-md-2 control-label">Login</label>
+		        	<div class="col-md-6" style="margin-top: 5px;">
+		          		<h:outputText value="#{sessionScope.loginUsuario.login}" />
+		          	</div>
+		  		</div>
+		  		
+		  		<div class="form-group">
+		        	<label class="col-md-2 control-label">Senha</label>
+		        	<div class="col-md-8">
+		          		<h:inputSecret id="senha" class="form-control" value="#{crudBean.senha}" maxlength="100" style="text-transform: none;" autocomplete="off">
+		                	<f:passThroughAttribute name="placeholder" value="Senha"/>
+		               	</h:inputSecret>
+		          	</div>
+		  		</div>	
+		    </div>  
+		</div>
+		
+		<div class="modal-footer">
+			<a4j:commandButton id="autenticar" styleClass="btn btn-primary" value="Autenticar (A)" accesskey="A" actionListener="#{crudBean.autenticar}" render="pnFrm"/>			
+			<input type="button" onclick="#{rich:component('panAutenticacao')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
+		</div>
+   	</h:panelGroup>
+       
+</ui:composition>
