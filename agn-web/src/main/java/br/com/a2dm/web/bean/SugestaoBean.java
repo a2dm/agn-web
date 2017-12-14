@@ -80,7 +80,7 @@ public class SugestaoBean extends AbstractBean<Sugestao, SugestaoService>
 		{
 			if(obj.getDesSugestao().length() > 115)
 			{
-				obj.setDesSugestao(obj.getDesSugestao().substring(0, 200) + " ...");
+				obj.setDesSugestao(obj.getDesSugestao().substring(0, 115) + " ...");
 			}
 		}
 		
