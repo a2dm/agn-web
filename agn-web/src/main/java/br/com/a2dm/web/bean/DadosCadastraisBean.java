@@ -17,6 +17,7 @@ import br.com.a2dm.cmn.service.EspecialidadeService;
 import br.com.a2dm.cmn.service.EstadoService;
 import br.com.a2dm.cmn.service.GrupoService;
 import br.com.a2dm.cmn.service.UsuarioService;
+import br.com.a2dm.cmn.util.criptografia.CriptoMD5;
 import br.com.a2dm.cmn.util.jsf.AbstractBean;
 import br.com.a2dm.cmn.util.jsf.JSFUtil;
 import br.com.a2dm.ngc.functions.MenuControl;
@@ -131,35 +132,28 @@ public class DadosCadastraisBean extends AbstractBean<Usuario, UsuarioService>
 		}
 	}
 	
-	public void salvar()
-	{
-		try
-		{			
-			//ATUALIZAR ESTADO
-			if (this.getSiglaEstado() != null && !this.getSiglaEstado().equalsIgnoreCase(""))  
-			{
-				Estado estado = new Estado();
-				estado.setSigla(this.getSiglaEstado());
-				estado = EstadoService.getInstancia().get(estado, 0);
-				
-				this.getEntity().setIdEstado(estado.getIdEstado());
-			}
-			
-			//SALVAR
-			UsuarioService.getInstancia().alterar(this.getEntity());
-		}
-		catch (Exception e)
+	public void salvar() throws Exception
+	{		
+		//ATUALIZAR ESTADO
+		if (this.getSiglaEstado() != null && !this.getSiglaEstado().equalsIgnoreCase(""))  
 		{
-			FacesMessage message = new FacesMessage(e.getMessage());
-	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-	        FacesContext.getCurrentInstance().addMessage(null, message);
+			Estado estado = new Estado();
+			estado.setSigla(this.getSiglaEstado());
+			estado = EstadoService.getInstancia().get(estado, 0);
+			
+			this.getEntity().setIdEstado(estado.getIdEstado());
 		}
+		
+		//SALVAR
+		UsuarioService.getInstancia().alterar(this.getEntity());				
 	}
 	
 	public void autenticar()
 	{
 		try
 		{
+			this.setMensagem(null);
+			
 			if(this.getSenha() == null
 					|| this.getSenha().trim().equals(""))
 			{
@@ -168,7 +162,7 @@ public class DadosCadastraisBean extends AbstractBean<Usuario, UsuarioService>
 			
 			Usuario usuario = new Usuario();
 			usuario.setLogin(util.getUsuarioLogado().getLogin());
-			usuario.setSenha(this.getSenha());
+			usuario.setSenha(CriptoMD5.stringHexa(this.getSenha().toUpperCase()));
 			usuario.setFlgAtivo("S");
 			
 			usuario = UsuarioService.getInstancia().get(usuario, 0);
@@ -179,14 +173,14 @@ public class DadosCadastraisBean extends AbstractBean<Usuario, UsuarioService>
 			}
 			else
 			{
-				
+				this.salvar();
 			}
+			
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Seus dados foram alterados com sucesso.", null));
 		}
 		catch (Exception e)
 		{
-			FacesMessage message = new FacesMessage(e.getMessage());
-	        message.setSeverity(FacesMessage.SEVERITY_ERROR);
-	        FacesContext.getCurrentInstance().addMessage(null, message);
+			this.setMensagem(e.getMessage());
 		}
 	}
 	

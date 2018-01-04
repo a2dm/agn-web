@@ -83,7 +83,7 @@
 						</rich:column>
 						<rich:column style="text-align: center;">
 							<h:outputText value="-" rendered="#{rst.flgAtivo == 'N'}"/>
-							<h:inputText value="#{rst.vlrServicoFormatado}" styleClass="form-control" style="height: 25px;" maxlength="12" onblur="formataMoeda(this);" rendered="#{rst.flgAtivo == 'S'}"/>
+							<h:inputText value="#{rst.vlrServicoFormatado}" styleClass="form-control" style="height: 25px;" maxlength="8" onblur="formataMoeda(this);" rendered="#{rst.flgAtivo == 'S'}"/>
 						</rich:column>		
 						<rich:column style="text-align: center;">
 							<h:outputText value="ATIVO" style="color: blue;" rendered="#{rst.flgAtivo == 'S'}"/>

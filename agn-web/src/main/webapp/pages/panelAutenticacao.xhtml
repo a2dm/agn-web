@@ -44,9 +44,23 @@
 		</div>
 		
 		<div class="modal-footer">
-			<a4j:commandButton id="autenticar" styleClass="btn btn-primary" value="Autenticar (A)" accesskey="A" actionListener="#{crudBean.autenticar}" render="pnFrm"/>			
+			<a4j:commandButton id="autenticar" styleClass="btn btn-primary" value="Autenticar (A)" accesskey="A" actionListener="#{crudBean.autenticar}" oncomplete="autenticar('#{crudBean.mensagem}')"/>			
 			<input type="button" onclick="#{rich:component('panAutenticacao')}.hide();" class="btn btn-default" value="Fechar (X)" accesskey="X"/>
 		</div>
    	</h:panelGroup>
+   	
+   	<script>
+		function autenticar(msg)
+		{
+			if(msg == '')
+			{
+				#{rich:component('panAutenticacao')}.hide();
+			}
+			else
+			{
+				alert(msg);
+			}
+		}
+	</script>
        
 </ui:composition>
