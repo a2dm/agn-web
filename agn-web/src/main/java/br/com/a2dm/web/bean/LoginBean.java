@@ -43,7 +43,7 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			{
 				//MENSAGEM DE VALIDACAO
 				
-				FacesMessage message = new FacesMessage("O campo Login é obrigatório!");
+				FacesMessage message = new FacesMessage("O campo Nome do Usuário é obrigatório!");
 		        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 		        FacesContext.getCurrentInstance().addMessage(null, message);
 				return null;
@@ -85,7 +85,7 @@ public class LoginBean extends AbstractBean<Usuario, UsuarioService>
 			}
 			else
 			{
-				FacesMessage message = new FacesMessage("Os dados informados não corresponde a um usuário do sistema. Verifique seu Login e Senha e tente novamente.");
+				FacesMessage message = new FacesMessage("Os dados informados não correspondem a um usuário do sistema. Verifique seu Login e Senha e tente novamente.");
 		        message.setSeverity(FacesMessage.SEVERITY_ERROR);
 		        FacesContext.getCurrentInstance().addMessage(null, message);
 				return null;

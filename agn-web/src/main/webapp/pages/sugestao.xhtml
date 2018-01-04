@@ -41,7 +41,7 @@
 		       	<div class="form-group">
 		          <label class="col-md-2 control-label">Sugestão *</label>
 		          <div class="col-md-6">
-		          	<h:inputTextarea cols="93" rows="3" id="sugestao" onkeyup="verificaTamanho(this, 4000, 'lblSugestao');" value="#{crudBean.entity.desSugestao}" styleClass="form-control"/>
+		          	<h:inputTextarea cols="93" rows="3" id="sugestao" onblur="verificaTamanho(this, 4000, 'lblSugestao');" onkeyup="verificaTamanho(this, 4000, 'lblSugestao');" value="#{crudBean.entity.desSugestao}" styleClass="form-control"/>
 					<label id="lblSugestao" style="font-size: 12px;">(4000 caracteres restantes)</label>
 		          </div>
 		       	</div>

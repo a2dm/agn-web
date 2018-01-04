@@ -112,7 +112,7 @@ public class HorarioBean extends AbstractBean<Horario, HorarioService>
 					if(horario.getHorInicio() == null || horario.getHorInicio().equals("") 
 							|| horario.getHorFim() == null || horario.getHorFim().equals(""))
 					{
-						throw new Exception("Ao selecionar um dia da semana para ser possível realizar agendamentos, os campos Horário Início e Horário Fim devem ser informados.");
+						throw new Exception("Ao selecionar um dia da semana, para ser possível realizar agendamentos, os campos Horário Início e Horário Fim devem ser informados.");
 					}
 					
 					//INICIO
@@ -151,7 +151,7 @@ public class HorarioBean extends AbstractBean<Horario, HorarioService>
 					//INICIO MAIOR QUE FIM
 					if(horaIni >= horaFim)
 					{
-						throw new Exception("Todas as Horas de Início devem ser maior que as Horas Fim.");
+						throw new Exception("Todas as Horas de Início devem ser menores que as Horas de Término.");
 					}
 				}
 			}
@@ -221,6 +221,12 @@ public class HorarioBean extends AbstractBean<Horario, HorarioService>
 		lista.add(horario6);
 		
 		return lista;
+	}
+	
+	@Override
+	public String getFullTitle()
+	{
+		return this.pageTitle;
 	}
 	
 //	@Override

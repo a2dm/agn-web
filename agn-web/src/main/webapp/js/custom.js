@@ -98,7 +98,7 @@ function validarCPF(cpf)
         cpf == "88888888888" || 
         cpf == "99999999999")
     	{
-    		alert('CPF Invalido, Favor informar um CPF válido!');
+    		alert('CPF Inválido, Favor informar um CPF válido!');
 			cpf.value = "";
 			return false;
     	}
@@ -112,7 +112,7 @@ function validarCPF(cpf)
             rev = 0;    
         if (rev != parseInt(cpf.charAt(9))) 
         {
-        	alert('CPF Invalido, Favor informar um CPF válido!');
+        	alert('CPF Inválido, Favor informar um CPF válido!');
 			cpf.value = "";
 			return false;
         }
@@ -126,7 +126,7 @@ function validarCPF(cpf)
         rev = 0;    
     if (rev != parseInt(cpf.charAt(10)))
     {
-    	alert('CPF Invalido, Favor informar um CPF válido!');
+    	alert('CPF Inválido, Favor informar um CPF válido!');
 		cpf.value = "";
 		return false;
     }
